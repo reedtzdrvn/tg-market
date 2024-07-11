@@ -1,0 +1,9 @@
+node_modules/
+venv/
+.pylintrc
+pycache/
+/backend/.env
+/ngrok
+.vscode
+
+db.sqlite3
