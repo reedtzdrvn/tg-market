@@ -8,6 +8,10 @@ const AdminSchema = new mongoose.Schema({
     password: {
         type: String,
         require: true
+    },
+    telegramId: {
+        type: String,
+        require: true
     }
 })
 
