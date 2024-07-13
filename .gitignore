@@ -4,6 +4,8 @@ venv/
 pycache/
 /backend/.env
 /ngrok
+/bot/.env
+/bot/venv
 .vscode
 
 db.sqlite3
