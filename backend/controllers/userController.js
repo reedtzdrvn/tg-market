@@ -24,7 +24,7 @@ export default class userController {
 
   static updateUser = async (req, res) => {
     try {
-      const { firstName, lastName, email, phoneNumber, telegramId } = req.body;
+      const { firstName, lastName, phoneNumber, telegramId } = req.body;
 
       const user = await UserSchema.findOne({ telegramId });
 
@@ -34,7 +34,6 @@ export default class userController {
 
       if (firstName) user.firstName = firstName;
       if (lastName) user.lastName = lastName;
-      if (email) user.email = email;
       if (phoneNumber) user.phoneNumber = phoneNumber;
 
       await user.save();
@@ -45,4 +44,12 @@ export default class userController {
       return res.status(500).json({ error: "Возникла ошибка" });
     }
   };
+
+  static register = async (req, res) => {
+
+    const {userName, telegramId, phoneNumber} = req.body
+
+    
+
+  }
 }

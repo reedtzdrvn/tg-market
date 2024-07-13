@@ -15,18 +15,17 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    email: {
-        type: String,
-    },
-    orders: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Order"
-    }],
     telegramId: {
         type: String,
         required: true,
         unique: true
     },
+    photos: [{
+        type: String
+    }],
+    videos: [{
+        type: String
+    }]
 })
 
 export default mongoose.model("User", UserSchema);
