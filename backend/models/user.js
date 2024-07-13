@@ -9,11 +9,11 @@ const UserSchema = new mongoose.Schema({
     },
     userName: {
         type: String,
-        require: true,
+        required: true,
     },
     phoneNumber: {
         type: String,
-        require: true
+        required: true,
     },
     email: {
         type: String,
@@ -24,7 +24,8 @@ const UserSchema = new mongoose.Schema({
     }],
     telegramId: {
         type: String,
-        require: true
+        required: true,
+        unique: true
     },
 })
 
