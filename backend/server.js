@@ -51,6 +51,8 @@ app.listen(PORT, (err) => {
   console.log("Server is running");
 });
 
-app.get("/");
+app.get("/", async (req, res) => {
+  res.json({ message: "nice" });
+});
 
 app.get("/user", userController.getUser);
