@@ -3,16 +3,8 @@ import mongoose from "mongoose";
 import cors from "cors";
 import { config as dotenvConfig } from "dotenv";
 import userController from "./controllers/userController.js";
-// import categoryController from './controllers/categoryController.js';
-// import itemController from './controllers/itemController.js';
-// import {wakeServer} from './utils/ping.js'
-// import adminController from './controllers/adminController.js';
-// import espforyouController from './controllers/espforyouController.js';
-// import orderController from './controllers/orderController.js';
-// import firstSliderController from './controllers/firstSliderController.js'
 import multer from "multer";
 import path from "path";
-import { fileURLToPath } from "url";
 
 dotenvConfig();
 
@@ -51,8 +43,23 @@ app.listen(PORT, (err) => {
   console.log("Server is running");
 });
 
+
+//GET
+
 app.get("/", async (req, res) => {
   res.json({ message: "nice" });
 });
 
 app.get("/user", userController.getUser);
+
+
+
+//POST
+
+app.post('/upload', upload.single('photo'), async (req, res) => {
+    try {
+        res.status(201).json({ filename: req.file.filename });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to upload photo' });
+    }
+});

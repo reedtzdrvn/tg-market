@@ -1,10 +1,8 @@
 import mongoose from "mongoose";
 
 const CategorySchema = new mongoose.Schema({
-  name: {
-    type: String,
-    require: true,
-  }
+  name: { type: String, required: true },
+  active: { type: Boolean, required: true },
 });
 
-export default mongoose.model("Category", CategorySchema);
+export const Category = mongoose.model("Category", CategorySchema);

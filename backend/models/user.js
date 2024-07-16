@@ -1,31 +1,17 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema({
-    firstName: {
-        type: String,
-    },
-    lastName: {
-        type: String,
-    },
-    userName: {
-        type: String,
-        required: true,
-    },
-    phoneNumber: {
-        type: String,
-        required: true,
-    },
-    telegramId: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    photos: [{
-        type: String
-    }],
-    videos: [{
-        type: String
-    }]
-})
+  lastName: { type: String, required: true },
+  firstName: { type: String, required: true },
+  userName: { type: String, required: true },
+  telegramId: { type: String, required: true },
+  phoneNumber: { type: String, required: true },
+  role: { type: String, required: false },
+  photo: { type: [String], required: false },
+  video: { type: [String], required: false },
+  vk: { type: String, required: false },
+  instagram: { type: String, required: false },
+  youtube: { type: String, required: false },
+});
 
 export default mongoose.model("User", UserSchema);

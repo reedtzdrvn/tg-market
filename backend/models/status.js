@@ -1,10 +1,8 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
 const StatusSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        require: true
-    }
-})
+  name: { type: String, required: true },
+  comment: { type: String, required: false },
+});
 
-export default mongoose.model("Status", StatusSchema);
+export const Status = mongoose.model("Status", StatusSchema);
