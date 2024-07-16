@@ -68,9 +68,9 @@ app.get("/order", orderController.getOrder) // если передаем в quer
 
 app.get("/category", categoryController.getCategory)
 
-app.get("/artist-request", artistRequestController.getArtistRequest) // если передаем requestId то получим конкретный request, если artistId - то его requests
+app.get("/artist-request", artistRequestController.getArtistRequest) // если передаем requestId то получим конкретный request, если artistId - то его requests, если categoryId - то все заявки с такой категорией
 
-app.get("/customer-requests", customerRequestController. getCustomerRequest) // если передаем requestId то получим конкретный request, если customer - то его requests
+app.get("/customer-requests", customerRequestController. getCustomerRequest) // если передаем requestId то получим конкретный request, если customer - то его requests, если categoryId - то все заявки с такой категорией
 
 //POST
 

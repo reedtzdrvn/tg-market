@@ -22,7 +22,12 @@ export default class customerRequestController {
     
       static getCustomerRequest = async (req, res) => {
         try {
-          const { requestId, customertId } = req.query;
+          const { requestId, customertId, categoryId } = req.query;
+
+          if (categoryId){
+            const request = await CustomerRequestSchema.findOne({categoryId: categoryId}).populate('categoryId').populate('customerId');
+            res.json(request);
+          }
     
           if (requestId) {
             const request = await CustomerRequestSchema.findOne({_id: requestId}).populate('categoryId').populate('customerId');
