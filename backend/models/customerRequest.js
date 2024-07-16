@@ -1,44 +1,27 @@
 import mongoose from "mongoose";
 
-const ApplicationSchema = new mongoose.Schema({
-  userId: {
+const CustomerRequestSchema = new mongoose.Schema({
+  city: { type: String, required: true },
+  categoryId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
-    require: true,
+    ref: "Category",
+    required: true,
   },
-  city: {
-    type: String,
-    require: true,
-  },
-  category: {
+  fee: { type: String, required: true },
+  startDate: { type: Date, required: true },
+  endDate: { type: Date, required: true },
+  time: { type: String, required: true },
+  guestCount: { type: Number, required: true },
+  description: { type: String, required: true },
+  customerId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "category",
-    require: true,
+    ref: "User",
+    required: true,
   },
-  price: {
-    type: Number,
-    require: true,
-  },
-  date: {
-    type: Date,
-    require: true,
-  },
-  time: {
-    type: String,
-    require: true,
-  },
-  countGuests: {
-    type: String,
-    require: true,
-  },
-  comment: {
-    type: Text,
-  },
-  status: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "status",
-    require: true,
-  }
+  approved: { type: Boolean, required: true },
 });
 
-export default mongoose.model("Application", ApplicationSchema);
+export const CustomerRequest = mongoose.model(
+  "CustomerRequest",
+  CustomerRequestSchema
+);
