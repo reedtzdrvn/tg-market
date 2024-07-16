@@ -23,28 +23,7 @@ class UserData(StatesGroup):
     phoneNumber = State()
 
 
-def setup_routers(db, bot) -> Router:
-    @my_router.message(CommandStart())
-    async def message_handler(message: Message, state: FSMContext) -> None:
-        markup = InlineKeyboardMarkup(
-            inline_keyboard=[
-                [
-                    InlineKeyboardButton(
-                        text="Перейти к приложению",
-                        web_app=WebAppInfo(url="https://google.com"),
-                    ),
-                ],
-            ],
-        )
-
-        await message.answer(
-            f"Здравствуйте, <b>{message.from_user.full_name}!</b>\n\n"
-            "Это приложение для быстрого поиска артистов для вашего события, а также для продажи своих услуг, если вы артист.\n\n"
-            "Покупайте или продавайте впечатления, общайтесь с артистами или заказчиками.\n\n"
-            "<b>Для начала работы выберите действие:</b>",
-            reply_markup=markup,
-        )
-
+def setup_routers(db, bot, WEB_APP_URl) -> Router:
         await send_registration_buttons_handler(message, state)
 
     async def send_registration_buttons_handler(
@@ -220,7 +199,7 @@ def setup_routers(db, bot) -> Router:
                     [
                         InlineKeyboardButton(
                             text="Перейти к приложению",
-                            web_app=WebAppInfo(url="https://google.com"),
+                            web_app=WebAppInfo(url=WEB_APP_URl),
                         ),
                     ],
                 ],

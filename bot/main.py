@@ -1,35 +1,46 @@
 import asyncio
 import logging
 import sys
-from os import getenv
 
 from aiogram import Bot, Dispatcher, html
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
-from aiogram.filters import CommandStart
-from aiogram.types import Message
-from dotenv import load_dotenv
 
-from handlers import setup_routers
-from db import Db
+from core.handlers.user_handler import user_router
 
-load_dotenv()
+from core.databases.mongodb.base import BaseDb
+from core.databases.mongodb.user.UserDb import UserController
 
-TOKEN = getenv("BOT_TOKEN")
-
-dp = Dispatcher()
-
-db = Db(db_url=getenv("DB_CONNECTION_STRING"), db_name=getenv("DB_NAME"))
+from config import BOT_TOKEN, DB_CONNECTION_STRING
 
 
 async def main() -> None:
-    bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+    dp = Dispatcher()
 
-    dp.include_router(setup_routers(db, bot))
+    base_db = BaseDb(db_url=DB_CONNECTION_STRING)
 
-    await dp.start_polling(bot)
+    try:
+        await base_db.initialize()
+    except Exception as e:
+        print(f"Failed to initialize database: {e}")
+        return
+
+    # CONTROLLERS
+    user_controller = UserController(base_db)
+
+    bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+
+    dp.include_router(user_router)
+
+    await dp.start_polling(bot, _user_controller=user_controller)
 
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
-    asyncio.run(main())
+
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("Exited")
+    except Exception as e:
+        print(e)
