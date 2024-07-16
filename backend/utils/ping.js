@@ -14,18 +14,13 @@ export const wakeServer = () => {
             console.log(`Status code: ${res.statusCode}`);
         });
 
-
-        // Обрабатываем ошибки запроса
         req.on('error', (error) => {
             console.error(`Error sending request: ${error}`);
         });
 
-        // Завершаем запрос
         req.end();
     }
 
-
-// Отправляем запрос каждые 5 минут (300 000 миллисекунд)
     setInterval(sendRequestToServer, 150000);
 
 }

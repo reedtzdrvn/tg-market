@@ -12,6 +12,7 @@ const UserSchema = new mongoose.Schema({
   vk: { type: String, required: false },
   instagram: { type: String, required: false },
   youtube: { type: String, required: false },
+  mainPhoto: {type: String, required: false}
 });
 
 export default mongoose.model("User", UserSchema);

@@ -12,10 +12,16 @@ const OrderSchema = new mongoose.Schema({
     required: true,
   },
   status: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Status",
-    required: true,
+    statusId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Status",
+      required: true,
+    },
+    comment: {
+      type: String,
+      required: false
+    }
   },
 });
 
-export const Order = mongoose.model("Order", OrderSchema);
+export default mongoose.model("Order", OrderSchema);

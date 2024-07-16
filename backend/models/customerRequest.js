@@ -21,7 +21,7 @@ const CustomerRequestSchema = new mongoose.Schema({
   approved: { type: Boolean, required: true },
 });
 
-export const CustomerRequest = mongoose.model(
+export default mongoose.model(
   "CustomerRequest",
   CustomerRequestSchema
 );

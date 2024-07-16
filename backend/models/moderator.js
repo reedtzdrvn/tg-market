@@ -7,4 +7,4 @@ const ModeratorSchema = new mongoose.Schema({
     }
 })
 
-export default mongoose.model("Admin", ModeratorSchema);
+export default mongoose.model("Moderator", ModeratorSchema);

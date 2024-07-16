@@ -18,7 +18,7 @@ const ReviewSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  approved: { type: Boolean, required: true },
+  approved: { type: Boolean, required: true, default: false },
 });
 
-export const Review = mongoose.model("Review", ReviewSchema);
+export default mongoose.model("Review", ReviewSchema);

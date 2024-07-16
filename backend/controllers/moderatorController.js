@@ -1,135 +1,64 @@
-import UserSchema from "../models/user.js";
-import AdminSchema from "../models/admin.js";
-import SizeSchema from "../models/size.js"
-import ItemSchema from "../models/item.js"
-import CategorySchema from "../models/category.js"
-import jwt from "jsonwebtoken";
-import { config as dotenvConfig } from "dotenv";
+import ModeratorSchema from "../models/moderator.js";
 
-dotenvConfig();
-
-export default class adminController {
-  static addUserNotification = async (req, res) => {
+export default class moderatorController {
+  static addModerator = async (req, res) => {
     try {
-      const { name, telegramId } = req.body;
+      const { telegramId } = req.body;
 
-      const date = new Date();
-
-      const user = await UserSchema.findOne({ telegramId });
-
-      if (!user) {
-        return res.status(404).json({ error: "Пользователь не найден" });
+      if (!telegramId) {
+        return res.status(400).json({ message: "TelegramId is not defined" });
       }
 
-      const newNotification = {
-        name,
-        date,
-        seen: false,
-      };
+      const moderator = new ModeratorSchema({ telegramId: telegramId });
 
-      user.notifications.push(newNotification);
+      await moderator.save();
 
-      await user.save();
-
-      return res.status(200).json({ notification: newNotification });
-    } catch (err) {
-      console.error(err);
-      return res.status(500).json({ error: "Возникла ошибка" });
+      res.status(201).json(moderator);
+    } catch (e) {
+      console.error(e);
+      res.status(500).json({ error: e.message });
     }
   };
 
-  static deleteNotification = async (req, res) => {
-    const { telegramId, notificationId } = req.body;
-    
+  static getModerator = async (req, res) => {
     try {
-      // Найти пользователя по telegramId и удалить уведомление с указанным ID
-      await UserSchema.updateOne(
-        { telegramId: telegramId },
-        { $pull: { notifications: { _id: notificationId } } }
-      );
-      console.log(telegramId, notificationId)
-      res.status(200).json({ success: true, message: "Уведомление удалено" });
-    } catch (error) {
-      console.error("Ошибка при удалении уведомления:", error);
-      res.status(500).json({ error: "Ошибка при удалении уведомления" });
-    }
-  };
+      const { telegramId } = req.query;
 
-  static loginUser = async (req, res) => {
-    try {
-      const { username, password } = req.body;
-
-      const user = await AdminSchema.findOne({
-        username: username,
-        password: password,
-      });
-
-      if (user) {
-        // If user found, create and send JWT token
-        jwt.sign(
-          { id: user.id, username: user.username },
-          process.env.SECRET_KEY,
-          { expiresIn: "30days" },
-          (err, token) => {
-            if (err) {
-              console.error(err);
-              res.status(500).json({ error: "Ошибка создания токена" });
-            } else {
-              res.json({ token });
-            }
-          }
-        );
-      } else {
-        // If user not found, send error response
-        res
-          .status(401)
-          .json({ error: "Неправильное имя пользователя или пароль" });
+      if (!telegramId) {
+        return res.status(400).json({ message: "TelegramId is not defined" });
       }
-    } catch (error) {
-      // Handle errors
-      console.error(error);
-      res.status(500).json({ error: "Ошибка сервера" });
+
+      const moderator = await ModeratorSchema.findOne({ telegramId: telegramId });
+
+      if (!moderator) {
+        return res.status(404).json({ message: "Moderator not found" });
+      }
+
+      res.json(moderator);
+    } catch (e) {
+      console.error(e);
+      res.status(500).json({ error: e.message });
     }
   };
 
-  static getAllAdmins = async (req, res) => {
+  static deleteModerator = async (req, res) => {
     try {
-      const admins = await AdminSchema.find({});
+      const { telegramId } = req.query;
 
-      return res.status(200).json(admins);
-    } catch (err) {
-      console.error(err);
-      return res.status(500).json({ error: "Возникла ошибка" });
+      if (!telegramId) {
+        return res.status(400).json({ message: "TelegramId is not defined" });
+      }
+
+      const moderator = await ModeratorSchema.findOneAndDelete({ telegramId: telegramId });
+
+      if (!moderator) {
+        return res.status(404).json({ message: "Moderator not found" });
+      }
+
+      res.json({ message: "Moderator deleted successfully" });
+    } catch (e) {
+      console.error(e);
+      res.status(500).json({ error: e.message });
     }
   };
-
-  static addItem = async (req, res) => {
-    try {
-      const sizes = await SizeSchema.find({}).limit(1)
-
-      const category = await CategorySchema.find({}).limit(1)
-
-      const item = await new ItemSchema({
-        name: "000_New",
-        category: category[0]._id,
-        photos: [],
-        price: null,
-        sale: null,
-        deliveryTime: "000_New",
-        sizes: [{id: sizes[0]._id, count: 0}],
-        description: "000_New",
-      });
-
-      await item.save();
-
-      return res.status(200).json({
-        ...item,
-      });
-    } catch (err) {
-      res.status(500).json({
-        error: "Возникла ошибка",
-      });
-    }
-  };
-
 }
