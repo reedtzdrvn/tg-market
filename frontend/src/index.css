@@ -2,12 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-.page {
-    margin-bottom: 25%;
-}
 body{
-    height: 100vh;
-    background-color: white;
+    font-family: "Inter", sans-serif;
 }
 ::-webkit-scrollbar {
     display: none; /* Для вебкит-браузеров (Chrome, Safari, Opera) */
