@@ -4,12 +4,12 @@ services:
     build: ./backend
     container_name: api_backend
     ports:
-      -'4444:4444'
+      - '4444:4444'
   
   client:
     build: ./frontend
     container_name: client_frontend
     ports:
-      -'3000:3000'
+      - '3000:3000'
     stdin_open: true
     tty: true
