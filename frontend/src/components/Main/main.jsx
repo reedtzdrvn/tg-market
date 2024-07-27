@@ -6,7 +6,7 @@ import { LightButton } from '../UI/Button/button';
 const Main = () => {
     return (
         <div className='relative h-max'>
-            <img src={bg} alt="bg" className='w-full absolute h-max -z-10' />
+            <img src={bg} alt="bg" className='w-full absolute h-full -z-10' />
             <div className='py-[31px] text-white'>
                 <div className='flex text-[16px] justify-between px-[19px]'>
                     <Link to="/categoryartist">Каталог артистов</Link>
