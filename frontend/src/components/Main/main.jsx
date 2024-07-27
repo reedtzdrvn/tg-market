@@ -10,7 +10,7 @@ const Main = () => {
             <div className='py-[31px] text-white'>
                 <div className='flex text-[16px] justify-between px-[19px]'>
                     <Link to="/categoryartist">Каталог артистов</Link>
-                    <Link to="/">Каталог заявок</Link>
+                    <Link to="/catalog-applications">Каталог заявок</Link>
                 </div>
                 <div className='mt-[195px] text-white text-[40px] font-bold text-center w-full leading-[44px] tracking-[0%]'>
                     Создай событие,<br /> которое <br /> запомнится!
