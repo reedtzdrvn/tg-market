@@ -1,4 +1,4 @@
-import ArtistRequestSchema from "../models/artistRequest";
+import ArtistRequestSchema from "../models/artistRequest.js";
 
 export default class artistRequestController {
     static addArtistRequest = async (req, res) => {
