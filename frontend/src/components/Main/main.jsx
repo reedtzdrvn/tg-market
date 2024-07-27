@@ -5,10 +5,10 @@ import { LightButton } from '../UI/Button/button';
 
 const Main = () => {
     return (
-        <div className='relative h-[735px]'>
-            <img src={bg} alt="bg" className='w-full absolute h-[735px] -z-10' />
-            <div className='py-[43px] text-white'>
-                <div className='flex text-[16px] justify-between px-[26px]'>
+        <div className='relative h-max'>
+            <img src={bg} alt="bg" className='w-full absolute h-max -z-10' />
+            <div className='py-[31px] text-white'>
+                <div className='flex text-[16px] justify-between px-[19px]'>
                     <Link to="/artists">Каталог артистов</Link>
                     <Link to="/requests">Каталог заявок</Link>
                 </div>
@@ -19,7 +19,7 @@ const Main = () => {
                     <LightButton text="Я артист" />
                     <LightButton text="Я хочу организовать событие" />
                 </div>
-                <div className='mt-[23px] text-[16px] text-center px-[43px] leading-[19px] tracking-[0%] mb-[14px]'>
+                <div className='mt-[23px] text-[16px] text-center px-[43px] leading-[19px] tracking-[0%] mb-[16px]'>
                     Eventra помогает найти первоклассных артистов для любого случая,
                     а таланты смогут заявить о себе и начать выгодное сотрудничество
                 </div>
