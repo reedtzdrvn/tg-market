@@ -9,8 +9,8 @@ const Main = () => {
             <img src={bg} alt="bg" className='w-full absolute h-max -z-10' />
             <div className='py-[31px] text-white'>
                 <div className='flex text-[16px] justify-between px-[19px]'>
-                    <Link to="/artists">Каталог артистов</Link>
-                    <Link to="/requests">Каталог заявок</Link>
+                    <Link to="/categoryartist">Каталог артистов</Link>
+                    <Link to="/">Каталог заявок</Link>
                 </div>
                 <div className='mt-[195px] text-white text-[40px] font-bold text-center w-full leading-[44px] tracking-[0%]'>
                     Создай событие,<br /> которое <br /> запомнится!
@@ -25,7 +25,6 @@ const Main = () => {
                 </div>
             </div>
         </div>
-
     );
 };
 

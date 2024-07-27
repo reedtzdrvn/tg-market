@@ -15,8 +15,8 @@ function App() {
       <Header />
       <Routes>
         <Route exact path="/" element={<Main />} />
-        <Route exact path="/categoryartist" element={<CategorySearch />} />
-        <Route exact path="/catalogartist" element={<CatalogArtist />} />
+        <Route path="/categoryartist" element={<CategorySearch />} />
+        <Route path="/catalogartist" element={<CatalogArtist />} />
       </Routes>
       <Footer />
     </>
