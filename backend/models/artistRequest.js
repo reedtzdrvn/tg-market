@@ -16,7 +16,4 @@ const ArtistRequestSchema = new mongoose.Schema({
   approved: { type: Boolean, required: true, default: false },
 });
 
-export default mongoose.model(
-  "ArtistRequest",
-  ArtistRequestSchema
-);
+export default mongoose.model("ArtistRequest", ArtistRequestSchema);
