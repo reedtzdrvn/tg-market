@@ -19,7 +19,7 @@ const Header = () => {
 
     return (
         <div className="h-[48px] shadow-custom flex justify-between items-center px-[16px] relative">
-            <div className="current_city">
+            <div className="current_city flex justify-start">
                 <select
                     value={selectedCity}
                     onChange={handleCityChange}
@@ -32,10 +32,10 @@ const Header = () => {
                     ))}
                 </select>
             </div>
-            <Link to="/" className="text-[16px] font-bold absolute text-center w-full left-0">
+            <Link to="/" className="text-[16px] font-bold text-center">
                 EVENTRA
             </Link>
-            <Link to="/profile" className="text-[14px] font-bold">
+            <Link to="/profile" className="text-[14px] flex justify-end font-bold">
                 Мой профиль
             </Link>
         </div>
