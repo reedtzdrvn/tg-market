@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import calendarIcon from "../../images/Calendar-2.svg";
 import moneyIcon from "../../images/Coins.svg";
 import mmm from "../../images/mmm.svg";
+import { Link } from "react-router-dom";
 
 const CatalogApplications = () => {
   const [selectedCategory, setSelectedCategory] = useState(1);
@@ -107,6 +108,7 @@ const CatalogApplications = () => {
       </div>
 
       <div className="mt-[38px] flex flex-col">
+        <Link to={'/application-details/1'}>
         <div className="bg-white p-4 shadow-custom mb-6">
           <div className="pt-7 pb-[24px] font-[Inter] font-bold text-2xl leading-8">
             <span className="mb-[24px]">Детский праздник для двух девочек</span>
@@ -151,6 +153,7 @@ const CatalogApplications = () => {
             Откликнуться
           </button>
         </div>
+        </Link>
 
         <div className="bg-white p-4 shadow-custom mb-6">
           <div className="pt-7 pb-[24px] font-[Inter] font-bold text-2xl leading-8">
