@@ -18,7 +18,7 @@ const Header = () => {
     };
 
     return (
-        <div className="h-[48px] shadow-custom flex justify-between items-center px-[16px] relative">
+        <div className="h-[48px] shadow-custom flex justify-between items-center px-[16px] relative bg-white">
             <div className="current_city flex justify-start w-1/3">
                 <select
                     value={selectedCity}

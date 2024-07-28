@@ -8,7 +8,7 @@ const ApplicationDetails = () => {
   const { id } = useParams();
 
   return (
-    <div className="font-[Inter]">
+    <div className="font-[Inter] bg-white">
       <div className="w-full flex justify-end px-[44px] pt-[46px]">
         <Link to={"/catalog-applications"}>
           <img className="w-[16px]" src={crossIcon} alt="close" />
