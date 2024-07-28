@@ -83,8 +83,8 @@ const ApplicationDetails = () => {
         заключаю с вами договор. Жду ваших откликов.
       </div>
 
-      <div className="px-4">
-        <button className="my-9 w-full flex justify-center items-center bg-black font-[Inter] text-[20px] font-bold rounded-2xl text-white py-4">
+      <div className="px-4 py-10">
+        <button className="w-full flex justify-center items-center bg-black font-[Inter] text-[20px] font-bold rounded-2xl text-white py-4">
           Откликнуться
         </button>
       </div>
