@@ -5,15 +5,15 @@ import CategoriesButtons from '../UI/Categories/categoriesButtons.jsx';
 import CatalogArtistCard from './catalogArtistCard.jsx';
 import CatalogBanner from '../UI/CatalogBanner/catalogBannerCustomer.jsx';
 import Loader from '../UI/Loader/loader.jsx';
+import { useCategories } from '../../context/categoryContext.js';
 
 const CatalogArtist = () => {
     const location = useLocation();
     // в category - айди текущей категории выбранной
     const [category, setCategory] = useState(null);
-    const [categories, setCategories] = useState([]);
+    const { categories } = useCategories()
     const queryParams = new URLSearchParams(location.search);
     const id = queryParams.get('id');
-    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         if (id) {
@@ -22,28 +22,16 @@ const CatalogArtist = () => {
     }, [id]);
 
     useEffect(() => {
-        axios.get("/category")
-            .then((res) => {
-                setCategories(res.data);
-                if (!id && res.data.length > 0) {
-                    setCategory(res.data[0]._id);
-                }
-                setLoading(false)
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, [id]);
+        if (!id) {
+            setCategory(categories?.[0]?._id);
+        }
+    }, [categories]);
 
     const handleChangeCategory = (id) => {
-        if(category!==id){
+        if (category !== id) {
             setCategory(id);
         }
     };
-
-    if(loading){
-        return <Loader />
-    }
 
     return (
         <div className='bg-back'>

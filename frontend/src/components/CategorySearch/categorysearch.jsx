@@ -4,25 +4,10 @@ import axios from "../../axios.js";
 import { DarkButton } from "../UI/Button/button";
 import Categories from "../UI/Categories/categories.jsx";
 import Loader from "../UI/Loader/loader.jsx";
+import { useCategories } from "../../context/categoryContext.js";
 
 const CategorySearch = () => {
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    axios.get("/category")
-      .then((res) => {
-        setCategories(res.data);
-        setLoading(false)
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
-  if (loading){
-    return <Loader />
-  }
+  const {categories} = useCategories()
 
   return (
     <div className="py-[84px] flex flex-col gap-[34px] items-center">
