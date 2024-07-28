@@ -7,6 +7,7 @@ import CategoriesButtons from "../UI/Categories/categoriesButtons";
 import axios from "../../axios.js"
 import CatalogBanner from "../UI/CatalogBanner/catalogBannerArtist.jsx";
 import Loader from "../UI/Loader/loader.jsx";
+import { Link } from "react-router-dom";
 
 const CatalogApplications = () => {
   
@@ -60,6 +61,7 @@ const CatalogApplications = () => {
       </div>
 
       <div className="mt-[38px] flex flex-col">
+        <Link to={'/application-details/1'}>
         <div className="bg-white p-4 shadow-custom mb-6">
           <div className="pt-7 pb-[24px] font-[Inter] font-bold text-2xl leading-8">
             <span className="mb-[24px]">Детский праздник для двух девочек</span>
@@ -104,6 +106,7 @@ const CatalogApplications = () => {
             Откликнуться
           </button>
         </div>
+        </Link>
 
         <div className="bg-white p-4 shadow-custom mb-6">
           <div className="pt-7 pb-[24px] font-[Inter] font-bold text-2xl leading-8">

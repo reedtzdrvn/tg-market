@@ -6,6 +6,7 @@ import Main from "./components/Main/main";
 import CategorySearch from "./components/CategorySearch/categorysearch";
 import CatalogArtist from "./components/CatalogArtist/catalogartist";
 import CatalogApplications from "./components/CatalogApplications/catalogapplications";
+import ApplicationDetails from "./components/ApplicationDetails/ApplicationDetails";
 
 let tg = window.Telegram.WebApp;
 tg.expand();
@@ -19,6 +20,7 @@ function App() {
         <Route path="/categoryartist" element={<CategorySearch />} />
         <Route path="/catalogartist" element={<CatalogArtist />} />
         <Route path="/catalog-applications" element={<CatalogApplications />} />
+        <Route path="/application-details/:id" element={<ApplicationDetails />} />
       </Routes>
       <Footer />
     </>
