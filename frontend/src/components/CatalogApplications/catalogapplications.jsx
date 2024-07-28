@@ -1,66 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import calendarIcon from "../../images/Calendar-2.svg";
 import moneyIcon from "../../images/Coins.svg";
 import mmm from "../../images/mmm.svg";
+import { useLocation } from "react-router-dom";
+import CategoriesButtons from "../UI/Categories/categoriesButtons";
+import axios from "../../axios.js"
+import CatalogBanner from "../UI/CatalogBanner/catalogBannerArtist.jsx";
+import Loader from "../UI/Loader/loader.jsx";
 
 const CatalogApplications = () => {
-  const [selectedCategory, setSelectedCategory] = useState(1);
+  
+  const location = useLocation();
+  // в category - айди текущей категории выбранной
+  const [category, setCategory] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const queryParams = new URLSearchParams(location.search);
+  const id = queryParams.get('id');
+  const [loading, setLoading] = useState(true)
 
-  const categories = [
-    {
-      id: 1,
-      svgName: "icon.svg",
-      name: "Песни",
-      count: 1151,
-      color: "purple",
-    },
-    {
-      id: 2,
-      svgName: "icon.svg",
-      name: "Ведущие",
-      count: 1151,
-      color: "pink",
-    },
-    {
-      id: 3,
-      svgName: "icon.svg",
-      name: "Муз. группа",
-      count: 1151,
-      color: "orange",
-    },
-    {
-      id: 4,
-      svgName: "icon.svg",
-      name: "Аниматоры",
-      count: 1151,
-      color: "green",
-    },
-    {
-      id: 5,
-      svgName: "icon.svg",
-      name: "Шоу артисты",
-      count: 1151,
-      color: "yellow",
-    },
-    {
-      id: 6,
-      svgName: "icon.svg",
-      name: "Танцы",
-      count: 1151,
-      color: "yellow",
-    },
-    {
-      id: 7,
-      svgName: "icon.svg",
-      name: "Диджеи",
-      count: 1151,
-      color: "pink",
-    },
-  ];
+  useEffect(() => {
+      if (id) {
+          setCategory(id);
+      }
+  }, [id]);
 
-  const handleCategoryClick = (category) => {
-    if (category !== selectedCategory) setSelectedCategory(category);
+  useEffect(() => {
+      axios.get("/category")
+          .then((res) => {
+              setCategories(res.data);
+              if (!id && res.data.length > 0) {
+                  setCategory(res.data[0]._id);
+              }
+              setLoading(false)
+          })
+          .catch((err) => {
+              console.log(err);
+          });
+  }, [id]);
+
+  const handleChangeCategory = (id) => {
+      if(category!==id){
+          setCategory(id);
+      }
   };
+
+  if(loading){
+    return <Loader/>
+  }
 
   return (
     <div className="bg-back">
@@ -69,40 +55,7 @@ const CatalogApplications = () => {
           <span className="text-[24px] w-full text-center font-bold opacity-50">
             Каталог заявок
           </span>
-          <div className="w-full flex justify-center">
-            <div className="flex flex-col gap-[12px] w-full">
-              <div className="flex w-full justify-center items-center gap-[12px]">
-                {categories.slice(0, 4).map((el, index) => (
-                  <button
-                    key={index}
-                    className={`px-[16px] py-[4px] text-[12px] rounded-[10px] w-max ${
-                      el.id === selectedCategory
-                        ? "bg-yellow"
-                        : "bg-buttoncategory opacity-50"
-                    }`}
-                    onClick={() => handleCategoryClick(el.id)}
-                  >
-                    {el.name}
-                  </button>
-                ))}
-              </div>
-              <div className="flex w-full justify-center items-center gap-[12px]">
-                {categories.slice(4, 9).map((el, index) => (
-                  <button
-                    key={index + 4}
-                    className={`px-[16px] py-[4px] text-[12px] rounded-[10px] w-max ${
-                      el.id === selectedCategory
-                        ? "bg-yellow"
-                        : "bg-buttoncategory opacity-50"
-                    }`}
-                    onClick={() => handleCategoryClick(el.id)}
-                  >
-                    {el.name}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
+          <CategoriesButtons categories={categories} category={category} handleChangeCategory={handleChangeCategory} />
         </div>
       </div>
 
@@ -188,15 +141,7 @@ const CatalogApplications = () => {
           </button>
         </div>
 
-        <div className="border-2 bg-main mb-6 border-black rounded-[15px] px-[27px] py-[25px] flex gap-[18px] items-center mx-[16px]">
-          <img src={mmm} className="h-[60px]" alt="1" />
-          <div className="text-[18px] font-bold leading-6">
-            Создайте свою анкету,
-            <br />
-            чтобы начать получать <br />
-            заявки
-          </div>
-        </div>
+        <CatalogBanner />
 
         <div className="bg-white p-4 shadow-custom mb-6">
           <div className="pt-7 pb-[24px] font-[Inter] font-bold text-2xl leading-8">

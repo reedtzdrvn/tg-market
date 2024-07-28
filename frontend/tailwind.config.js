@@ -10,11 +10,11 @@ module.exports = {
       colors: {
         main: "#FFFFFF",
         back: "#F4F4F4",
-        orange: "#E79A82",
-        green: "#9EAB71",
-        yellow: "#E7D582",
-        pink: "#DFACD4",
-        purple: "#B5B1E1",
+        customorange: "#E79A82",
+        customgreen: "#9EAB71",
+        customyellow: "#E7D582",
+        custompink: "#DFACD4",
+        custompurple: "#B5B1E1",
         buttoncategory: "#CACACA"
       },
       boxShadow: {
