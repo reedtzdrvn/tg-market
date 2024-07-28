@@ -11,7 +11,7 @@ const CatalogArtistCard = () => {
                 <img src={picture} className='w-[88px] h-[88px] rounded-full ' alt="1" />
                 <div className='flex flex-col gap-[12px] h-full justify-center'>
                     <span className='font-bold text-[24px]'>Ира Петрова</span>
-                    <button className={`px-[16px] py-[4px] text-[12px] rounded-[10px] w-max bg-green`}>Танцы</button>
+                    <button className={`px-[16px] py-[4px] text-[12px] rounded-[10px] w-max bg-customyellow`}>Танцы</button>
                 </div>
             </div>
             <div className='mt-[24px]'>

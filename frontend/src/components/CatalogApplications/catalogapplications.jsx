@@ -69,17 +69,17 @@ const CatalogApplications = () => {
 
           <div className="flex flex-row gap-4 font-[Inter] text-[12px] font-normal ">
             <span
-              className={`py-[4.5px] px-4 flex justify-center items-center rounded-xl bg-yellow`}
+              className={`py-[4.5px] px-4 flex justify-center items-center rounded-xl bg-customyellow`}
             >
               Танцы
             </span>
             <span
-              className={`py-[4.5px] px-4 flex justify-center items-center rounded-xl bg-green`}
+              className={`py-[4.5px] px-4 flex justify-center items-center rounded-xl bg-customyellow`}
             >
               Аниматоры
             </span>
             <span
-              className={`py-[4.5px] px-4 flex justify-center items-center rounded-xl bg-pink`}
+              className={`py-[4.5px] px-4 flex justify-center items-center rounded-xl bg-customyellow`}
             >
               Ведущие
             </span>
@@ -115,7 +115,7 @@ const CatalogApplications = () => {
 
           <div className="flex flex-row gap-4 font-[Inter] text-[12px] font-normal ">
             <span
-              className={`py-[4.5px] px-4 flex justify-center items-center rounded-xl bg-yellow`}
+              className={`py-[4.5px] px-4 flex justify-center items-center rounded-xl bg-customyellow`}
             >
               Танцы
             </span>
@@ -153,12 +153,12 @@ const CatalogApplications = () => {
 
           <div className="flex flex-row gap-4 font-[Inter] text-[12px] font-normal ">
             <span
-              className={`py-[4.5px] px-4 flex justify-center items-center rounded-xl bg-yellow`}
+              className={`py-[4.5px] px-4 flex justify-center items-center rounded-xl bg-customyellow`}
             >
               Танцы
             </span>
             <span
-              className={`py-[4.5px] px-4 flex justify-center items-center rounded-xl bg-pink`}
+              className={`py-[4.5px] px-4 flex justify-center items-center rounded-xl bg-customyellow`}
             >
               Ведущие
             </span>

@@ -22,17 +22,17 @@ const ApplicationDetails = () => {
 
         <div className="flex justify-center gap-4 mt-8 text-[12px] leading-3">
           <span
-            className={`py-[4.5px] px-4 flex justify-center items-center rounded-xl bg-yellow`}
+            className={`py-[4.5px] px-4 flex justify-center items-center rounded-xl bg-customyellow`}
           >
             Танцы
           </span>
           <span
-            className={`py-[4.5px] px-4 flex justify-center items-center rounded-xl bg-green`}
+            className={`py-[4.5px] px-4 flex justify-center items-center rounded-xl bg-customyellow`}
           >
             Аниматоры
           </span>
           <span
-            className={`py-[4.5px] px-4 flex justify-center items-center rounded-xl bg-pink`}
+            className={`py-[4.5px] px-4 flex justify-center items-center rounded-xl bg-customyellow`}
           >
             Ведущие
           </span>
