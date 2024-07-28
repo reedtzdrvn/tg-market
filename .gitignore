@@ -4,7 +4,7 @@ venv/
 pycache/
 /backend/.env
 /frontend/.env
-**/.env
+
 /ngrok
 /bot/.env
 /bot/venv
