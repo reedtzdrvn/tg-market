@@ -9,15 +9,15 @@ const Main = () => {
             <img src={bg} alt="bg" className='w-full absolute h-full -z-10' />
             <div className='py-[31px] text-white'>
                 <div className='flex text-[16px] justify-between px-[19px]'>
-                    <Link to="/categoryartist">Каталог артистов</Link>
+                    <Link to="/catalog-artist">Каталог артистов</Link>
                     <Link to="/catalog-applications">Каталог заявок</Link>
                 </div>
                 <div className='mt-[195px] text-white text-[40px] font-bold text-center w-full leading-[44px] tracking-[0%]'>
                     Создай событие,<br /> которое <br /> запомнится!
                 </div>
                 <div className='mt-[58px] flex flex-col gap-[12px] px-[23px]'>
-                    <LightButton text="Я артист" />
-                    <LightButton text="Я хочу организовать событие" />
+                    <LightButton text="Я артист"/>
+                    <Link to="/category-artist"><LightButton text="Я хочу организовать событие" /></Link>
                 </div>
                 <div className='mt-[23px] text-[16px] text-center px-[43px] leading-[19px] tracking-[0%] mb-[16px]'>
                     Eventra помогает найти первоклассных артистов для любого случая,
