@@ -3,6 +3,7 @@ venv/
 .pylintrc
 pycache/
 /backend/.env
+/frontend/.env
 /ngrok
 /bot/.env
 /bot/venv
