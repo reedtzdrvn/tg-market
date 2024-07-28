@@ -4,6 +4,8 @@
 
 body{
     font-family: "Inter", sans-serif;
+    @apply bg-main
+
 }
 ::-webkit-scrollbar {
     display: none; /* Для вебкит-браузеров (Chrome, Safari, Opera) */
