@@ -12,6 +12,7 @@ import photo from "../../images/photo 1.png";
 import arrow from "../../images/arrow.svg";
 import Review from "./review";
 import { DarkButton } from "../UI/Button/button";
+import { useUser } from "../../context/userContext";
 
 const ArtistDetails = () => {
     const { id } = useParams();
@@ -20,11 +21,9 @@ const ArtistDetails = () => {
     const [visiblePhotos, setVisiblePhotos] = useState(8);
     const [visibleReview, setVisibleReview] = useState(3);
 
-    let tg = window.Telegram.WebApp;
-    let userId = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "703999322";
-
+    const {user} = useUser()
     const handleContactClick = () => {
-        window.location.href = `tg://resolve?domain=${userId}`;
+        window.location.href = `tg://resolve?domain=${user.userName}`;
     }
 
     const toggleShowMore = () => {
