@@ -97,9 +97,9 @@ const ArtistDetails = () => {
                 </div>
                 <div className="mt-[39px]">
                     <div className="font-bold text-[24px]">Галерея</div>
-                    <div className="mt-[16px] flex flex-wrap gap-[8px] justify-around">
+                    <div className="mt-[16px] flex flex-wrap gap-[5px] justify-around">
                         {photos.slice(0, visiblePhotos).map((photo, index) => (
-                            <img key={index} src={photo} className="w-[90px] h-[90px]" alt={`photo ${index + 1}`} />
+                            <img key={index} src={photo} className="w-[80px] h-[80px]" alt={`photo ${index + 1}`} />
                         ))}
                     </div>
                     <div className="mt-[29px] flex justify-center">
