@@ -1,7 +1,6 @@
 import UserSchema from "../models/user.js";
 
 export default class userController {
-
   static getUser = async (req, res) => {
     try {
       const telegramId = req.query.telegramId;
@@ -24,10 +23,22 @@ export default class userController {
 
   static updateUser = async (req, res) => {
     try {
-      const { firstName, lastName, phoneNumber, telegramId, role, photo, mainPhoto, video, vk , instagram, youtube } = req.body;
+      const {
+        firstName,
+        lastName,
+        phoneNumber,
+        telegramId,
+        role,
+        photo,
+        mainPhoto,
+        video,
+        vk,
+        instagram,
+        youtube,
+      } = req.body;
 
       const user = await UserSchema.findOne({ telegramId });
-
+      console.log(user);
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }

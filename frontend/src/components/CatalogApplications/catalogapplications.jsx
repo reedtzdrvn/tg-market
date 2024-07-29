@@ -39,7 +39,7 @@ const CatalogApplications = () => {
     <div className="bg-back">
       <div className="pt-[52px]">
         <div className="flex flex-col gap-[27px] items-center">
-          <span className="text-[24px] w-full text-center font-bold opacity-50">
+          <span className="text-[24px] w-full text-center font-bold">
             Каталог заявок
           </span>
           <CategoriesButtons categories={categories} category={category} handleChangeCategory={handleChangeCategory} />

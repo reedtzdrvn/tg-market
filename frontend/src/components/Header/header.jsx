@@ -2,12 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCategories } from '../../context/categoryContext';
 import Loader from '../UI/Loader/loader';
-import axios from "../../axios"
+import axios from "../../axios";
+import { useUser } from '../../context/userContext';
 
 const Header = () => {
+  let tg = window.Telegram.WebApp;
+  let userId = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "703999322";
+
   const [selectedCity, setSelectedCity] = useState('Екатеринбург');
   const { categories, setCategories } = useCategories();
-  const [loading, setLoading] = useState(true);
+  const { user, setUser } = useUser();
+  const [loadingCategories, setLoadingCategories] = useState(true);
+  const [loadingUser, setLoadingUser] = useState(true);
 
   const cities = [
     'Екатеринбург',
@@ -27,17 +33,32 @@ const Header = () => {
       axios.get("/category")
         .then((res) => {
           setCategories(res.data);
-          setLoading(false);
+          setLoadingCategories(false);
         })
         .catch((err) => {
           console.log(err);
         });
     } else {
-      setLoading(false);
+      setLoadingCategories(false);
     }
   }, [categories, setCategories]);
 
-  if (loading) {
+  useEffect(() => {
+    if (!user) {
+      axios.get(`/user?telegramId=${userId}`)
+        .then((res) => {
+          setUser(res.data[0]);
+          setLoadingUser(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      setLoadingUser(false);
+    }
+  }, [user, setUser, userId]);
+
+  if (loadingCategories || loadingUser) {
     return <Loader />;
   }
 
