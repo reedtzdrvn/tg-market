@@ -23,12 +23,7 @@ const ArtistDetails = () => {
     const [visibleReview, setVisibleReview] = useState(3);
 
     const handleContactClick = () => {
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        if (isMobile) {
-            window.location.href = 'tg://resolve?domain=XrenMoX';
-        } else {
-            window.location.href = 'https://t.me/XrenMoX';
-        }
+        window.location.href = 'https://t.me/XrenMoX';
     };
 
     const toggleShowMore = () => {
