@@ -5,10 +5,10 @@ import star from "../../images/Star.svg";
 import coins from "../../images/Coins.svg";
 import { Link } from "react-router-dom"
 
-const CatalogArtistCard = () => {
+const CatalogArtistCard = ({category}) => {
     return (
         <div className='bg-main px-[16px] py-[25px] shadow-custom '>
-            <Link to={`/artist/:id`} className='flex items-center gap-[12px]'>
+            <Link  to={`/artist/${"1"}/${category}`} className='flex items-center gap-[12px]'>
                 <img src={picture} className='w-[88px] h-[88px] rounded-full ' alt="1" />
                 <div className='flex flex-col gap-[12px] h-full justify-center'>
                     <span className='font-bold text-[24px]'>Ира Петрова</span>

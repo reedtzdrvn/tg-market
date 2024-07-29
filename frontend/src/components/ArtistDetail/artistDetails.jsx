@@ -11,18 +11,25 @@ import youtube from "../../images/Youtube.svg";
 import photo from "../../images/photo 1.png";
 import arrow from "../../images/arrow.svg";
 import Review from "./review";
+import crossIcon from "../../images/close.svg";
+import { Link } from "react-router-dom";
 import { DarkButton } from "../UI/Button/button";
 
 const ArtistDetails = () => {
-    const { id } = useParams();
+    const { id, idCategory } = useParams();
     const [showMore, setShowMore] = useState(false);
     const [showMoreReview, setShowMoreReview] = useState(false);
     const [visiblePhotos, setVisiblePhotos] = useState(8);
     const [visibleReview, setVisibleReview] = useState(3);
 
     const handleContactClick = () => {
-        window.location.href = `tg://resolve?domain=XrenMoX`;
-    }
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile) {
+            window.location.href = 'tg://resolve?domain=XrenMoX';
+        } else {
+            window.location.href = 'https://t.me/XrenMoX';
+        }
+    };
 
     const toggleShowMore = () => {
         if (showMore) {
@@ -47,9 +54,12 @@ const ArtistDetails = () => {
     const reviews = new Array(28).fill(<Review />);
 
     return (
-        <div className="w-full">
-            <div className="w-full h-[160px]">
+        <div className="w-full font-[Inter] relative">
+            <div className="w-full h-[160px] ">
                 <img src={bgartist} className="w-full h-full" alt="bgartist" />
+                <Link to={`/catalog-artist?id=${idCategory}`} className="absolute top-[16px] right-[16px] ">
+                    <img className="w-[16px]" src={crossIcon} alt="close" />
+                </Link>
             </div>
             <div className="rounded-full flex justify-center w-full -mt-[80px]">
                 <img className="w-[160px] h-[160px]" src={avatar} alt="picture" />

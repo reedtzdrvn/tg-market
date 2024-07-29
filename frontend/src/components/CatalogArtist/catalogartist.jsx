@@ -41,7 +41,7 @@ const CatalogArtist = () => {
                     <CategoriesButtons categories={categories} category={category} handleChangeCategory={handleChangeCategory} />
                 </div>
                 <div className='mt-[39px] flex flex-col gap-[24px]'>
-                    <CatalogArtistCard />
+                    <CatalogArtistCard category={category}/>
                     <CatalogBanner />
                     <CatalogArtistCard />
                 </div>

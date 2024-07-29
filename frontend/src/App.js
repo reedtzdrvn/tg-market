@@ -36,7 +36,7 @@ function App() {
           path="/application-details/:id"
           element={<ApplicationDetails />}
         />
-        <Route path="/artist/:id" element={<ArtistDetails />} />
+        <Route path="/artist/:id/:idCategory" element={<ArtistDetails />} />
       </Routes>
       <Footer />
     </>
