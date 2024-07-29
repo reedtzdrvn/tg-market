@@ -68,7 +68,7 @@ const Header = () => {
         <select
           value={selectedCity}
           onChange={handleCityChange}
-          className="text-[12px] underline"
+          className="text-[12px] underline w-[110px]"
         >
           {cities.map((city, index) => (
             <option key={index} value={city}>

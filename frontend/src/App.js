@@ -8,6 +8,7 @@ import CatalogArtist from "./components/CatalogArtist/catalogartist";
 import CatalogApplications from "./components/CatalogApplications/catalogapplications";
 import ApplicationDetails from "./components/ApplicationDetails/ApplicationDetails";
 import { useUser } from "./context/userContext";
+import ArtistDetails from "./components/ArtistDetail/artistDetails";
 
 let tg = window.Telegram.WebApp;
 tg.expand();
@@ -35,6 +36,7 @@ function App() {
           path="/application-details/:id"
           element={<ApplicationDetails />}
         />
+        <Route path="/artist/:id" element={<ArtistDetails />} />
       </Routes>
       <Footer />
     </>

@@ -2,50 +2,53 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
-    font-family: "Inter", sans-serif;
-    @apply bg-main
-
+body {
+  font-family: "Inter", sans-serif;
+  @apply bg-main;
+}
+* {
+  flex-wrap: wrap;
 }
 ::-webkit-scrollbar {
-    display: none; /* Для вебкит-браузеров (Chrome, Safari, Opera) */
+  display: none; /* Для вебкит-браузеров (Chrome, Safari, Opera) */
 }
 html {
-    scrollbar-width: none;
+  scrollbar-width: none;
 }
-input, textarea{
-    outline:none;
+input,
+textarea {
+  outline: none;
 }
 
 .loader {
-    width: 48px;
-    height: 48px;
-    border: 3px solid #FAD9C9;
-    border-radius: 50%;
-    display: inline-block;
-    position: relative;
-    box-sizing: border-box;
-    animation: rotation 1s linear infinite;
+  width: 48px;
+  height: 48px;
+  border: 3px solid #fad9c9;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
 }
 .loader::after {
-    content: '';
-    box-sizing: border-box;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 3px solid transparent;
-    border-bottom-color: rgba(0,0,0,0.75);
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-bottom-color: rgba(0, 0, 0, 0.75);
 }
 
 @keyframes rotation {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
