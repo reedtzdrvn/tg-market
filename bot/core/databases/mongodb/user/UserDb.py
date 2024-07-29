@@ -11,7 +11,7 @@ class UserController():
         self.collection = self.db["users"]
 
     async def add_user(self, telegramId: int, username: str) -> bool:
-        new_user = User(username=username, telegramId=telegramId)
+        new_user = User(userName=username, telegramId=telegramId)
         
         await self.collection.insert_one(new_user.dict())
         

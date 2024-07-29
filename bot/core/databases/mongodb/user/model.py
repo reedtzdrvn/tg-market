@@ -3,7 +3,7 @@ from dataclasses import asdict, dataclass
 
 @dataclass
 class User:
-    username: str
+    userName: str
     telegramId: int
 
     def dict(self):

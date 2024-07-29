@@ -2,10 +2,11 @@ node_modules/
 venv/
 .pylintrc
 pycache/
-/backend/.env
-/frontend/.env
+
+**/.env
+.env
 /ngrok
-/bot/.env
+
 /bot/venv
 .vscode
 
