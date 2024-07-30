@@ -28,7 +28,7 @@ const AddMyApplication = () => {
     return (
         <div className="px-[16px] bg-main">
             <div className="py-[44px] flex gap-[33px] justify-center">
-                <div to={"/my-add-application"} className="underline font-bold text-[20px]">Создать заявку</div><Link to={"/my-applications"} className="text-[20px] opacity-60" >Мои заявки (6)</Link>
+                <div className="underline font-bold text-[20px]">Создать заявку</div><Link to={"/my-applications"} className="text-[20px] opacity-60" >Мои заявки (6)</Link>
             </div>
             <div>
             <form className="px-[16px]" onSubmit={handleGoForm}>
