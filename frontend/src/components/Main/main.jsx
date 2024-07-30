@@ -22,7 +22,7 @@ const Main = () => {
     const handleGoArtistCatalog = () => {
         axios.patch("/user", { telegramId: userId, role: 'customer' })
             .then(() => {
-                window.location.href("/catalog-artist");
+                window.location.href="/catalog-artist";
             })
             .catch((err) => {
                 console.log(err)
@@ -32,7 +32,7 @@ const Main = () => {
     const handleGoCustomerCatalog = () => {
         axios.patch("/user", { telegramId: userId, role: 'artist' })
             .then(() => {
-                window.location.href("/category-artist");
+                window.location.href="/category-artist";
             })
             .catch((err) => {
                 console.log(err)
