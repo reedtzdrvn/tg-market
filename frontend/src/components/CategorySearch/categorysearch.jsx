@@ -1,9 +1,6 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import axios from "../../axios.js";
 import { DarkButton } from "../UI/Button/button";
 import Categories from "../UI/Categories/categories.jsx";
-import Loader from "../UI/Loader/loader.jsx";
 import { useCategories } from "../../context/categoryContext.js";
 
 const CategorySearch = () => {
@@ -16,7 +13,7 @@ const CategorySearch = () => {
       </div>
       <div className="flex flex-col items-center w-full px-[12px]">
         <Categories categories={categories} />
-        <Link to="/addrequest" className="w-full"><DarkButton text={"Создать заявку"} /></Link>
+        <Link to="/add-application" className="w-full"><DarkButton text={"Создать заявку"} /></Link>
       </div>
     </div>
   );

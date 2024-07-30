@@ -50,3 +50,31 @@ textarea {
     transform: rotate(360deg);
   }
 }
+
+.select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.custom-select {
+  appearance: none; /* Убираем стандартную стрелку */
+  -webkit-appearance: none; /* Убираем стандартную стрелку в WebKit браузерах */
+  -moz-appearance: none; /* Убираем стандартную стрелку в Firefox */
+  padding: 16px 24px;
+  border: 2px solid black;
+  width: 100%;
+  padding-right: 40px; /* Дополнительное пространство для кастомной стрелки */
+  background: white; /* Фон, чтобы стрелка была видна */
+  font-size: 16px; /* Размер текста */
+}
+
+.select-wrapper::after {
+  content: "▼"; /* Кастомная стрелка */
+  font-size: 14px;
+  color: black;
+  position: absolute;
+  right: 16px; /* Отступ справа */
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none; /* Чтобы стрелка не блокировала клики по селекту */
+}

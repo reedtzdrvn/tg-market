@@ -9,17 +9,14 @@ import CatalogApplications from "./components/CatalogApplications/catalogapplica
 import ApplicationDetails from "./components/ApplicationDetails/ApplicationDetails";
 import { useUser } from "./context/userContext";
 import ArtistDetails from "./components/ArtistDetail/artistDetails";
-
-let tg = window.Telegram.WebApp;
-tg.expand();
-
-let userId = "";
-
-if (!tg.initDataUnsafe.user) {
-  userId = "703999322";
-} else {
-  userId = tg.initDataUnsafe.user?.id;
-}
+import AddApplication from "./components/AddApplication/addApplication";
+import ApplicationDone from "./components/ApplicationDone/applicationDone";
+import MyApplications from "./components/Profile/myApplications";
+import AddMyApplication from "./components/Profile/addMyApplication";
+import AddArtistRequest from "./components/AddArtistRequest/addArtistRequest";
+import DoneArtistRequest from "./components/AddArtistRequest/doneArtistRequest";
+import MyRequest from "./components/Profile/myRequests";
+import AddMyRequest from "./components/Profile/addMyRequest";
 
 function App() {
   const { user } = useUser();
@@ -37,6 +34,14 @@ function App() {
           element={<ApplicationDetails />}
         />
         <Route path="/artist/:id/:idCategory" element={<ArtistDetails />} />
+        <Route path="/add-application" element={<AddApplication />} />
+        <Route path="/application-done" element={<ApplicationDone />} />
+        <Route path="/my-applications" element={<MyApplications />} />
+        <Route path="/my-add-application" element={<AddMyApplication />} />
+        <Route path="/add-artist-request" element={<AddArtistRequest />} />
+        <Route path="/artist-request-done" element={<DoneArtistRequest />} />
+        <Route path="/my-add-request" element={<AddMyRequest />} />
+        <Route path="/my-requests" element={<MyRequest />} />
       </Routes>
       <Footer />
     </>

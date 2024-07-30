@@ -3,9 +3,14 @@ import calendarIcon from "../../images/Calendar-2.svg";
 import moneyIcon from "../../images/Coins.svg";
 import userIcon from "../../images/User.svg";
 import { Link, useParams } from "react-router-dom";
+import { DarkButton } from "../UI/Button/button";
 
 const ApplicationDetails = () => {
   const { id } = useParams();
+
+  const handleContactClick = () => {
+    window.location.href = 'https://t.me/XrenMoX';
+  };
 
   return (
     <div className="font-[Inter] bg-white">
@@ -84,9 +89,7 @@ const ApplicationDetails = () => {
       </div>
 
       <div className="px-4 py-10">
-        <button className="w-full flex justify-center items-center bg-black font-[Inter] text-[20px] font-bold rounded-2xl text-white py-4">
-          Откликнуться
-        </button>
+        <DarkButton text={"откликнуться"} onClick={handleContactClick} />
       </div>
     </div>
   );
