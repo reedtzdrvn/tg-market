@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import { config as dotenvConfig } from "dotenv";
 import userController from "./controllers/userController.js";
-import statusController from "./controllers/statusController.js"
+import statusController from "./controllers/statusController.js";
 import multer from "multer";
 import path from "path";
 import moderatorController from "./controllers/moderatorController.js";
@@ -32,7 +32,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-app.use(express.static("media"));
+app.use('/media', express.static('media'));
 app.use(express.json());
 app.use(cors());
 mongoose
@@ -58,68 +58,73 @@ app.get("/", async (req, res) => {
 
 app.get("/user", userController.getUser);
 
-app.get("/status", statusController.getStatus)
+app.get("/status", statusController.getStatus);
 
-app.get("/moderator", moderatorController.getModerator)
+app.get("/moderator", moderatorController.getModerator);
 
-app.get("/review", reviewController.getReview) // если передаем artistId то получим все отзывы артиста, если reviewId - конкретный отзыв
+app.get("/review", reviewController.getReview); // если передаем artistId то получим все отзывы артиста, если reviewId - конкретный отзыв
 
-app.get("/order", orderController.getOrder) // если передаем в query orderId - то получим заказ, если artistId - все заказы артиста, если customerId - все заказы заказчика
+app.get("/order", orderController.getOrder); // если передаем в query orderId - то получим заказ, если artistId - все заказы артиста, если customerId - все заказы заказчика
 
-app.get("/category", categoryController.getCategory)
+app.get("/category", categoryController.getCategory);
 
-app.get("/artist-request", artistRequestController.getArtistRequest) // если передаем requestId то получим конкретный request, если artistId - то его requests, если categoryId - то все заявки с такой категорией
+app.get("/artist-request", artistRequestController.getArtistRequest); // если передаем requestId то получим конкретный request, если artistId - то его requests, если categoryId - то все заявки с такой категорией
 
-app.get("/customer-requests", customerRequestController. getCustomerRequest) // если передаем requestId то получим конкретный request, если customer - то его requests, если categoryId - то все заявки с такой категорией
+app.get("/customer-requests", customerRequestController.getCustomerRequest); // если передаем requestId то получим конкретный request, если customer - то его requests, если categoryId - то все заявки с такой категорией
 
 //POST
 
-app.post('/upload', upload.single('photo'), async (req, res) => {
-    try {
-        res.status(201).json({ filename: req.file.filename });
-    } catch (err) {
-        res.status(500).json({ error: 'Failed to upload photo' });
-    }
+app.post("/upload", upload.single("photo"), async (req, res) => {
+  try {
+    res.status(201).json({ filename: "/media/" + req.file.filename });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to upload photo" });
+  }
 });
 
-app.post("/status", statusController.addStatus)
+app.post("/status", statusController.addStatus);
 
-app.post("/moderator", moderatorController.addModerator)
+app.post("/moderator", moderatorController.addModerator);
 
-app.post("/review", reviewController.addReview)
+app.post("/review", reviewController.addReview);
 
-app.post("/order", orderController.addOrder)
+app.post("/order", orderController.addOrder);
 
-app.post("/category", categoryController. addCategory)
+app.post("/category", categoryController.addCategory);
 
-app.post("/artist-request", artistRequestController. addArtistRequest)
+app.post("/artist-request", artistRequestController.addArtistRequest);
 
-app.post("/customer-requests", customerRequestController.addCustomerRequest)
+app.post("/customer-requests", customerRequestController.addCustomerRequest);
 
 //PATCH
 
-app.patch("/user", userController.updateUser)
+app.patch("/user", userController.updateUser);
 
-app.patch("/review", reviewController.updateReview)
+app.patch("/review", reviewController.updateReview);
 
-app.patch("/order", orderController.updateOrder)
+app.patch("/order", orderController.updateOrder);
 
-app.patch("/artist-request", artistRequestController.updateArtistRequest)
+app.patch("/artist-request", artistRequestController.updateArtistRequest);
 
-app.patch("/customer-request", customerRequestController.updateCustomerRequest)
+app.patch("/customer-request", customerRequestController.updateCustomerRequest);
+
+app.patch("/selectcity", userController.updateSelectCity);
 
 //DELETE
 
-app.delete("/status", statusController.deleteStatus)
+app.delete("/status", statusController.deleteStatus);
 
-app.delete("/moderator", moderatorController.deleteModerator)
+app.delete("/moderator", moderatorController.deleteModerator);
 
-app.delete("/review", reviewController.deleteReview)
+app.delete("/review", reviewController.deleteReview);
 
-app.delete("/order", orderController.deleteOrder)
+app.delete("/order", orderController.deleteOrder);
 
-app.delete("/category", categoryController.deleteCategory)
+app.delete("/category", categoryController.deleteCategory);
 
-app.delete("/artist-request", artistRequestController.deleteArtistRequest)
+app.delete("/artist-request", artistRequestController.deleteArtistRequest);
 
-app.delete("/customer-request", customerRequestController.deleteCustomerRequest)
+app.delete(
+  "/customer-request",
+  customerRequestController.deleteCustomerRequest
+);

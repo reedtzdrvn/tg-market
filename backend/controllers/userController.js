@@ -1,3 +1,4 @@
+import user from "../models/user.js";
 import UserSchema from "../models/user.js";
 
 export default class userController {
@@ -15,6 +16,33 @@ export default class userController {
         return res.status(404).json({ message: "User not found" });
       }
       res.json(userData);
+    } catch (e) {
+      console.log(e);
+      res.status(500).json({ error: e, message: e.message });
+    }
+  };
+  static updateSelectCity = async (req, res) => {
+    try {
+      const setCitySearch = req.body.setCitySearch;
+      const telegramId = req.body.telegramId;
+
+      if (!setCitySearch) {
+        return res
+          .status(404)
+          .json({ message: "setCitySearch is not defined" });
+      }
+
+      const userData = await UserSchema.findOne({ telegramId: telegramId });
+
+      if (!userData) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      userData.setCitySearch = setCitySearch;
+
+      await userData.save();
+
+      return res.status(200).json(userData);
     } catch (e) {
       console.log(e);
       res.status(500).json({ error: e, message: e.message });

@@ -13,7 +13,20 @@ const ArtistRequestSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  price: {
+    type: String,
+    require: true,
+  },
   approved: { type: Boolean, required: true, default: false },
+  mainPhoto: { type: String, required: false },
+  backGroundPhoto: { type: String, required: false },
+  photo: { type: [String], required: false },
+  video: { type: [String], required: false },
+  link_video: { type: [String], required: false },
+  vk: { type: String, required: false },
+  instagram: { type: String, required: false },
+  youtube: { type: String, required: false },
+  tiktok: { type: String, required: false },
 });
 
 export default mongoose.model("ArtistRequest", ArtistRequestSchema);

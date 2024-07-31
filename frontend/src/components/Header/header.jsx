@@ -9,7 +9,6 @@ const Header = () => {
   let tg = window.Telegram.WebApp;
   let userId = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "703999322";
 
-  const [selectedCity, setSelectedCity] = useState('Екатеринбург');
   const { categories, setCategories } = useCategories();
   const { user, setUser } = useUser();
   const [loadingCategories, setLoadingCategories] = useState(true);
@@ -24,8 +23,19 @@ const Header = () => {
     'Челябинск'
   ];
 
+
   const handleCityChange = (event) => {
-    setSelectedCity(event.target.value);
+    const newCity = event.target.value;
+
+    if (user && user.telegramId) {
+      axios.patch("/selectcity", { telegramId: user.telegramId, setCitySearch: newCity })
+        .then(() => {
+          setUser(prevUser => ({ ...prevUser, setCitySearch: newCity }));
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   useEffect(() => {
@@ -44,6 +54,7 @@ const Header = () => {
   }, [categories, setCategories]);
 
   useEffect(() => {
+
     if (!user) {
       axios.get(`/user?telegramId=${userId}`)
         .then((res) => {
@@ -66,8 +77,8 @@ const Header = () => {
     <div className="h-[48px] shadow-custom flex justify-between items-center px-[16px] relative bg-white">
       <div className="current_city flex justify-start w-1/3">
         <select
-          value={selectedCity}
-          onChange={handleCityChange}
+          value={user.setCitySearch}
+          onChange={(event) => handleCityChange(event)}
           className="text-[12px] underline w-[110px]"
         >
           {cities.map((city, index) => (
