@@ -74,9 +74,11 @@ app.get("/customer-requests", customerRequestController.getCustomerRequest); // 
 
 //POST
 
-app.post("/upload", upload.single("photo"), async (req, res) => {
+app.post("/upload", upload.array("photo"), async (req, res) => {
   try {
-    res.status(201).json({ filename: "/media/" + req.file.filename });
+    const fileUrls = req.files.map(file => "/media/" + file.filename);
+    console.log(fileUrls)
+    res.status(201).json({ filenames: fileUrls });
   } catch (err) {
     res.status(500).json({ error: "Failed to upload photo" });
   }

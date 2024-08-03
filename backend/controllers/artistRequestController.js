@@ -3,13 +3,13 @@ import ArtistRequestSchema from "../models/artistRequest.js";
 export default class artistRequestController {
     static addArtistRequest = async (req, res) => {
         try {
-          const { city, artistId, categoryId, description } = req.body;
+          const { city, artistId, categoryId, description, price, approved, mainPhoto, backGroundPhoto, photo, link_video, vk, instagram, youtube, tiktok  } = req.body;
     
           if (!city || !artistId || !categoryId ) {
             return res.status(400).json({ message: "Error, check city, artistId, categoryId, description" });
           }
     
-          const request = new ArtistRequestSchema({ city: customecityrId, artistId: artistId, categoryId: categoryId, description: description});
+          const request = new ArtistRequestSchema({ city, artistId, categoryId, description, price, approved, mainPhoto, backGroundPhoto, photo, link_video, vk, instagram, youtube, tiktok});
     
           await request.save();
     

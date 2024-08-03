@@ -54,17 +54,12 @@ export default class userController {
       const {
         firstName,
         lastName,
+        userName,
         phoneNumber,
         telegramId,
         role,
-        photo,
-        mainPhoto,
-        video,
-        vk,
-        instagram,
-        youtube,
       } = req.body;
-
+      
       const user = await UserSchema.findOne({ telegramId });
       console.log(user);
       if (!user) {
@@ -75,12 +70,7 @@ export default class userController {
       if (lastName) user.lastName = lastName;
       if (phoneNumber) user.phoneNumber = phoneNumber;
       if (role) user.role = role;
-      if (photo) user.photo = photo;
-      if (mainPhoto) user.mainPhoto = mainPhoto;
-      if (video) user.video = video;
-      if (vk) user.vk = vk;
-      if (instagram) user.instagram = instagram;
-      if (youtube) user.youtube = youtube;
+      if (userName) user.userName = userName;
 
       await user.save();
 

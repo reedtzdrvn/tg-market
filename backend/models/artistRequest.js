@@ -7,7 +7,7 @@ const ArtistRequestSchema = new mongoose.Schema({
     ref: "Category",
     required: true,
   },
-  description: { type: String, required: true },
+  description: { type: String, required: false },
   artistId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -21,7 +21,6 @@ const ArtistRequestSchema = new mongoose.Schema({
   mainPhoto: { type: String, required: false },
   backGroundPhoto: { type: String, required: false },
   photo: { type: [String], required: false },
-  video: { type: [String], required: false },
   link_video: { type: [String], required: false },
   vk: { type: String, required: false },
   instagram: { type: String, required: false },

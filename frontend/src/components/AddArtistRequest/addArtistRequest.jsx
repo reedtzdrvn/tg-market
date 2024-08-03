@@ -8,11 +8,13 @@ import { useUser } from "../../context/userContext";
 import { useState } from "react";
 import axios from "../../axios"
 import Loader from "../UI/Loader/loader";
+import { useEffect } from "react";
 
 const AddArtistRequest = () => {
 
     const { user } = useUser()
 
+    const [loading, setLoading] = useState(false)
 
     const { categories } = useCategories()
 
@@ -29,17 +31,71 @@ const AddArtistRequest = () => {
         'Челябинск'
     ];
 
-    const handleGoForm = () => {
+    const handleGoForm = async (e) => {
+        e.preventDefault();
 
-        // navigate("/artist-request-done")
-    }
+        let formDataToSend = new FormData();
+
+        if (formData.mainPhotoFile) {
+            formDataToSend.append('photo', formData.mainPhotoFile);
+        }
+
+        if (formData.backGroundPhotoFile) {
+            formDataToSend.append('photo', formData.backGroundPhotoFile);
+        }
+
+        if (formData.galleryFiles && formData.galleryFiles.length > 0) {
+            formData.galleryFiles.forEach(file => formDataToSend.append('photo', file));
+        }
+
+        axios.post('/upload', formDataToSend, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+            .then((res) => {
+                setFormData(prevData => ({
+                    ...prevData,
+                    mainPhoto: res.data.filenames[0],
+                    backGroundPhoto: res.data.filenames[1],
+                    gallery: res.data.filenames.slice(2),
+
+                }));
+
+                axios.post("/artist-request", {
+                    city: formData.setCitySearch,
+                    artistId: user._id,
+                    categoryId: formData.category,
+                    description: formData.description,
+                    price: formData.priceFrom + ' - ' + formData.priceTo,
+                    mainPhoto: res.data.filenames[0],
+                    backGroundPhoto: res.data.filenames[1],
+                    photo: res.data.filenames.slice(2),
+                    link_video: formData.videoLinks,
+                    vk: formData.vk,
+                    instagram: formData.instagram,
+                    youtube: formData.youtube,
+                    tiktok: formData.tiktok
+                });
+
+                axios.patch("/user", {
+                    lastName: formData.fullName.split(' ')[0],
+                    firstName: formData.fullName.split(' ')[1],
+                    userName: formData.userName,
+                    phoneNumber: formData.phoneNumber,
+                    telegramId: user.telegramId
+                });
+            })
+        window.location.href = "/artist-request-done";
+    };
+
 
     const [formData, setFormData] = useState({
-        fullName: user?.firstName + user?.lastName || '',
-        userName: user?.userName || '',
-        phoneNumber: user?.phoneNumber || '',
-        category: categories?.length > 0 ? categories?.[0]._id : '',
-        setCitySearch: user?.setCitySearch,
+        fullName: '',
+        userName: '',
+        phoneNumber: '',
+        category: '',
+        setCitySearch: "",
         priceFrom: '',
         priceTo: '',
         description: '',
@@ -48,40 +104,38 @@ const AddArtistRequest = () => {
         youtube: '',
         tiktok: '',
         mainPhoto: null,
+        mainPhotoFile: null,
         backGroundPhoto: null,
+        backGroundPhotoFile: null,
         gallery: [],
+        galleryFiles: [],
         videoLinks: ['', '', '', '', ''],
     });
+
+    console.log(formData)
 
     const handleFileChange = (e) => {
         const { name, files } = e.target;
         const file = files[0];
 
-        const formData = new FormData();
-        formData.append('photo', file); 
+        console.log(file)
 
-        axios.post('/upload', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        })
-            .then((res) => {
-                const filename = res.data.filename;
-                if (name === 'mainPhoto' || name === 'backGroundPhoto') {
-                    setFormData((prevData) => ({
-                        ...prevData,
-                        [name]: filename,
-                    }));
-                } else {
-                    setFormData((prevData) => ({
-                        ...prevData,
-                        gallery: [...prevData.gallery, filename],
-                    }));
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        if (name === 'mainPhoto') {
+            setFormData((prevData) => ({
+                ...prevData,
+                mainPhotoFile: file,
+            }));
+        } else if (name === 'backGroundPhoto') {
+            setFormData((prevData) => ({
+                ...prevData,
+                backGroundPhotoFile: file,
+            }));
+        } else {
+            setFormData((prevData) => ({
+                ...prevData,
+                galleryFiles: [...prevData.galleryFiles, file],
+            }));
+        }
     };
 
     const handleUpdateVideoLink = (event) => {
@@ -90,6 +144,23 @@ const AddArtistRequest = () => {
         let links = formData.videoLinks
         links[index - 1] = event.target.value
         setFormData({ ...formData, videoLinks: links })
+    }
+
+    useEffect(() => {
+        if (user && categories) {
+            setFormData({
+                ...formData,
+                fullName: user?.lastName + ' ' + user?.firstName || '',
+                userName: user?.userName || '',
+                phoneNumber: user?.phoneNumber || '',
+                category: categories?.length > 0 ? categories?.[0]._id : '',
+                setCitySearch: user?.setCitySearch,
+            });
+        }
+    }, [user, categories]);
+
+    if (loading) {
+        return <Loader />
     }
 
     return (
@@ -184,16 +255,16 @@ const AddArtistRequest = () => {
                         <div className="flex w-full gap-[16px]">
                             <input required type="file" name="mainPhoto" id="mainPhoto" className="hidden" onChange={(e) => handleFileChange(e)} />
                             <label htmlFor="mainPhoto" className="border-black border-solid border-2 w-full h-[60px] flex items-center justify-center text-[40px]">
-                                {formData.mainPhoto ? (
-                                    <img src={process.env.REACT_APP_API_URL +  formData.mainPhoto} alt="mainPhoto" className="w-full h-full object-cover" />
+                                {formData.mainPhotoFile ? (
+                                    <img src={URL.createObjectURL(formData.mainPhotoFile)} alt="mainPhoto" className="w-full h-full object-cover" />
                                 ) : (
                                     '+'
                                 )}
                             </label>
                             <input required type="file" name="backGroundPhoto" id="backGroundPhoto" className="hidden" onChange={(e) => handleFileChange(e)} />
                             <label htmlFor="backGroundPhoto" className="border-black border-solid border-2 w-full h-[60px] flex items-center justify-center text-[40px]">
-                                {formData.backGroundPhoto ? (
-                                    <img src={process.env.REACT_APP_API_URL + formData.backGroundPhoto} alt="backGroundPhoto" className="w-full h-full object-cover" />
+                                {formData.backGroundPhotoFile ? (
+                                    <img src={URL.createObjectURL(formData.backGroundPhotoFile)} alt="backGroundPhoto" className="w-full h-full object-cover" />
                                 ) : (
                                     '+'
                                 )}
@@ -207,32 +278,32 @@ const AddArtistRequest = () => {
                         <div className="flex w-full gap-[16px]">
                             <input type="file" name="gallery" id="gallery1" className="hidden" onChange={(e) => handleFileChange(e)} />
                             <label htmlFor="gallery1" className="border-black border-solid border-2 w-full h-[60px] flex items-center justify-center text-[40px]">
-                                {formData.gallery[0] ? (
-                                    <img src={process.env.REACT_APP_API_URL + formData.gallery[0]} alt="gallery1" className="w-full h-full object-cover" />
+                                {formData.galleryFiles[0] ? (
+                                    <img src={URL.createObjectURL(formData.galleryFiles[0])} alt="gallery1" className="w-full h-full object-cover" />
                                 ) : (
                                     '+'
                                 )}
                             </label>
                             <input type="file" name="gallery" id="gallery2" className="hidden" onChange={(e) => handleFileChange(e)} />
                             <label htmlFor="gallery2" className="border-black border-solid border-2 w-full h-[60px] flex items-center justify-center text-[40px]">
-                                {formData.gallery[1] ? (
-                                    <img src={process.env.REACT_APP_API_URL +  formData.gallery[1]} alt="gallery2" className="w-full h-full object-cover" />
+                                {formData.galleryFiles[1] ? (
+                                    <img src={URL.createObjectURL(formData.galleryFiles[1])} alt="gallery2" className="w-full h-full object-cover" />
                                 ) : (
                                     '+'
                                 )}
                             </label>
                             <input type="file" name="gallery" id="gallery3" className="hidden" onChange={(e) => handleFileChange(e)} />
                             <label htmlFor="gallery3" className="border-black border-solid border-2 w-full h-[60px] flex items-center justify-center text-[40px]">
-                                {formData.gallery[2] ? (
-                                    <img src={process.env.REACT_APP_API_URL +  formData.gallery[2]} alt="gallery2" className="w-full h-full object-cover" />
+                                {formData.galleryFiles[2] ? (
+                                    <img src={URL.createObjectURL(formData.galleryFiles[2])} alt="gallery2" className="w-full h-full object-cover" />
                                 ) : (
                                     '+'
                                 )}
                             </label>
                             <input type="file" name="gallery" id="gallery4" className="hidden" onChange={(e) => handleFileChange(e)} />
                             <label htmlFor="gallery4" className="border-black border-solid border-2 w-full h-[60px] flex items-center justify-center text-[40px]">
-                                {formData.gallery[3] ? (
-                                    <img src={process.env.REACT_APP_API_URL +  formData.gallery[3]} alt="gallery2" className="w-full h-full object-cover" />
+                                {formData.galleryFiles[3] ? (
+                                    <img src={URL.createObjectURL(formData.galleryFiles[3])} alt="gallery2" className="w-full h-full object-cover" />
                                 ) : (
                                     '+'
                                 )}
