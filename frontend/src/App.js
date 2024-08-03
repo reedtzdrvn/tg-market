@@ -25,7 +25,13 @@ function App() {
     <>
       <Header />
       <Routes>
-        {user?.role === 'artist' ? <Route exact path="/" element={< CatalogApplications/>} /> : user?.role === 'customer' ? <Route exact path="/" element={<CategorySearch />} /> : <Route exact path="/" element={<Main />} />} 
+        {user?.role === "artist" ? (
+          <Route exact path="/" element={<CatalogApplications />} />
+        ) : user?.role === "customer" ? (
+          <Route exact path="/" element={<CategorySearch />} />
+        ) : (
+          <Route exact path="/" element={<Main />} />
+        )}
         <Route path="/category-artist" element={<CategorySearch />} />
         <Route path="/catalog-artist" element={<CatalogArtist />} />
         <Route path="/catalog-applications" element={<CatalogApplications />} />
