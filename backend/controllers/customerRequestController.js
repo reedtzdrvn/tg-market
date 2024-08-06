@@ -3,13 +3,14 @@ import CustomerRequestSchema from "../models/customerRequest.js"
 export default class customerRequestController {
     static addCustomerRequest = async (req, res) => {
         try {
-          const { city, customerId, categoryId, description, fee, startDate, endDate, time, guestCount } = req.body;
+          const { city, customerId, categoryId, description, fee, date, time, guestCount, eventName } = req.body;
+          console.log(city, customerId, categoryId, description, fee, date, time, guestCount, eventName)
     
-          if (!city || !customerId || !categoryId || !startDate || !endDate) {
+          if (!city || !customerId || !categoryId) {
             return res.status(400).json({ message: "Error, check city, artistId, categoryId, description, fee, startDate, endDate" });
           }
     
-          const request = new CustomerRequestSchema({ city, customerId, categoryId, description, fee, startDate, endDate, time, guestCount});
+          const request = new CustomerRequestSchema({eventName,  city, customerId, categoryId, description, fee, date, time, guestCount});
     
           await request.save();
     

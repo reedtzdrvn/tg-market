@@ -7,18 +7,22 @@ const CustomerRequestSchema = new mongoose.Schema({
     ref: "Category",
     required: true,
   },
+  eventName: {
+    type: String,
+    require: true,
+  },
+
   fee: { type: String, required: true },
-  startDate: { type: Date, required: true },
-  endDate: { type: Date, required: true },
+  date: { type: Date, required: true },
   time: { type: String, required: true },
-  guestCount: { type: Number, required: true },
+  guestCount: { type: String, required: true },
   description: { type: String, required: true },
   customerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
-  approved: { type: Boolean, required: true },
+  approved: { type: Boolean, required: true, default:false },
 });
 
 export default mongoose.model(

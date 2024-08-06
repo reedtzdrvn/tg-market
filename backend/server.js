@@ -96,7 +96,7 @@ app.post("/category", categoryController.addCategory);
 
 app.post("/artist-request", artistRequestController.addArtistRequest);
 
-app.post("/customer-requests", customerRequestController.addCustomerRequest);
+app.post("/customer-request", customerRequestController.addCustomerRequest);
 
 //PATCH
 
