@@ -20,7 +20,7 @@ const AddMyRequest = () => {
         fullName: '',
         userName: '',
         phoneNumber: '',
-        category: '',
+        category: [],
         setCitySearch: "",
         priceFrom: '',
         priceTo: '',
@@ -83,7 +83,7 @@ const AddMyRequest = () => {
 
             setFormData((prevData) => ({
                 ...prevData,
-                category: request.categoryId?._id || '',
+                category: request.categoryId?.map((el)=>(el._id)) || [],
                 setCitySearch: request.city || '',
                 priceFrom,
                 priceTo,
@@ -99,6 +99,12 @@ const AddMyRequest = () => {
             }));
         }
     }, [request]);
+    
+    const handleChange = (e) => {
+        const { name, options } = e.target;
+        const selectedOptions = Array.from(options).filter(option => option.selected).map(option => option.value);
+        setFormData({ ...formData, [name]: selectedOptions });
+    };
 
     const handleFileChange = async (e) => {
         const { name, files } = e.target;
@@ -166,7 +172,8 @@ const AddMyRequest = () => {
                 instagram: formData.instagram,
                 youtube: formData.youtube,
                 tiktok: formData.tiktok,
-                requestId: request._id
+                requestId: request._id,
+                approved: false,
             });
 
             await axios.patch("/user", {
@@ -230,7 +237,7 @@ const AddMyRequest = () => {
                     <div className="flex flex-col gap-[8px]">
                         <div className="flex text-[14px] opacity-70 gap-[8px]"><div>Категория</div><div><img src={zvezda} alt="zvezda" /></div></div>
                         <div className="select-wrapper">
-                            <select required value={formData.category} onChange={(event) => setFormData({ ...formData, category: event.target.value })} className="custom-select" name="1" id="1">
+                            <select multiple required value={formData.category} onChange={handleChange} className="custom-select" name="category" id="1">
                                 {categories.map((el) => (
                                     <option key={el._id} value={el._id}>{el.name}</option>
                                 ))}

@@ -85,9 +85,9 @@ const AddArtistRequest = () => {
                     phoneNumber: formData.phoneNumber,
                     telegramId: user.telegramId
                 })
-                .then((res)=>{
-                    window.location.href = "/artist-request-done";
-                })
+                    .then((res) => {
+                        window.location.href = "/artist-request-done";
+                    })
             })
     };
 
@@ -96,7 +96,7 @@ const AddArtistRequest = () => {
         fullName: '',
         userName: '',
         phoneNumber: '',
-        category: '',
+        category: [],
         setCitySearch: "",
         priceFrom: '',
         priceTo: '',
@@ -155,11 +155,17 @@ const AddArtistRequest = () => {
                 fullName: user?.lastName + ' ' + user?.firstName || '',
                 userName: user?.userName || '',
                 phoneNumber: user?.phoneNumber || '',
-                category: categories?.length > 0 ? categories?.[0]._id : '',
+                category: categories?.length > 0 ? [categories?.[0]._id] : [],
                 setCitySearch: user?.setCitySearch,
             });
         }
     }, [user, categories]);
+
+    const handleChange = (e) => {
+        const { name, options } = e.target;
+        const selectedOptions = Array.from(options).filter(option => option.selected).map(option => option.value);
+        setFormData({ ...formData, [name]: selectedOptions });
+    };
 
     if (loading) {
         return <Loader />
@@ -199,7 +205,7 @@ const AddArtistRequest = () => {
                     <div className="flex flex-col gap-[8px]">
                         <div className="flex text-[14px] opacity-70 gap-[8px]"><div>Категория</div><div><img src={zvezda} alt="zvezda" /></div></div>
                         <div className="select-wrapper">
-                            <select required value={formData.category} onChange={(event) => setFormData({ ...formData, category: event.target.value })} className="custom-select" name="1" id="1">
+                            <select multiple required value={formData.category} name="category" onChange={handleChange} className="custom-select" id="1">
                                 {categories.map((el) => (
                                     <option key={el._id} value={el._id}>{el.name}</option>
                                 ))}

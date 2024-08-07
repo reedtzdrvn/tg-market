@@ -2,11 +2,11 @@ import mongoose from "mongoose";
 
 const ArtistRequestSchema = new mongoose.Schema({
   city: { type: String, required: true },
-  categoryId: {
+  categoryId: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
     required: true,
-  },
+  }],
   description: { type: String, required: false },
   artistId: {
     type: mongoose.Schema.Types.ObjectId,
