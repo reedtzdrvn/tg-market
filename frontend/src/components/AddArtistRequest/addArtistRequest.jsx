@@ -37,15 +37,15 @@ const AddArtistRequest = () => {
         let formDataToSend = new FormData();
 
         if (formData.mainPhotoFile) {
-            formDataToSend.append('photo', formData.mainPhotoFile);
+            formDataToSend.append('files', formData.mainPhotoFile);
         }
 
         if (formData.backGroundPhotoFile) {
-            formDataToSend.append('photo', formData.backGroundPhotoFile);
+            formDataToSend.append('files', formData.backGroundPhotoFile);
         }
 
         if (formData.galleryFiles && formData.galleryFiles.length > 0) {
-            formData.galleryFiles.forEach(file => formDataToSend.append('photo', file));
+            formData.galleryFiles.forEach(file => formDataToSend.append('files', file));
         }
 
         axios.post('/upload', formDataToSend, {
@@ -84,9 +84,11 @@ const AddArtistRequest = () => {
                     userName: formData.userName,
                     phoneNumber: formData.phoneNumber,
                     telegramId: user.telegramId
-                });
+                })
+                .then((res)=>{
+                    window.location.href = "/artist-request-done";
+                })
             })
-        window.location.href = "/artist-request-done";
     };
 
 

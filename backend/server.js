@@ -74,12 +74,14 @@ app.get("/customer-requests", customerRequestController.getCustomerRequest); // 
 
 //POST
 
-app.post("/upload", upload.array("photo"), async (req, res) => {
+app.post("/upload", upload.array("files"), async (req, res) => {
   try {
+    console.log(req.files)
     const fileUrls = req.files.map(file => "/media/" + file.filename);
-    console.log(fileUrls)
+    console.log(fileUrls);
     res.status(201).json({ filenames: fileUrls });
   } catch (err) {
+    console.error("Failed to upload photo", err);
     res.status(500).json({ error: "Failed to upload photo" });
   }
 });
@@ -125,6 +127,7 @@ app.delete("/order", orderController.deleteOrder);
 app.delete("/category", categoryController.deleteCategory);
 
 app.delete("/artist-request", artistRequestController.deleteArtistRequest);
+
 
 app.delete(
   "/customer-request",

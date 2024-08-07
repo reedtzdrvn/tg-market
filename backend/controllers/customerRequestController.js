@@ -23,7 +23,7 @@ export default class customerRequestController {
     
       static getCustomerRequest = async (req, res) => {
         try {
-          const { requestId, customertId, categoryId } = req.query;
+          const { requestId, customerId, categoryId } = req.query;
 
           if (categoryId){
             const request = await CustomerRequestSchema.findOne({categoryId: categoryId}).populate('categoryId').populate('customerId');
@@ -35,8 +35,8 @@ export default class customerRequestController {
             res.json(request);
           }
 
-          if (customertId){
-            const request = await CustomerRequestSchema.find({customertId: customertId}).populate('categoryId').populate('customerId');
+          if (customerId){
+            const request = await CustomerRequestSchema.find({customerId: customerId}).populate('categoryId').populate('customerId');
             res.json(request);
           }
     
@@ -69,7 +69,7 @@ export default class customerRequestController {
     
       static updateCustomerRequest = async (req, res) => {
         try {
-          const { requestId, city, categoryId, description, fee, startDate, endDate, time, guestCount, approved } = req.body;
+          const {eventName, requestId, city, categoryId, description, fee, date, time, guestCount, approved } = req.body;
     
           const request = await CustomerRequestSchema.findOne({ _id:requestId });
     
@@ -82,10 +82,10 @@ export default class customerRequestController {
           if (description) request.description = description
           if (city) request.city = city
           if (fee) request.fee = fee
-          if (startDate) request.startDate = startDate
-          if (endDate) request.endDate = endDate
+          if (date) request.date = date
           if (time) request.time = time
           if (guestCount) request.guestCount = guestCount
+          if (eventName) request.eventName = eventName
     
           await request.save();
     

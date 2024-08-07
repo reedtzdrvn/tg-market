@@ -8,17 +8,17 @@ import { useCategories } from "../../context/categoryContext";
 import { DarkButton } from "../UI/Button/button";
 import { useUser } from '../../context/userContext';
 
-const   AddApplication = () => {
+const AddApplication = () => {
     const { categories } = useCategories();
     const navigate = useNavigate();
-    const {user} = useUser()
+    const { user } = useUser();
 
     const [formData, setFormData] = useState({
         name: '',
         telegramNick: '',
         phoneNumber: '',
         eventName: '',
-        category: '',
+        category: [],
         city: '',
         feeFrom: '',
         feeTo: '',
@@ -38,8 +38,13 @@ const   AddApplication = () => {
     ];
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        const { name, value, options } = e.target;
+        if (name === 'category') {
+            const selectedOptions = Array.from(options).filter(option => option.selected).map(option => option.value);
+            setFormData({ ...formData, [name]: selectedOptions });
+        } else {
+            setFormData({ ...formData, [name]: value });
+        }
     };
 
     useEffect(() => {
@@ -50,7 +55,7 @@ const   AddApplication = () => {
                 telegramNick: user.userName,
                 phoneNumber: user.phoneNumber,
                 city: user.setCitySearch,
-                category: categories[0]._id
+                category: [categories[0]._id]
             }));
         }
     }, [user, categories]);
@@ -58,8 +63,23 @@ const   AddApplication = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('/customer-request', {fee: formData.feeFrom + ' - ' + formData.feeTo ,eventName: formData.eventName,description:formData.eventDetails, city: formData.city, customerId: user._id, categoryId: formData.category ,date: formData.date, time: formData.timeInterval, guestCount: formData.guestCount});
-            const response2 = await axios.patch('/user', {telegramId: user.telegramId, firstName: formData.name.split(" ")[0], lastName: formData.name.split(" ")[1], userName: formData.telegramNick})
+            const response = await axios.post('/customer-request', {
+                fee: formData.feeFrom + ' - ' + formData.feeTo,
+                eventName: formData.eventName,
+                description: formData.eventDetails,
+                city: formData.city,
+                customerId: user._id,
+                categoryId: formData.category,
+                date: formData.date,
+                time: formData.timeInterval,
+                guestCount: formData.guestCount
+            });
+            const response2 = await axios.patch('/user', {
+                telegramId: user.telegramId,
+                firstName: formData.name.split(" ")[0],
+                lastName: formData.name.split(" ")[1],
+                userName: formData.telegramNick
+            });
             if (response.status === 201) {
                 window.location.href = "/application-done";
             }
@@ -174,6 +194,7 @@ const   AddApplication = () => {
                                 name="category"
                                 value={formData.category}
                                 onChange={handleChange}
+                                multiple
                                 required
                             >
                                 {categories.map((el) => (

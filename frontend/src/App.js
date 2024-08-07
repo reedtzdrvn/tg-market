@@ -17,6 +17,7 @@ import AddArtistRequest from "./components/AddArtistRequest/addArtistRequest";
 import DoneArtistRequest from "./components/AddArtistRequest/doneArtistRequest";
 import MyRequest from "./components/Profile/myRequests";
 import AddMyRequest from "./components/Profile/addMyRequest";
+import EditMyApplication from "./components/Profile/myEditApplication";
 
 function App() {
   const { user } = useUser();
@@ -44,6 +45,7 @@ function App() {
         <Route path="/application-done" element={<ApplicationDone />} />
         <Route path="/my-applications" element={<MyApplications />} />
         <Route path="/my-add-application" element={<AddMyApplication />} />
+        <Route path="/my-edit-application/:id" element={<EditMyApplication />} />
         <Route path="/add-artist-request" element={<AddArtistRequest />} />
         <Route path="/artist-request-done" element={<DoneArtistRequest />} />
         <Route path="/my-add-request" element={<AddMyRequest />} />

@@ -68,7 +68,7 @@ export default class artistRequestController {
     
       static updateArtistRequest = async (req, res) => {
         try {
-          const { requestId, categoryId, approved, description, city } = req.body;
+          const { requestId, city, categoryId, description, price, approved, mainPhoto, backGroundPhoto, photo, link_video, vk, instagram, youtube, tiktok } = req.body;
     
           const request = await ArtistRequestSchema.findOne({ _id:requestId });
     
@@ -79,6 +79,15 @@ export default class artistRequestController {
           if (approved) request.approved = true
           if (categoryId) request.categoryId = categoryId
           if (description) request.description = description
+          if (price) request.price = price
+          if (mainPhoto) request.mainPhoto = mainPhoto
+          if (backGroundPhoto) request.backGroundPhoto = backGroundPhoto
+          if (photo) request.photo = photo
+          if (link_video) request.link_video = link_video
+          if (vk) request.vk = vk
+          if (instagram) request.instagram = instagram
+          if (youtube) request.youtube = youtube
+          if (tiktok) request.tiktok = tiktok
           if (city) request.city = city
     
           await request.save();

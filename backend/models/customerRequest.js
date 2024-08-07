@@ -2,11 +2,11 @@ import mongoose from "mongoose";
 
 const CustomerRequestSchema = new mongoose.Schema({
   city: { type: String, required: true },
-  categoryId: {
+  categoryId: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
     required: true,
-  },
+  }],
   eventName: {
     type: String,
     require: true,
@@ -14,9 +14,9 @@ const CustomerRequestSchema = new mongoose.Schema({
 
   fee: { type: String, required: true },
   date: { type: Date, required: true },
-  time: { type: String, required: true },
+  time: { type: String, required: false },
   guestCount: { type: String, required: true },
-  description: { type: String, required: true },
+  description: { type: String, required: false },
   customerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
