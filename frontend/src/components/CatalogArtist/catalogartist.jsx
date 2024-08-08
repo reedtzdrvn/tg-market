@@ -72,13 +72,20 @@ const CatalogArtist = () => {
         </div>
         <div className="mt-[39px] flex flex-col gap-[24px] last:mb-[27px]">
           {applications && applications.length > 0 ? (
-            applications.map((app) => (
-              <CatalogArtistCard key={app._id} info={app} />
+            applications.map((app, index) => (
+              <>
+                {index % 3 === 0 && index !== 0 ? <CatalogBanner /> : ""}
+                <CatalogArtistCard key={app._id} info={app} category={category} />
+                {applications.length === index + 1 ? <CatalogBanner /> : ""}
+              </>
+
             ))
           ) : (
-            <div className="text-center">нет данных</div>
+            <>
+              <div className="text-center text-2xl font-bold mb-[24px]">Нет артистов с этой категорией!</div>
+              <CatalogBanner />
+            </>
           )}
-          <CatalogBanner />
         </div>
       </div>
     </div>

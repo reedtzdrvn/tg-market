@@ -152,11 +152,11 @@ const AddArtistRequest = () => {
         if (user && categories) {
             setFormData({
                 ...formData,
-                fullName: user?.lastName + ' ' + user?.firstName || '',
+                fullName: `${user?.lastName || ''} ${user?.firstName || ''}`,
                 userName: user?.userName || '',
                 phoneNumber: user?.phoneNumber || '',
-                category: categories?.length > 0 ? [categories?.[0]._id] : [],
-                setCitySearch: user?.setCitySearch,
+                category: categories?.length > 0 ? [categories?.[0]?._id] : [],
+                setCitySearch: user?.setCitySearch || '',
             });
         }
     }, [user, categories]);

@@ -25,8 +25,10 @@ export default class customerRequestController {
         try {
           const { requestId, customerId, categoryId } = req.query;
 
+          console.log(requestId)
+
           if (categoryId){
-            const request = await CustomerRequestSchema.findOne({categoryId: categoryId}).populate('categoryId').populate('customerId');
+            const request = await CustomerRequestSchema.find({categoryId: categoryId, approved: true}).populate('categoryId').populate('customerId');
             res.json(request);
           }
     

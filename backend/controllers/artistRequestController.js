@@ -25,7 +25,7 @@ export default class artistRequestController {
           const { requestId, artistId, categoryId } = req.query;
 
           if (categoryId) {
-            const request = await ArtistRequestSchema.findOne({categoryId: categoryId}).populate('categoryId').populate('artistId');
+            const request = await ArtistRequestSchema.find({categoryId: categoryId}).populate('categoryId').populate('artistId');
             res.json(request);
           }
     

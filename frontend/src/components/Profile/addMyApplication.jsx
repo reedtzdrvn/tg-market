@@ -72,7 +72,7 @@ const AddMyApplication = () => {
         if (user && categories) {
             setFormData(prevData => ({
                 ...prevData,
-                name: `${user.firstName} ${user.lastName}`,
+                name: `${user?.lastName || ''} ${user?.firstName || ''}`,
                 telegramNick: user.userName,
                 phoneNumber: user.phoneNumber,
                 city: user.setCitySearch,

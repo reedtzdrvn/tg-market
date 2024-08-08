@@ -64,7 +64,7 @@ const AddMyRequest = () => {
         if (user && categories) {
             setFormData((prevData) => ({
                 ...prevData,
-                fullName: `${user.lastName || ''} ${user.firstName || ''}`.trim(),
+                fullName: `${user?.lastName || ''} ${user?.firstName || ''}`.trim(),
                 userName: user.userName || '',
                 phoneNumber: user.phoneNumber || '',
             }));

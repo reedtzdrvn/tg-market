@@ -15,6 +15,8 @@ import crossIcon from "../../images/close.svg";
 import { Link } from "react-router-dom";
 import { DarkButton } from "../UI/Button/button";
 import axios from "../../axios";
+import CategoriesButton from "../UI/Categories/categoryButton";
+import Loader from "../UI/Loader/loader";
 
 const ArtistDetails = () => {
   const { id, idCategory } = useParams();
@@ -22,15 +24,22 @@ const ArtistDetails = () => {
   const [showMoreReview, setShowMoreReview] = useState(false);
   const [visiblePhotos, setVisiblePhotos] = useState(8);
   const [visibleReview, setVisibleReview] = useState(3);
+  const [request, setRequest] = useState({})
+  const [loading, setLoading] = useState(true)
 
   const handleContactClick = () => {
-    window.location.href = "https://t.me/XrenMoX";
+    window.location.href = `https://t.me/${request.artistId.userName}`;
   };
 
   useEffect(() => {
-    axios.get("/artist-request", { params: { artistId: id } }).then((res) => {
-      console.log(res.data);
-    });
+    axios.get("/artist-request", { params: { artistId: id } })
+    .then((res) => {
+      setRequest(res.data[0])
+      setLoading(false)
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
   });
 
   const toggleShowMore = () => {
@@ -54,10 +63,12 @@ const ArtistDetails = () => {
   const photos = new Array(28).fill(photo);
   const reviews = new Array(28).fill(<Review />);
 
+  if (loading) return <Loader />
+
   return (
     <div className="w-full font-[Inter] relative">
       <div className="w-full h-[160px] ">
-        <img src={bgartist} className="w-full h-full" alt="bgartist" />
+        <img src={process.env.REACT_APP_API_URL + request.backGroundPhoto} className="w-full h-full" alt="bgartist" />
         <Link
           to={`/catalog-artist?id=${idCategory}`}
           className="absolute top-[16px] right-[16px] "
@@ -66,29 +77,22 @@ const ArtistDetails = () => {
         </Link>
       </div>
       <div className="rounded-full flex justify-center w-full -mt-[80px]">
-        <img className="w-[160px] h-[160px]" src={avatar} alt="picture" />
+        <img className="w-[160px] h-[160px] rounded-full" src={process.env.REACT_APP_API_URL + request.mainPhoto} alt="picture" />
       </div>
       <div className="px-[16px]">
         <div className="text-center text-[30px] font-bold mt-[35px]">
-          Ира Петрова
+          {request.artistId.lastName + " " +  request.artistId.firstName}
         </div>
         <div className="flex items-center flex-wrap gap-3 justify-center mt-[24px]">
-          <div className="w-max flex justify-center items-center">
-            <div className="bg-customyellow px-[16px] py-[4px] rounded-[15px] text-[12px]">
-              Танцы
-            </div>
-          </div>
-          <div className="w-max flex justify-center items-center">
-            <div className="bg-customyellow px-[16px] py-[4px] rounded-[15px] text-[12px]">
-              Муз. группа
-            </div>
-          </div>
+          {request.categoryId.map((el)=>(
+            <CategoriesButton category={el} />
+          ))}
         </div>
         <div className="px-[8px]">
           <div className="flex flex-wrap items-center justify-center w-full mt-[24px] gap-3">
             <div className="flex gap-1 items-center justify-center mb-2">
               <img src={coins} className="w-[16px]" alt="coins" />
-              <div className="text-[18px] font-bold">5.000 - 20.000Р</div>
+              <div className="text-[18px] font-bold">{request.price} Р</div>
             </div>
             <div className="flex items-center justify-center -mt-[8px]">
               <img src={star} alt="star" />
@@ -97,37 +101,28 @@ const ArtistDetails = () => {
             </div>
           </div>
           <div className="mt-[36px] flex gap-5 justify-center items-center">
-            <img src={inst} alt="inst" />
-            <img src={vk} alt="vk" />
-            <img src={youtube} alt="youtube" />
-            <img src={tiktok} alt="tiktok" />
+            {request.instagram && request.instagram!==" " && request.instagram!=="" && <Link  to={`https://instagram.com/${request.instagram}`}><img src={inst} alt="inst" /></Link>}
+            {request.vk && request.vk!==" " && request.vk!=="" && <Link  to={`https://vk.com/${request.vk}`}><img src={vk} alt="vk" /></Link>}
+            {request.youtube && request.youtube!==" " && request.youtube!=="" && <Link  to={`${request.youtube}`}><img src={youtube} alt="youtube" /></Link>}
+            {request.tiktok && request.tiktok!==" " && request.tiktok!=="" && <Link  to={`https://tiktok.com/${request.tiktok}`}><img src={tiktok} alt="tiktok" /></Link>}
           </div>
           <div className="mt-[64px] text-[16px] leading-5">
             <div className="mb-[21px] font-bold text-[20px]">
               Обо мне. Услуги и стоимость
             </div>
             <div className="mb-[21px]">
-              Привет! Меня зовут Ира. Я страстно люблю танцы и считаю, что они
-              являются моим способом самовыражения. Мое тело говорит на языке
-              музыки, а движения — выражение души.
+              {request.description}
             </div>
-            <div className="mb-[24px]">
-              Выступление до 30 минут - 5 000р
-              <br />
-              Выступление 30-60 минут - 10 000р
-              <br />
-              Индивидуальная разработка танцевального номера - 20 000р
-            </div>
-            <div>г.Екатеринбург</div>
+            <div>г.{request.city}</div>
           </div>
         </div>
         <div className="mt-[39px]">
           <div className="font-bold text-[24px]">Галерея</div>
           <div className="mt-[16px] flex flex-wrap gap-[5px] justify-around">
-            {photos.slice(0, visiblePhotos).map((photo, index) => (
+            {request.photo.slice(0, visiblePhotos).map((photo, index) => (
               <img
                 key={index}
-                src={photo}
+                src={process.env.REACT_APP_API_URL + photo}
                 className="w-[80px] h-[80px]"
                 alt={`photo ${index + 1}`}
               />
@@ -159,7 +154,7 @@ const ArtistDetails = () => {
           </div>
         </div>
         <div className="mt-[54px] mb-[111px]">
-          <DarkButton text={"Связаься"} onClick={handleContactClick} />
+          <DarkButton text={"Связаться"} onClick={handleContactClick} />
         </div>
       </div>
     </div>

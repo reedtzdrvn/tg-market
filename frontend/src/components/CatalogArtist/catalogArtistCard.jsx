@@ -5,7 +5,7 @@ import star from "../../images/Star.svg";
 import coins from "../../images/Coins.svg";
 import { Link } from "react-router-dom"
 
-const CatalogArtistCard = ({info}) => {
+const CatalogArtistCard = ({info, category}) => {
 
     const handleContactClick = () => {
         window.location.href = 'https://t.me/XrenMoX';
@@ -37,7 +37,7 @@ const CatalogArtistCard = ({info}) => {
                 {info.photo.map((img) => <img src={`http://localhost:4444${img}`} className='h-[80px] w-[80px]' alt="1" />)}
             </div>
             <div className='mt-[16px] text-[18px]'>
-                <Link to={`/artist/${info.artistId._id}/${info.categoryId._id}`}><DarkButton text={"Связаться"}/></Link>
+                <Link to={`/artist/${info.artistId._id}/${category}`}><DarkButton text={"Связаться"}/></Link>
             </div>
         </div>
     );

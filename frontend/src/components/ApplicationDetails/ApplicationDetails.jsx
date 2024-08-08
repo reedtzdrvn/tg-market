@@ -4,13 +4,46 @@ import moneyIcon from "../../images/Coins.svg";
 import userIcon from "../../images/User.svg";
 import { Link, useParams } from "react-router-dom";
 import { DarkButton } from "../UI/Button/button";
+import { useEffect, useState } from "react";
+import axios from "../../axios";
+import Loader from "../UI/Loader/loader";
+import CategoriesButton from "../UI/Categories/categoryButton";
 
 const ApplicationDetails = () => {
   const { id } = useParams();
 
+  const [loading, setLoading] = useState({})
+  const [application, setApplication] = useState(true)
+
   const handleContactClick = () => {
-    window.location.href = 'https://t.me/XrenMoX';
+    window.location.href = `https://t.me/${application.customerId.userName}`;
   };
+
+  console.log(application)
+
+  useEffect(() => {
+    if (id) {
+      axios.get(`/customer-requests?requestId=${id}`)
+        .then((res) => {
+          setApplication(res.data)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+        .finally(() => {
+          setLoading(false)
+        })
+    }
+  }, [id])
+
+  function normDate(date) {
+    let dateNorm = date.split("T")[0].split("-")
+    return dateNorm[2] + "." + dateNorm[1] + "." + dateNorm[0]
+  }
+
+  if (loading) {
+    return <Loader />
+  }
 
   return (
     <div className="font-[Inter] bg-white">
@@ -22,25 +55,13 @@ const ApplicationDetails = () => {
 
       <div className="flex justify-center flex-col w-full px-12 mt-6">
         <span className="text-center text-[30px] font-bold leading-9">
-          Детский праздник для двух девочек
+          {application.eventName}
         </span>
 
         <div className="flex justify-center gap-4 mt-8 text-[12px] leading-3">
-          <span
-            className={`py-[4.5px] px-4 flex justify-center items-center rounded-xl bg-customyellow`}
-          >
-            Танцы
-          </span>
-          <span
-            className={`py-[4.5px] px-4 flex justify-center items-center rounded-xl bg-customyellow`}
-          >
-            Аниматоры
-          </span>
-          <span
-            className={`py-[4.5px] px-4 flex justify-center items-center rounded-xl bg-customyellow`}
-          >
-            Ведущие
-          </span>
+          {application.categoryId.map((el) => {
+            <CategoriesButton category={el} />
+          })}
         </div>
       </div>
 
@@ -49,47 +70,36 @@ const ApplicationDetails = () => {
           <div className="flex items-center">
             <img className="w-[18px] mr-2" src={calendarIcon} alt="calendar" />
             <span>
-              11.12.2024,
+              {normDate(application.date)},
               <br />
-              12-17:00
+              {application.time}
             </span>
           </div>
           <div className="flex items-center">
             <img className="w-[16px] mr-2" src={userIcon} alt="people" />
-            <span>0-50 человек</span>
+            <span>{application.guestCount} человек</span>
           </div>
         </div>
 
         <div className="flex flex-col gap-4">
           <div className="flex items-center">
             <img className="w-[16px] mr-2" src={moneyIcon} alt="money" />
-            <span>10 000 - 40 000 ₽</span>
+            <span>{application.fee} ₽</span>
           </div>
           <div>
             <span>
-              г. Екатеринбург,
-              <br />
-              Свердловаская обл.
+              г. {application.city},
             </span>
           </div>
         </div>
       </div>
 
       <div className="mt-9 px-4 opacity-70 text-[16px] leading-5">
-        Детский праздник в ярком парке соберет маленьких гостей на веселые игры
-        и конкурсы под руководством аниматоров. <br />
-        <br />
-        Ищем талантливого аниматора-танцора и веселого ведущего, чтобы сделать
-        этот день особенным и запоминающимся. Мы хотим организовать веселые
-        танцевальные баталии под любимые музыкальные хиты, увлекательные игры с
-        призами и креативные конкурсы. <br />
-        <br />
-        Праздник хочу организовать в парке Зеленая роща, днем. Плачу аванс,
-        заключаю с вами договор. Жду ваших откликов.
+        {application.description}
       </div>
 
       <div className="px-4 py-10">
-        <DarkButton text={"откликнуться"} onClick={handleContactClick} />
+        <DarkButton text={"Откликнуться"} onClick={handleContactClick} />
       </div>
     </div>
   );
