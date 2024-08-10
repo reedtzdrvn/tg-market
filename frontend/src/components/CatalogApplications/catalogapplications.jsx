@@ -57,10 +57,6 @@ const CatalogApplications = () => {
     return dateNorm[2] + "." + dateNorm[1] + "." + dateNorm[0]
   }
 
-  if (loading) {
-    return <Loader />
-  }
-
   return (
     <div className="bg-back min-h-[80vh]">
       <div className="pt-[52px]">
@@ -71,57 +67,56 @@ const CatalogApplications = () => {
           <CategoriesButtons categories={categories} category={category} handleChangeCategory={handleChangeCategory} />
         </div>
       </div>
-
-      <div className="mt-[38px] flex flex-col">
-        {applications.length === 0 ? <div className="center font-bold text-center text-2xl mt-[24px]">Нет заявок с этой категорией! <div className="mt-[24px]"><CatalogBanner /></div> </div> :
-          <>
-            {applications.map((application, index) => {
-              console.log(applications.length === index + 1)
-              return (
-                <>
-                  {index % 3 === 0 && index !== 0 ? <CatalogBanner /> : ""}
-                  <div key={application._id} >
-                    <div className="bg-white p-4 shadow-custom mb-6">
-                      <div className="pt-7 pb-[24px] font-[Inter] font-bold text-2xl leading-8">
-                        <span className="mb-[24px]">{application.eventName}</span>
-                      </div>
-                      <div className="flex flex-row gap-4 font-[Inter] text-[12px] font-normal flex-wrap">
-                        {application.categoryId.map((el) => (
-                          <CategoriesButton category={el} />
-                        ))}
-                      </div>
-
-                      <div className="mt-[24px] flex justify-between items-center font-[Inter] text-4 font-semibold">
-                        <div className="flex items-center">
-                          <img className="w-[18px] mr-2" src={calendarIcon} alt="data" />
-                          <span>{normDate(application.date)}</span>
+      {loading ? <Loader /> :
+        <div className="mt-[38px] flex flex-col">
+          {applications.length === 0 ? <div className="center font-bold text-center text-2xl mt-[24px]">Нет заявок с этой категорией! <div className="mt-[24px]"><CatalogBanner /></div> </div> :
+            <>
+              {applications.map((application, index) => {
+                return (
+                  <>
+                    {index % 3 === 0 && index !== 0 ? <CatalogBanner /> : ""}
+                    <div key={application._id} >
+                      <div className="bg-white p-4 shadow-custom mb-6">
+                        <div className="pt-7 pb-[24px] font-[Inter] font-bold text-2xl leading-8">
+                          <span className="mb-[24px]">{application.eventName}</span>
+                        </div>
+                        <div className="flex flex-row gap-4 font-[Inter] text-[12px] font-normal flex-wrap">
+                          {application.categoryId.map((el) => (
+                            <CategoriesButton category={el} />
+                          ))}
                         </div>
 
-                        <div className="flex items-center">
-                          <img className="w-[16px] mr-2" src={moneyIcon} alt="money" />
-                          <span>{application.fee} ₽</span>
+                        <div className="mt-[24px] flex justify-between items-center font-[Inter] text-4 font-semibold">
+                          <div className="flex items-center">
+                            <img className="w-[18px] mr-2" src={calendarIcon} alt="data" />
+                            <span>{normDate(application.date)}</span>
+                          </div>
+
+                          <div className="flex items-center">
+                            <img className="w-[16px] mr-2" src={moneyIcon} alt="money" />
+                            <span>{application.fee} ₽</span>
+                          </div>
                         </div>
-                      </div>
 
-                      <div className="mt-4 font-[Inter] text-[14px] opacity-50 leading-4">
-                        {application.description}
-                      </div>
+                        <div className="mt-4 font-[Inter] text-[14px] opacity-50 leading-4">
+                          {application.description}
+                        </div>
 
-                      <Link to={`/application-details/${application._id}`}>
-                        <button className="mt-4 w-full flex justify-center items-center bg-black font-[Inter] text-[20px] font-bold rounded-2xl text-white py-4">
-                          Откликнуться
-                        </button>
-                      </Link>
+                        <Link to={`/application-details/${application._id}`}>
+                          <button className="mt-4 w-full flex justify-center items-center bg-black font-[Inter] text-[20px] font-bold rounded-2xl text-white py-4">
+                            Откликнуться
+                          </button>
+                        </Link>
+                      </div>
                     </div>
-                  </div>
-                  {applications.length === index + 1 ? <CatalogBanner /> : ""}
-                </>
-              )
-            })}
-          </>
-        }
-
-      </div>
+                    {applications.length === index + 1 ? <CatalogBanner /> : ""}
+                  </>
+                )
+              })}
+            </>
+          }
+        </div>
+      }
     </div>
   );
 };

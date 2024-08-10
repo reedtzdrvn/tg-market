@@ -78,3 +78,14 @@ textarea {
   transform: translateY(-50%);
   pointer-events: none; /* Чтобы стрелка не блокировала клики по селекту */
 }
+
+.cartTarif{
+  width: 185px;
+}
+
+@media screen and (max-width: 370px) {
+  .cartTarif{
+    width: 100% !important;
+  }
+
+}

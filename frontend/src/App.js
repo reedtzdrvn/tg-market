@@ -18,6 +18,9 @@ import DoneArtistRequest from "./components/AddArtistRequest/doneArtistRequest";
 import MyRequest from "./components/Profile/myRequests";
 import AddMyRequest from "./components/Profile/addMyRequest";
 import EditMyApplication from "./components/Profile/myEditApplication";
+import Subscription from "./components/Subscription/subscription";
+import About from "./components/About/about";
+import Share from "./components/Share/share";
 
 function App() {
   const { user } = useUser();
@@ -50,6 +53,9 @@ function App() {
         <Route path="/artist-request-done" element={<DoneArtistRequest />} />
         <Route path="/my-add-request" element={<AddMyRequest />} />
         <Route path="/my-requests" element={<MyRequest />} />
+        <Route path="/subscription" element={<Subscription />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/share" element={<Share />} />
       </Routes>
       <Footer />
     </>
