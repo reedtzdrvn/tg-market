@@ -1,8 +1,9 @@
 import logging
 
 from aiogram import Router, F
-from aiogram.filters import CommandStart
+from aiogram.filters import CommandStart, Command
 from aiogram.types import Message
+from aiogram.enums import ChatAction
 
 from pymongo.errors import DuplicateKeyError
 
@@ -14,6 +15,7 @@ user_router = Router()
 @user_router.message(CommandStart())
 async def message_handler(message: Message, _user_controller) -> None:
     try:
+        await message.bot.send_chat_action(chat_id=message.from_user.id, action=ChatAction.TYPING)
         await _user_controller.add_user(
             message.from_user.id, message.from_user.username
         )
