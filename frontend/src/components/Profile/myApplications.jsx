@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import calendar from "../../images/Calendar.svg"
 import coins from "../../images/Coins.svg"
 import zvezda from "../../images/zvezda.svg"
-import { DarkButton, LightButton2 } from "../UI/Button/button";
+import { LightButton2 } from "../UI/Button/button";
 import { useEffect, useState } from "react";
 import Loader from "../UI/Loader/loader";
 import axios from "../../axios"

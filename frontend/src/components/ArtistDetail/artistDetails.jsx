@@ -27,20 +27,34 @@ const ArtistDetails = () => {
   const [request, setRequest] = useState({})
   const [loading, setLoading] = useState(true)
 
+  const [reviews, setReviews] = useState([])
+
+  useEffect(() => {
+    if (id) {
+      axios.get('/review', { params: { artistId: id } })
+      .then((res)=>{
+        setReviews(res.data)
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+    }
+  }, [id])
+
   const handleContactClick = () => {
     window.location.href = `https://t.me/${request.artistId.userName}`;
   };
 
   useEffect(() => {
     axios.get("/artist-request", { params: { artistId: id } })
-    .then((res) => {
-      setRequest(res.data[0])
-      setLoading(false)
-    })
-    .catch((err)=>{
-      console.log(err)
-    })
-  });
+      .then((res) => {
+        setRequest(res.data[0])
+        setLoading(false)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, []);
 
   const toggleShowMore = () => {
     if (showMore) {
@@ -60,8 +74,15 @@ const ArtistDetails = () => {
     setShowMoreReview(!showMoreReview);
   };
 
+  function ratingCalculate(reviews){
+    let rating = 0
+    for (let i = 0; i<reviews.length; i++){
+      rating+=reviews[i].grade
+    }
+    return parseFloat((rating / reviews.length).toFixed(1));
+  }
+
   const photos = new Array(28).fill(photo);
-  const reviews = new Array(28).fill(<Review />);
 
   if (loading) return <Loader />
 
@@ -81,10 +102,10 @@ const ArtistDetails = () => {
       </div>
       <div className="px-[16px]">
         <div className="text-center text-[30px] font-bold mt-[35px]">
-          {request.artistId.lastName + " " +  request.artistId.firstName}
+          {request.artistId.lastName + " " + request.artistId.firstName}
         </div>
         <div className="flex items-center flex-wrap gap-3 justify-center mt-[24px]">
-          {request.categoryId.map((el)=>(
+          {request.categoryId.map((el) => (
             <CategoriesButton category={el} />
           ))}
         </div>
@@ -94,17 +115,17 @@ const ArtistDetails = () => {
               <img src={coins} className="w-[16px]" alt="coins" />
               <div className="text-[18px] font-bold">{request.price} Р</div>
             </div>
-            <div className="flex items-center justify-center -mt-[8px]">
+            {reviews.length>0 && <div className="flex items-center justify-center -mt-[8px]">
               <img src={star} alt="star" />
-              <div className="ml-[1px] mr-[6px] font-bold text-[18px]">4.5</div>
-              <div className="underline text-[18px] font-bold">Отзывы (15)</div>
-            </div>
+              <div className="ml-[1px] mr-[6px] font-bold text-[18px]">{ratingCalculate(reviews)}</div>
+              <div className="underline text-[18px] font-bold">Отзывы ({reviews.length})</div>
+            </div>}
           </div>
           <div className="mt-[36px] flex gap-5 justify-center items-center">
-            {request.instagram && request.instagram!==" " && request.instagram!=="" && <Link  to={`https://instagram.com/${request.instagram}`}><img src={inst} alt="inst" /></Link>}
-            {request.vk && request.vk!==" " && request.vk!=="" && <Link  to={`https://vk.com/${request.vk}`}><img src={vk} alt="vk" /></Link>}
-            {request.youtube && request.youtube!==" " && request.youtube!=="" && <Link  to={`${request.youtube}`}><img src={youtube} alt="youtube" /></Link>}
-            {request.tiktok && request.tiktok!==" " && request.tiktok!=="" && <Link  to={`https://tiktok.com/${request.tiktok}`}><img src={tiktok} alt="tiktok" /></Link>}
+            {request.instagram && request.instagram !== " " && request.instagram !== "" && <Link to={`https://instagram.com/${request.instagram}`}><img src={inst} alt="inst" /></Link>}
+            {request.vk && request.vk !== " " && request.vk !== "" && <Link to={`https://vk.com/${request.vk}`}><img src={vk} alt="vk" /></Link>}
+            {request.youtube && request.youtube !== " " && request.youtube !== "" && <Link to={`${request.youtube}`}><img src={youtube} alt="youtube" /></Link>}
+            {request.tiktok && request.tiktok !== " " && request.tiktok !== "" && <Link to={`https://tiktok.com/${request.tiktok}`}><img src={tiktok} alt="tiktok" /></Link>}
           </div>
           <div className="mt-[64px] text-[16px] leading-5">
             <div className="mb-[21px] font-bold text-[20px]">
@@ -137,11 +158,11 @@ const ArtistDetails = () => {
             />
           </div>
         </div>
-        <div className="mt-[50px]">
-          <div className="text-[20px] font-bold">Отзывы (15)</div>
+        {reviews.length > 0 && <div className="mt-[50px]">
+          <div className="text-[20px] font-bold">Отзывы ({reviews.length})</div>
           <div className="flex flex-col gap-[23px] mt-[32px]">
-            {reviews.slice(0, visibleReview).map((review, index) => (
-              <Review />
+            {reviews.slice(0, visibleReview).map((review) => (
+              <Review review={review} key={review._id} />
             ))}
           </div>
           <div className="mt-[29px] flex justify-center">
@@ -152,7 +173,7 @@ const ArtistDetails = () => {
               className={`cursor-pointer ${showMoreReview ? `rotate-180` : ""}`}
             />
           </div>
-        </div>
+        </div> }
         <div className="mt-[54px] mb-[111px]">
           <DarkButton text={"Связаться"} onClick={handleContactClick} />
         </div>

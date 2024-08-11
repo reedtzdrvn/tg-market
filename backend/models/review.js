@@ -13,12 +13,25 @@ const ReviewSchema = new mongoose.Schema({
   },
   reviewText: {
     type: String,
+    require: true,
+  },
+  reviewTitle: {
+    type: String,
+    require: true,
   },
   grade: {
     type: Number,
     required: true
   },
-  approved: { type: Boolean, required: true, default: false },
+  approved: { 
+    type: Boolean, 
+    required: true, 
+    default: false 
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 export default mongoose.model("Review", ReviewSchema);
