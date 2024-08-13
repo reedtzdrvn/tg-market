@@ -50,68 +50,104 @@ export default class orderController {
 
       let order;
 
-      // If an orderId is provided, find the order by _id and populate all fields including categories
+      // If an orderId is provided, find the order by _id and populate all fields including categories and user
       if (orderId) {
         order = await OrderSchema.findOne({ _id: orderId })
           .populate({
             path: "customerRequestId",
-            populate: {
-              path: "categoryId",
-              model: "Category", // Populate the categoryId in CustomerRequest
-            },
+            populate: [
+              {
+                path: "categoryId",
+                model: "Category", // Populate the categoryId in CustomerRequest
+              },
+              {
+                path: "customerId",
+                model: "User", // Populate the customerId in CustomerRequest
+              },
+            ],
           })
           .populate({
             path: "artistRequestId",
-            populate: {
-              path: "categoryId",
-              model: "Category", // Populate the categoryId in ArtistRequest
-            },
+            populate: [
+              {
+                path: "categoryId",
+                model: "Category", // Populate the categoryId in ArtistRequest
+              },
+              {
+                path: "artistId",
+                model: "User", // Populate the artistId in ArtistRequest
+              },
+            ],
           })
           .populate("statusCustomer.statusIdCustomer")
           .populate("statusArtist.statusIdArtist");
         return res.json(order);
       }
 
-      // If an artistId is provided, find the order by artistRequestId and populate all fields including categories
+      // If an artistId is provided, find the order by artistRequestId and populate all fields including categories and user
       if (artistId) {
         order = await OrderSchema.find({ artistRequestId: artistRequestId })
           .populate({
             path: "customerRequestId",
-            populate: {
-              path: "categoryId",
-              model: "Category", // Populate the categoryId in CustomerRequest
-            },
+            populate: [
+              {
+                path: "categoryId",
+                model: "Category", // Populate the categoryId in CustomerRequest
+              },
+              {
+                path: "customerId",
+                model: "User", // Populate the customerId in CustomerRequest
+              },
+            ],
           })
           .populate({
             path: "artistRequestId",
-            populate: {
-              path: "categoryId",
-              model: "Category", // Populate the categoryId in ArtistRequest
-            },
+            populate: [
+              {
+                path: "categoryId",
+                model: "Category", // Populate the categoryId in ArtistRequest
+              },
+              {
+                path: "artistId",
+                model: "User", // Populate the artistId in ArtistRequest
+              },
+            ],
           })
           .populate("statusCustomer.statusIdCustomer")
           .populate("statusArtist.statusIdArtist");
         return res.json(order);
       }
 
-      // If a customerRequestId is provided, find the order by customerRequestId and populate all fields including categories
+      // If a customerRequestId is provided, find the order by customerRequestId and populate all fields including categories and user
       if (customerRequestId) {
         order = await OrderSchema.findOne({
           customerRequestId: customerRequestId,
         })
           .populate({
             path: "customerRequestId",
-            populate: {
-              path: "categoryId",
-              model: "Category", // Populate the categoryId in CustomerRequest
-            },
+            populate: [
+              {
+                path: "categoryId",
+                model: "Category", // Populate the categoryId in CustomerRequest
+              },
+              {
+                path: "customerId",
+                model: "User", // Populate the customerId in CustomerRequest
+              },
+            ],
           })
           .populate({
             path: "artistRequestId",
-            populate: {
-              path: "categoryId",
-              model: "Category", // Populate the categoryId in ArtistRequest
-            },
+            populate: [
+              {
+                path: "categoryId",
+                model: "Category", // Populate the categoryId in ArtistRequest
+              },
+              {
+                path: "artistId",
+                model: "User", // Populate the artistId in ArtistRequest
+              },
+            ],
           })
           .populate("statusCustomer.statusIdCustomer")
           .populate("statusArtist.statusIdArtist");

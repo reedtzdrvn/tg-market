@@ -19,7 +19,6 @@ const AddArtistRequest = () => {
     const { categories } = useCategories()
 
 
-    console.log(user)
     const navigate = useNavigate()
 
     const cities = [

@@ -31,8 +31,7 @@ const MyRequest = () => {
     }, [user])
 
     const handleGoTg = (el) =>{
-        // window.location.href = `https://t.me/${el.customerRequestId.customerId}`;
-        console.log(`https://t.me/${el.customerRequestId.customerId}`)
+        window.location.href = `https://t.me/${el.customerRequestId.customerId.userName}`;
     }
 
     function normDate(date) {
@@ -47,12 +46,12 @@ const MyRequest = () => {
     return (
         <div className="px-[16px]">
             <div className="py-[44px] flex gap-[33px] justify-center">
-                <Link to={"/my-add-request"} className=" text-[20px] opacity-60">Моя анкета</Link><div className="text-[20px]  underline font-bold " >Мои заказы (6)</div>
+                <Link to={"/my-add-request"} className=" text-[20px] opacity-60">Моя анкета</Link><div className="text-[20px]  underline font-bold " >Мои заказы ({orders.length})</div>
             </div>
             <div className="flex flex-col gap-[24px] last:mb-[24px]">
                 {orders.map((el) => (
                     <div className="flex-col">
-                        <div className="h-[59px] bg-customgreen flex items-center justify-center text-white text-[18px] font-bold relative">Активна <img className={`absolute right-4 text-white`} src={arrow} alt="arrow" /></div>
+                        <div className="h-[59px] bg-customgreen flex items-center justify-center text-white text-[18px] font-bold relative">{el.statusArtist.statusIdArtist.name} <img className={`absolute right-4 text-white`} src={arrow} alt="arrow" /></div>
                         <div className="py-[24px] px-[19px] bg-main">
                             <div className="text-[24px] font-bold">{el.customerRequestId.eventName}</div>
                             <div className="mt-[20px] flex gap-[16px] flex-wrap">
