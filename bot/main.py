@@ -12,6 +12,7 @@ from core.handlers.admin_handler import admin_router
 from core.databases.mongodb.base import BaseDb
 from core.databases.mongodb.user.UserDb import UserController
 from core.databases.mongodb.moderator.controller import ModeratorController
+from core.databases.mongodb.artist.controller import ArtistController
 
 from config import BOT_TOKEN, DB_CONNECTION_STRING
 
@@ -30,6 +31,7 @@ async def main() -> None:
     # CONTROLLERS
     user_controller = UserController(base_db)
     moderator_controller = ModeratorController(base_db)
+    artist_controller = ArtistController(base_db)
 
     bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 
@@ -39,6 +41,7 @@ async def main() -> None:
         bot,
         _user_controller=user_controller,
         _moderator_controller=moderator_controller,
+        _artist_controller=artist_controller
     )
 
 
