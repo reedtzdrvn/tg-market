@@ -1,5 +1,6 @@
 import ArtistRequestSchema from "../models/artistRequest.js";
 import UserSchema from "../models/user.js";
+import ModeratorSchema from "../models/moderator.js";
 import axios from "axios";
 
 export default class artistRequestController {
@@ -45,9 +46,10 @@ export default class artistRequestController {
         tiktok,
       });
 
-      const artist = await UserSchema.findById(artistId);
+      // const artist = await UserSchema.findById(artistId);
+      const moderators = await ModeratorSchema.find({}).select('telegramId')
 
-      await this.sendTelegramNotification(artist);
+      await this.sendTelegramNotification(moderators);
 
       await request.save();
 
@@ -58,20 +60,20 @@ export default class artistRequestController {
     }
   };
 
-  static sendTelegramNotification = async (user) => {
+  static sendTelegramNotification = async (moderators, isEditing=false) => {
     try {
       const { unapproved_count } = await this.getUnapprovedArtistRequests();
-      console.log(user);
-      await axios.post(
-        `https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`,
-        {
-          chat_id: user.telegramId,
-          text: `Пришла новая заявка от исполнителя.\n\nВсего сейчас непроверенных заявок исполнителей: <b>${
-            unapproved_count + 1
-          }</b>`,
-          parse_mode: "HTML",
-        }
-      );
+
+      for (const moderator of moderators) {
+        await axios.post(
+          `https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`,
+          {
+            chat_id: moderator.telegramId,
+            text: `Пришла новая заявка от <b>Исполнителя.</b>\n\nВсего сейчас непроверенных заявок исполнителей: <b>${isEditing ? unapproved_count : unapproved_count + 1}</b>`,
+            parse_mode: "HTML",
+          }
+        );
+      }
     } catch (e) {
       console.error(e);
       return { error: e.message };
@@ -126,7 +128,7 @@ export default class artistRequestController {
         return res.status(404).json({ error: "request not found" });
       }
 
-      if (approved) request.approved = approved;
+      request.approved = false;
       if (categoryId) request.categoryId = categoryId;
       if (description) request.description = description;
       if (price) request.price = price;
@@ -139,6 +141,10 @@ export default class artistRequestController {
       if (youtube) request.youtube = youtube;
       if (tiktok) request.tiktok = tiktok;
       if (city) request.city = city;
+
+      const moderators = await ModeratorSchema.find({}).select('telegramId')
+
+      await this.sendTelegramNotification(moderators, true);
 
       await request.save();
 

@@ -1,4 +1,6 @@
 import CustomerRequestSchema from "../models/customerRequest.js";
+import ModeratorSchema from "../models/moderator.js";
+import axios from "axios";
 
 export default class customerRequestController {
   static addCustomerRequest = async (req, res) => {
@@ -34,12 +36,49 @@ export default class customerRequestController {
         guestCount,
       });
 
+      const moderators = await ModeratorSchema.find({}).select('telegramId')
+
+      await this.sendTelegramNotification(moderators);
+
       await request.save();
 
       return res.status(201).json(request);
     } catch (e) {
       console.error(e);
       return res.status(500).json({ error: e.message });
+    }
+  };
+
+  static sendTelegramNotification = async (moderators, isEditing=false) => {
+    try {
+      const { unapproved_count } = await this.getUnapprovedCustomerRequests();
+
+      for (const moderator of moderators) {
+        await axios.post(
+          `https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`,
+          {
+            chat_id: moderator.telegramId,
+            text: `Пришла новая заявка от <b>Заказчика.</b>\n\nВсего сейчас непроверенных заявок исполнителей: <b>${isEditing ? unapproved_count : unapproved_count + 1}</b>`,
+            parse_mode: "HTML",
+          }
+        );
+      }
+    } catch (e) {
+      console.error(e);
+      return { error: e.message };
+    }
+  };
+
+  static getUnapprovedCustomerRequests = async () => {
+    try {
+      const data = await CustomerRequestSchema.countDocuments({
+        approved: false,
+      });
+
+      return { unapproved_count: data };
+    } catch (e) {
+      console.error(e);
+      return { error: e.message };
     }
   };
 
@@ -133,6 +172,10 @@ export default class customerRequestController {
       if (time) request.time = time;
       if (guestCount) request.guestCount = guestCount;
       if (eventName) request.eventName = eventName;
+
+      const moderators = await ModeratorSchema.find({}).select('telegramId')
+
+      await this.sendTelegramNotification(moderators, true);
 
       await request.save();
 
