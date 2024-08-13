@@ -5,6 +5,7 @@ from aiogram.enums import ChatAction
 
 from core.filters.Admin import AdminFilter
 from core.keyboards.admin_keyboard import main_keyboard
+import pprint
 
 from core.databases.mongodb.artist.controller import ArtistController
 
@@ -22,8 +23,13 @@ async def welcome_message(message: Message) -> None:
 
 @admin_router.message(F.text == 'Исполнители', AdminFilter())
 async def artist_message(message: Message, _artist_controller: ArtistController) -> None:
+    await message.bot.send_chat_action(
+        chat_id=message.from_user.id, action=ChatAction.TYPING
+    )
+
     data = await _artist_controller.get_unapproved_artist_requests()
-    print(data)
+    
+    pprint.pp(data)
     await message.bot.send_chat_action(
         chat_id=message.from_user.id, action=ChatAction.TYPING
     )
