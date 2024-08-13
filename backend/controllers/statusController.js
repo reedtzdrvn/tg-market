@@ -3,13 +3,13 @@ import StatusSchema from "../models/status.js"
 export default class statusController {
     static addStatus = async (req, res) => {
         try {
-          const { name } = req.body;
+          const { name, roleStatus } = req.body;
     
           if (!name) {
             return res.status(400).json({ message: "Status name is not defined" });
           }
     
-          const status = new StatusSchema({ name: name });
+          const status = new StatusSchema({ name: name, roleStatus: roleStatus });
     
           await status.save();
     

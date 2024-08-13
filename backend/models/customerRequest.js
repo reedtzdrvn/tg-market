@@ -23,6 +23,7 @@ const CustomerRequestSchema = new mongoose.Schema({
     required: true,
   },
   approved: { type: Boolean, required: true, default:false },
+  order: { type: Boolean, required: true, default:false },
 });
 
 export default mongoose.model(
