@@ -20,6 +20,16 @@ class ArtistController():
             artist_id = request.get("artistId")
             if artist_id:
                 user = await self.db["users"].find_one({"_id": ObjectId(artist_id)})
+                
+                categories = []
+
+                for categoryId in request.get('categoryId'):
+                    category = await self.db['categories'].find_one(ObjectId(categoryId), {"name": 1, "_id": 0})
+                    categories.append(category)
+
+                if category:
+                    request['categoriesName'] = categories
+
                 if user:
                     request["artistDetails"] = user
             populated_requests.append(request)
