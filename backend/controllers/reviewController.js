@@ -1,4 +1,6 @@
 import ReviewShema from "../models/review.js";
+import ModeratorSchema from "../models/moderator.js";
+import axios from "axios";
 
 export default class reviewController {
   static addReview = async (req, res) => {
@@ -21,12 +23,49 @@ export default class reviewController {
         reviewTitle: reviewTitle
       });
 
+      const moderators = await ModeratorSchema.find({}).select('telegramId')
+
+      await this.sendTelegramNotification(moderators);
+
       await review.save();
 
       return res.status(201).json(review);
     } catch (e) {
       console.error(e);
       return res.status(500).json({ error: e.message });
+    }
+  };
+
+  static sendTelegramNotification = async (moderators) => {
+    try {
+      const { unapproved_count } = await this.getUnapprovedArtistRequests();
+
+      for (const moderator of moderators) {
+        await axios.post(
+          `https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`,
+          {
+            chat_id: moderator.telegramId,
+            text: `Пришел новый <b>отзыв</b> от <b>Заказчика.</b>\n\nВсего сейчас непроверенных отзывов: <b>${unapproved_count + 1}</b>`,
+            parse_mode: "HTML",
+          }
+        );
+      }
+    } catch (e) {
+      console.error(e);
+      return { error: e.message };
+    }
+  };
+
+  static getUnapprovedArtistRequests = async () => {
+    try {
+      const data = await ReviewShema.countDocuments({
+        approved: false,
+      });
+
+      return { unapproved_count: data };
+    } catch (e) {
+      console.error(e);
+      return { error: e.message };
     }
   };
 
