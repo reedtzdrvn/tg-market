@@ -12,7 +12,7 @@ const OrderSchema = new mongoose.Schema({
     required: true,
   },
   statusArtist: {
-    statusId: {
+    statusIdArtist: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Status",
       required: true,
@@ -23,10 +23,10 @@ const OrderSchema = new mongoose.Schema({
     }
   },
   statusCustomer: {
-    statusId: {
+    statusIdCustomer: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Status",
-      required: true,
+      required: false,
     },
     comment: {
       type: String,

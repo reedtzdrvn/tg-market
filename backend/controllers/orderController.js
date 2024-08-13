@@ -4,23 +4,22 @@ import StatusShema from "../models/status.js"
 export default class orderController {
     static addOrder = async (req, res) => {
         try {
-          const { artistRequestId, customerRequestId, status } = req.body;
+          const { artistRequestId, customerRequestId } = req.body;
     
           if (!artistRequestId || !customerRequestId || !status) {
             return res.status(400).json({ message: "Error, check  customerId, artistId, status " });
           }
 
-          const statusCustomer = await StatusShema.findOne({name: "Создан"}).populate('customerId').populate('artistId').populate('statusId');
-          const statusArtist = await StatusShema.findOne({name: "Создан"}).populate('customerId').populate('artistId').populate('statusId');
+          const statusArtist = await StatusShema.findOne({name: "Создан"})._id
     
-          const order = new OrderShema({ artistRequestId: artistRequestId, customerRequestId: customerRequestId, status: status});
+          const order = new OrderShema({ artistRequestId: artistRequestId, customerRequestId: customerRequestId, statusIdArtist: statusArtist});
     
           await order.save();
     
-          res.status(201).json(order);
+          return res.status(201).json(order);
         } catch (e) {
           console.error(e);
-          res.status(500).json({ error: e.message });
+          return res.status(500).json({ error: e.message });
         }
       };
     
