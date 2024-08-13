@@ -1,15 +1,19 @@
 import OrderShema from "../models/order.js"
+import StatusShema from "../models/status.js"
 
 export default class orderController {
     static addOrder = async (req, res) => {
         try {
-          const { customerId, artistId, status } = req.body;
+          const { artistRequestId, customerRequestId, status } = req.body;
     
-          if (!customerId || !artistId || !status) {
+          if (!artistRequestId || !customerRequestId || !status) {
             return res.status(400).json({ message: "Error, check  customerId, artistId, status " });
           }
+
+          const statusCustomer = await StatusShema.findOne({name: "Создан"}).populate('customerId').populate('artistId').populate('statusId');
+          const statusArtist = await StatusShema.findOne({name: "Создан"}).populate('customerId').populate('artistId').populate('statusId');
     
-          const order = new OrderShema({ customerId: customerId, artistId: artistId, status: status});
+          const order = new OrderShema({ artistRequestId: artistRequestId, customerRequestId: customerRequestId, status: status});
     
           await order.save();
     

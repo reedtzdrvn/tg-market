@@ -48,6 +48,7 @@ const CatalogApplications = () => {
 
   const handleChangeCategory = (id) => {
     if (category !== id) {
+      setLoading(true)
       setCategory(id);
     }
   };
