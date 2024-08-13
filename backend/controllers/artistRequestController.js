@@ -76,7 +76,7 @@ export default class artistRequestController {
             return res.status(404).json({ error: "request not found" });
           }
 
-          if (approved) request.approved = true
+          if (approved) request.approved = approved
           if (categoryId) request.categoryId = categoryId
           if (description) request.description = description
           if (price) request.price = price
