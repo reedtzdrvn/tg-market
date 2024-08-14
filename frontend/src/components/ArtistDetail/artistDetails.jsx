@@ -171,7 +171,7 @@ const ArtistDetails = () => {
                     title={`YouTube video player ${index}`}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
-                    className="w-full"
+                    className="w-full h-[200px]"
                   ></iframe>
                 );
               }
