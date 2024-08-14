@@ -1,6 +1,7 @@
 import OrderSchema from "../models/order.js";
 import StatusShema from "../models/status.js";
 import ArtistRequestSchema from "../models/artistRequest.js";
+import CustomerRequestSchema from "../models/customerRequest.js";
 
 export default class orderController {
   static addOrder = async (req, res) => {
@@ -22,8 +23,8 @@ export default class orderController {
       const order = new OrderSchema({
         artistRequestId: artistRequest._id,
         customerRequestId: customerRequestId,
-        statusArtist: {
-          statusIdArtist: statusArtist._id,
+        status: {
+          statusId: statusArtist._id,
         },
       });
 
@@ -40,17 +41,14 @@ export default class orderController {
     try {
       const { customerRequestId, artistId, orderId } = req.query;
 
-      // Fetch the artist request based on artistId
       const artistRequest = await ArtistRequestSchema.findOne({
         artistId: artistId,
       });
 
-      // Extract artistRequestId from the artist request
       const artistRequestId = artistRequest?._id;
 
       let order;
 
-      // If an orderId is provided, find the order by _id and populate all fields including categories and user
       if (orderId) {
         order = await OrderSchema.findOne({ _id: orderId })
           .populate({
@@ -79,8 +77,7 @@ export default class orderController {
               },
             ],
           })
-          .populate("statusCustomer.statusIdCustomer")
-          .populate("statusArtist.statusIdArtist");
+          .populate("status.statusId")
         return res.json(order);
       }
 
@@ -113,8 +110,7 @@ export default class orderController {
               },
             ],
           })
-          .populate("statusCustomer.statusIdCustomer")
-          .populate("statusArtist.statusIdArtist");
+          .populate("status.statusId")
         return res.json(order);
       }
 
@@ -149,8 +145,7 @@ export default class orderController {
               },
             ],
           })
-          .populate("statusCustomer.statusIdCustomer")
-          .populate("statusArtist.statusIdArtist");
+          .populate("status.statusId")
         return res.json(order);
       }
 
@@ -184,7 +179,7 @@ export default class orderController {
 
   static updateOrder = async (req, res) => {
     try {
-      const { status, orderId } = req.body;
+      const { status, orderId, customerRequestId } = req.body;
 
       const order = await OrderSchema.findOne({ _id: orderId });
 
@@ -192,7 +187,14 @@ export default class orderController {
         return res.status(404).json({ error: "order not found" });
       }
 
-      order.status = status;
+      order.status.statusId = status._id;
+
+      if (status.name !== "Отменён"){
+        order.isCustomerView = true
+        const requestCustomer = await CustomerRequestSchema.findOne({_id: customerRequestId})
+        requestCustomer.order = true
+        await requestCustomer.save()
+      }
 
       await order.save();
 

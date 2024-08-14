@@ -8,7 +8,6 @@ import ArtistOrder from "./artistOrder";
 
 
 const MyRequest = () => {
-    const [tap, setTap] = useState(false)
     const { user } = useUser()
     const [orders, setOrders] = useState([])
     const [loading, setLoading] = useState(true)

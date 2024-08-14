@@ -213,6 +213,7 @@ const AddMyRequest = () => {
             </div>
             <form className=" px-[16px]" onSubmit={handleGoForm}>
                 <div>
+                    {request.isRejected && <div className="bg-custompink py-[16px] w-full mb-8 rounded-xl ">{request.isRejected && <div className="text-center font-bold">Анкета отклонена модератором, отредактируйте её. Подробнее прочтите в чате или напишите в поддержку</div>}</div>}
                     <div className="text-[20px] font-bold">Контактная информация</div>
                 </div>
                 <div className="mt-[27px] flex flex-col gap-[24px]">

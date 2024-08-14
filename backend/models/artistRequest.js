@@ -2,11 +2,13 @@ import mongoose from "mongoose";
 
 const ArtistRequestSchema = new mongoose.Schema({
   city: { type: String, required: true },
-  categoryId: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Category",
-    required: true,
-  }],
+  categoryId: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      required: true,
+    },
+  ],
   description: { type: String, required: false },
   artistId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -26,6 +28,7 @@ const ArtistRequestSchema = new mongoose.Schema({
   instagram: { type: String, required: false },
   youtube: { type: String, required: false },
   tiktok: { type: String, required: false },
+  isRejected: { type: Boolean, default: false },
 });
 
 export default mongoose.model("ArtistRequest", ArtistRequestSchema);

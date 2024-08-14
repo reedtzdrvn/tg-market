@@ -32,12 +32,12 @@ const ArtistDetails = () => {
   useEffect(() => {
     if (id) {
       axios.get('/review', { params: { artistId: id } })
-      .then((res)=>{
-        setReviews(res.data)
-      })
-      .catch((err)=>{
-        console.log(err)
-      })
+        .then((res) => {
+          setReviews(res.data)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     }
   }, [id])
 
@@ -74,15 +74,13 @@ const ArtistDetails = () => {
     setShowMoreReview(!showMoreReview);
   };
 
-  function ratingCalculate(reviews){
+  function ratingCalculate(reviews) {
     let rating = 0
-    for (let i = 0; i<reviews.length; i++){
-      rating+=reviews[i].grade
+    for (let i = 0; i < reviews.length; i++) {
+      rating += reviews[i].grade
     }
     return parseFloat((rating / reviews.length).toFixed(1));
   }
-
-  const photos = new Array(28).fill(photo);
 
   if (loading) return <Loader />
 
@@ -115,7 +113,7 @@ const ArtistDetails = () => {
               <img src={coins} className="w-[16px]" alt="coins" />
               <div className="text-[18px] font-bold">{request.price} Р</div>
             </div>
-            {reviews.length>0 && <div className="flex items-center justify-center -mt-[8px]">
+            {reviews.length > 0 && <div className="flex items-center justify-center -mt-[8px]">
               <img src={star} alt="star" />
               <div className="ml-[1px] mr-[6px] font-bold text-[18px]">{ratingCalculate(reviews)}</div>
               <div className="underline text-[18px] font-bold">Отзывы ({reviews.length})</div>
@@ -144,7 +142,7 @@ const ArtistDetails = () => {
               <img
                 key={index}
                 src={process.env.REACT_APP_API_URL + photo}
-                className="w-[80px] h-[80px]"
+                className="w-full"
                 alt={`photo ${index + 1}`}
               />
             ))}
@@ -158,9 +156,33 @@ const ArtistDetails = () => {
             />
           </div>
         </div>
-        {reviews.length > 0 && <div className="mt-[50px]">
+        <div className="mt-[50px]">
+          <div className="mb-[32px] text-[20px] font-bold">Видео с ютуба</div>
+          <div>
+            {request.link_video.map((el, index) => {
+              if (el !== "") {
+                const videoId = el.split("v=")[1];
+                const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+
+                return (
+                  <iframe
+                    key={index}
+                    src={embedUrl}
+                    title={`YouTube video player ${index}`}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="w-full"
+                  ></iframe>
+                );
+              }
+              return null;
+            })}
+          </div>
+
+        </div>
+        {reviews.length > 0 && <div className="mt-[50px] w-full">
           <div className="text-[20px] font-bold">Отзывы ({reviews.length})</div>
-          <div className="flex flex-col gap-[23px] mt-[32px]">
+          <div className="flex flex-col gap-[23px] mt-[32px] w-full">
             {reviews.slice(0, visibleReview).map((review) => (
               <Review review={review} key={review._id} />
             ))}
@@ -173,7 +195,7 @@ const ArtistDetails = () => {
               className={`cursor-pointer ${showMoreReview ? `rotate-180` : ""}`}
             />
           </div>
-        </div> }
+        </div>}
         <div className="mt-[54px] mb-[111px]">
           <DarkButton text={"Связаться"} onClick={handleContactClick} />
         </div>

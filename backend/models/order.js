@@ -11,8 +11,8 @@ const OrderSchema = new mongoose.Schema({
     ref: "ArtistRequest",
     required: true,
   },
-  statusArtist: {
-    statusIdArtist: {
+  status: {
+    statusId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Status",
       required: true,
@@ -22,17 +22,10 @@ const OrderSchema = new mongoose.Schema({
       required: false
     }
   },
-  statusCustomer: {
-    statusIdCustomer: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Status",
-      required: false,
-    },
-    comment: {
-      type: String,
-      required: false
-    }
-  },
+  isCustomerView : {
+    type: Boolean,
+    default: false
+  }
 });
 
 export default mongoose.model("Order", OrderSchema);

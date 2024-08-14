@@ -71,7 +71,7 @@ const CatalogApplications = () => {
       </div>
       {loading ? <Loader /> :
         <div className="mt-[38px] flex flex-col">
-          {applications.length === 0 ? <div className="center font-bold text-center text-2xl mt-[24px]">Нет заявок с этой категорией! <div className="mt-[24px]"><CatalogBanner /></div> </div> :
+          {applications.length === 0 ? <div className="center font-bold text-center text-2xl mt-[24px]">Нет заявок с этой категорией! <div className="mt-[24px]">{(artist===undefined || artist===null)  ? <CatalogBanner /> : ""}</div> </div> :
             <>
               {applications.map((application, index) => {
                 return (
