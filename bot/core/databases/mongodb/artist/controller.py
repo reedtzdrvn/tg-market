@@ -10,6 +10,21 @@ class ArtistController():
         self.db = db_ins.db
         self.collection = self.db["artistrequests"]
 
+
+    async def accept_artist_request(self, request_id):
+        logging.info('request to db to change approved artist\'s status')
+
+        result = await self.collection.find_one_and_update(
+            {'_id': request_id},
+            {'$set': {'approved': True}},
+            return_document=True
+        )
+
+        if result:
+            logging.info(f'{request_id} has been approved.')
+        else:
+            logging.warning(f'{request_id} not found.')
+
     async def get_unapproved_artist_requests(self) -> bool:
         logging.info('request to db to get all unapproved artist requests')
 
