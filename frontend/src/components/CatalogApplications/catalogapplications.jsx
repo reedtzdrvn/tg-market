@@ -10,6 +10,7 @@ import Loader from "../UI/Loader/loader.jsx";
 import { Link } from "react-router-dom";
 import { useCategories } from "../../context/categoryContext.js";
 import CategoriesButton from "../UI/Categories/categoryButton.jsx";
+import { useArtist } from "../../context/artistContext.js";
 
 const CatalogApplications = () => {
 
@@ -20,7 +21,7 @@ const CatalogApplications = () => {
   const queryParams = new URLSearchParams(location.search);
   const id = queryParams.get('id');
   const [loading, setLoading] = useState(true)
-
+  const {artist} = useArtist()
   const [applications, setApplications] = useState([])
 
   useEffect(() => {
@@ -75,7 +76,7 @@ const CatalogApplications = () => {
               {applications.map((application, index) => {
                 return (
                   <>
-                    {index % 3 === 0 && index !== 0 ? <CatalogBanner /> : ""}
+                    {index % 3 === 0 && index !== 0 && (artist===undefined || artist===null)  ? <CatalogBanner /> : ""}
                     <div key={application._id} >
                       <div className="bg-white p-4 shadow-custom mb-6">
                         <div className="pt-7 pb-[24px] font-[Inter] font-bold text-2xl leading-8">
@@ -110,7 +111,7 @@ const CatalogApplications = () => {
                         </Link>
                       </div>
                     </div>
-                    {applications.length === index + 1 ? <CatalogBanner /> : ""}
+                    {applications.length === index + 1  && (artist===undefined || artist===null)  ? <CatalogBanner /> : ""}
                   </>
                 )
               })}

@@ -4,6 +4,7 @@ import { useCategories } from '../../context/categoryContext';
 import Loader from '../UI/Loader/loader';
 import axios from "../../axios";
 import { useUser } from '../../context/userContext';
+import {useArtist} from "../../context/artistContext"
 
 const Header = () => {
   let tg = window.Telegram.WebApp;
@@ -13,6 +14,8 @@ const Header = () => {
   const { user, setUser } = useUser();
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [loadingUser, setLoadingUser] = useState(true);
+  const [loadingArtist, setLoadingArtist] = useState(true);
+  const {artist, setArtist} = useArtist()
 
   const cities = [
     'Екатеринбург',
@@ -69,7 +72,21 @@ const Header = () => {
     }
   }, [user, setUser, userId]);
 
-  if (loadingCategories || loadingUser) {
+  useEffect(() => {
+    if (user?.role === 'artist') {
+      axios.get(`/artist-request?artistId=${user._id}`)
+        .then((res) => {
+          setArtist(res.data[0]);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      setLoadingArtist(false);
+    }
+  }, [user, setUser, userId]);
+
+  if (loadingCategories || loadingUser || loadingArtist) {
     return <Loader />;
   }
 

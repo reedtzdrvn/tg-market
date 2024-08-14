@@ -9,6 +9,7 @@ import { useState } from "react";
 import axios from "../../axios"
 import Loader from "../UI/Loader/loader";
 import { useEffect } from "react";
+import { useArtist } from "../../context/artistContext";
 const AddMyRequest = () => {
     const { user } = useUser();
     const [loading, setLoading] = useState(true);
