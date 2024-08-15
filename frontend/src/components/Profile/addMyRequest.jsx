@@ -17,11 +17,12 @@ const AddMyRequest = () => {
     const navigate = useNavigate();
     const [request, setRequest] = useState({});
     const [added, setAdded] = useState(false);
+    const [orders, setOrders] = useState([])
     const [formData, setFormData] = useState({
         fullName: '',
         userName: '',
         phoneNumber: '',
-        category: [],
+        category: [], 
         setCitySearch: "",
         priceFrom: '',
         priceTo: '',
@@ -47,13 +48,25 @@ const AddMyRequest = () => {
 
     useEffect(() => {
         if (user) {
+            axios.get("/order", { params: { artistId: user._id } })
+                .then((res) => {
+                    setOrders(res.data)
+                    setLoading(false)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
+    }, [user])
+
+    useEffect(() => {
+        if (user) {
             axios.get(`/artist-request?artistId=${user._id}`)
                 .then((res) => {
                     setRequest(res.data[0]);
                     if (res.data.length > 0) {
                         setAdded(true);
                     }
-                    setLoading(false);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -209,7 +222,7 @@ const AddMyRequest = () => {
     return (
         <div>
             <div className="py-[44px] flex gap-[33px] justify-center">
-                <div className="underline font-bold text-[20px]">Моя анкета</div><Link to={"/my-requests"} className="text-[20px] opacity-60" >Мои заказы (6)</Link>
+                <div className="underline font-bold text-[20px]">Моя анкета</div><Link to={"/my-requests"} className="text-[20px] opacity-60" >Мои заказы ({orders.length})</Link>
             </div>
             <form className=" px-[16px]" onSubmit={handleGoForm}>
                 <div>
