@@ -30,7 +30,7 @@ const CatalogArtistCard = ({ info, category }) => {
         for (let i = 0; i < reviews.length; i++) {
             rating += reviews[i].grade
         }
-        return parseFloat((rating / reviews.length).toFixed(1));
+        return parseFloat((rating / reviews.length).toFixed(1)) || 0;
     }
 
     if (loading) {
