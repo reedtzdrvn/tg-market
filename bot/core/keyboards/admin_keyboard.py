@@ -6,10 +6,10 @@ main_keyboard = ReplyKeyboardMarkup(
         [
             KeyboardButton(text="Исполнители"),
             KeyboardButton(text="Заказы"),
+            KeyboardButton(text="Отзывы"),
         ],
         [
-            KeyboardButton(text="Отзывы"),
-            KeyboardButton(text="Тех.поддержка"),
+            KeyboardButton(text="Открыть веб-апп"),
         ],
     ],
     resize_keyboard=True,
@@ -39,6 +39,60 @@ def build_artist_request_keyboard(page, total_pages, request_id, telegram_id):
         InlineKeyboardButton(
             text='Отклонить',
             callback_data=f"reject_artist_{request_id}_{telegram_id}"
+        )
+    )
+
+    return builder.as_markup()
+
+def build_customer_request_keyboard(page, total_pages, request_id, telegram_id):
+    builder = InlineKeyboardBuilder()
+
+    if page > 0:
+        builder.button(
+            text="⬅️ Предыдущая",
+            callback_data=f"customer_page_{page-1}"
+        )
+    if page < total_pages - 1:
+        builder.button(
+            text="Следующая ➡️",
+            callback_data=f"customer_page_{page+1}"
+        )
+
+    builder.row(
+        InlineKeyboardButton(
+            text='Принять',
+            callback_data=f"accept_customer_{request_id}_{telegram_id}"
+        ),
+        InlineKeyboardButton(
+            text='Отклонить',
+            callback_data=f"reject_customer_{request_id}_{telegram_id}"
+        )
+    )
+
+    return builder.as_markup()
+
+def build_reviews_keyboard(page, total_pages, review_id, customer_telegram_id, artist_telegram_id):
+    builder = InlineKeyboardBuilder()
+
+    if page > 0:
+        builder.button(
+            text="⬅️ Предыдущая",
+            callback_data=f"review_page_{page-1}"
+        )
+    if page < total_pages - 1:
+        builder.button(
+            text="Следующая ➡️",
+            callback_data=f"review_page_{page+1}"
+        )
+
+    builder.row(
+        InlineKeyboardButton(
+            text='Принять',
+            callback_data=f"accept_review_{review_id}_{customer_telegram_id}_{artist_telegram_id}"
+        ),
+        InlineKeyboardButton(
+            text='Отклонить',
+            callback_data=f"reject_review_{review_id}_{customer_telegram_id}"
         )
     )
 

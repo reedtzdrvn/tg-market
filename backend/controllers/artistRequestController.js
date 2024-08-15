@@ -129,6 +129,7 @@ export default class artistRequestController {
       }
 
       request.approved = false;
+      request.isRejected = false;
       if (categoryId) request.categoryId = categoryId;
       if (description) request.description = description;
       if (price) request.price = price;

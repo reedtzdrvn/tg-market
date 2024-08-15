@@ -5,14 +5,16 @@ from core.databases.mongodb.base import BaseDb
 
 from core.databases.mongodb.moderator.model import Moderator
 
-class ArtistController():
+import pprint
+
+class CustomerController():
     def __init__(self, db_ins):
         self.db = db_ins.db
-        self.collection = self.db["artistrequests"]
+        self.collection = self.db["customerrequests"]
 
 
-    async def accept_artist_request(self, request_id):
-        logging.info('request to db to change approved artist\'s status')
+    async def accept_customer_request(self, request_id):
+        logging.info('request to db to change approved customer\'s status')
 
         result = await self.collection.find_one_and_update(
             {'_id': request_id},
@@ -25,12 +27,12 @@ class ArtistController():
         else:
             logging.warning(f'{request_id} not found.')
 
-    async def reject_artist_request(self, request_id):
-        logging.info('request to db to change reject artist\'s status')
+    async def reject_customer_request(self, request_id):
+        logging.info('request to db to change reject customer\'s status')
 
         result = await self.collection.find_one_and_update(
             {'_id': request_id},
-            {'$set': {'isRejected': True}},
+            {'$set': {'isReject': True}},
             return_document=True
         )
 
@@ -39,16 +41,16 @@ class ArtistController():
         else:
             logging.warning(f'{request_id} not found.')
 
-    async def get_unapproved_artist_requests(self):
-        logging.info('request to db to get all unapproved artist requests')
+    async def get_unapproved_customer_requests(self):
+        logging.info('request to db to get all unapproved customer requests')
 
-        artist_requests = self.collection.find({"approved": False, "isRejected": False})
+        customer_requests = self.collection.find({"approved": False, "isReject": False})
 
         populated_requests = []
-        for request in await artist_requests.to_list(length=None):
-            artist_id = request.get("artistId")
-            if artist_id:
-                user = await self.db["users"].find_one({"_id": ObjectId(artist_id)})
+        for request in await customer_requests.to_list(length=None):
+            customer_id = request.get("customerId")
+            if customer_id:
+                user = await self.db["users"].find_one({"_id": ObjectId(customer_id)})
                 
                 categories = []
 
@@ -62,5 +64,5 @@ class ArtistController():
                 if user:
                     request["artistDetails"] = user
             populated_requests.append(request)
-        
+
         return populated_requests

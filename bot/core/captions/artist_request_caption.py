@@ -1,8 +1,12 @@
-def generate_caption(person):
+def generate_artist_request_caption(person):
     caption = f"""
+ID: {person.get('_id')}
+    
 Имя Фамилия: {person.get('artistDetails')['firstName']} {person.get('artistDetails')['lastName']}
 Номер телефона: {person.get('artistDetails')['phoneNumber']}
 Город: {person.get('city')}
+
+Telegram: <a href="https://t.me/{person.get('artistDetails')['userName']}">Ссылка</a>
 
 Instagram: {"<a href='" + person.get('instagram') + "'>Ссылка</a>" if person.get('instagram') else "нет информации"}
 Вконтакте: {"<a href='" + person.get('vk') + "'>Ссылка</a>" if person.get('vk') else "нет информации"}
@@ -10,7 +14,7 @@ Youtube: {"<a href='" + person.get('youtube') + "'>Ссылка</a>" if person.g
 Tiktok: {"<a href='" + person.get('tiktok') + "'>Ссылка</a>" if person.get('tiktok') else "нет информации"}
 Цены: {person.get('price')}
 Описание:
-{f"<b>{person.get('description')}</b>" if person.get('tiktok') else "нет информации"}
+{f"<b>{person.get('description')}</b>" if person.get('description') else "нет информации"}
 
 Видео на Youtube:
 """
