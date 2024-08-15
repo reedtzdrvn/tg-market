@@ -9,6 +9,7 @@ services:
   bot:
     build: ./bot
     container_name: bot
+    command: python3 main.py
 
   client:
     build: ./frontend
