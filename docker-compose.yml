@@ -6,6 +6,10 @@ services:
     ports:
       - '4444:4444'
   
+  bot:
+    build: ./bot
+    container_name: bot
+
   client:
     build: ./frontend
     container_name: client_frontend
