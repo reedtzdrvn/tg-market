@@ -10,12 +10,24 @@ const ApplicationDone = () => {
 
     const navigate = useNavigate()
     const {user} = useUser()
-
+    const [orders, setOrders] = useState([])
     const [applications, setApplications] = useState([])
     const [loading, setLoading] = useState(true)
 
     
     useEffect(() => {
+        if (user) {
+            axios.get("/order", { params: { customerId: user._id } })
+                .then((res) => {
+                    setOrders(res.data)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+                .finally(() => {
+                    setLoading(false)
+                })
+        }
         if (user) {
             axios.get(`/customer-requests?customerId=${user._id}`)
                 .then((res) => {
@@ -24,9 +36,6 @@ const ApplicationDone = () => {
                 .catch((err) => {
                     console.log(err);
                 })
-                .finally(() => {
-                    setLoading(false);
-                });
         }
     }, [user]);
 
@@ -47,7 +56,7 @@ const ApplicationDone = () => {
         <div className="h-screen flex flex-col items-center justify-center px-[16px]">
             <img src={done} alt="done" className="mb-[72px]" />
             <div className="w-full"><LightButton2 onClick={handleGoArtistCatalog} text={"Каталог артистов"} /></div>
-            <div className="mt-[12px] w-full"><LightButton2 onClick={handleGoMyApplications} text={`Мои заявки (${applications.length})`} /></div>
+            <div className="mt-[12px] w-full"><LightButton2 onClick={handleGoMyApplications} text={`Мои заявки (${applications.length + orders.length})`} /></div>
         </div>
     );
 }
