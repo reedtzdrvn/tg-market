@@ -155,6 +155,7 @@ export default class customerRequestController {
         time,
         guestCount,
         approved,
+        isReject
       } = req.body;
 
       const request = await CustomerRequestSchema.findOne({ _id: requestId });
@@ -162,8 +163,8 @@ export default class customerRequestController {
       if (!request) {
         return res.status(404).json({ error: "request not found" });
       }
-
-      if (approved) request.approved = true;
+      if (isReject!==null && isReject!==undefined) request.isReject = isReject
+      if (approved!==null && isReject!==undefined) request.approved = approved;
       if (categoryId) request.categoryId = categoryId;
       if (description) request.description = description;
       if (city) request.city = city;

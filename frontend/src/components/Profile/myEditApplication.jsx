@@ -87,7 +87,7 @@ const EditMyApplication = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.patch('/customer-request', { fee: formData.feeFrom + ' - ' + formData.feeTo, eventName: formData.eventName, description: formData.eventDetails, city: formData.city, requestId: id, categoryId: formData.category, date: formData.date, time: formData.timeInterval, guestCount: formData.guestCount, approved: false });
+            const response = await axios.patch('/customer-request', {isReject: false, approved: false, fee: formData.feeFrom + ' - ' + formData.feeTo, eventName: formData.eventName, description: formData.eventDetails, city: formData.city, requestId: id, categoryId: formData.category, date: formData.date, time: formData.timeInterval, guestCount: formData.guestCount, approved: false });
             if (response.status === 200) {
                 window.location.href = "/application-done";
             }

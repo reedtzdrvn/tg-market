@@ -21,6 +21,8 @@ import EditMyApplication from "./components/Profile/myEditApplication";
 import Subscription from "./components/Subscription/subscription";
 import About from "./components/About/about";
 import Share from "./components/Share/share";
+import AddReview from "./components/AddReview/addReview";
+import ReviewDone from "./components/AddReview/reviewDone";
 
 function App() {
   const { user } = useUser();
@@ -56,6 +58,8 @@ function App() {
         <Route path="/subscription" element={<Subscription />} />
         <Route path="/about" element={<About />} />
         <Route path="/share" element={<Share />} />
+        <Route path="/addReview/:id" element={<AddReview />} />
+        <Route path="/review-done/:id" element={<ReviewDone />} />
       </Routes>
       <Footer />
     </>

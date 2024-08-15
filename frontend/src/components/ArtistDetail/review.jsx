@@ -22,7 +22,7 @@ const Review = ({ review }) => {
         <div className="flex w-full">
             <div className="ml-[10px] flex-col flex gap-[6px] flex-nowrap">
                 <div className="text-[16px] font-bold">{review.reviewTitle}</div>
-                <div className="flex w-full justify-between flex-wrap gap-4">
+                <div className="flex w-full flex-wrap gap-4">
                     <div className="opacity-60">
                         {review.customerId.lastName + ' ' + review.customerId.firstName}
                     </div>

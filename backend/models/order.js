@@ -25,6 +25,10 @@ const OrderSchema = new mongoose.Schema({
   isCustomerView : {
     type: Boolean,
     default: false
+  },
+  review: {
+    type: Boolean, 
+    default: false
   }
 });
 

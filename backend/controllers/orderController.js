@@ -2,6 +2,7 @@ import OrderSchema from "../models/order.js";
 import StatusShema from "../models/status.js";
 import ArtistRequestSchema from "../models/artistRequest.js";
 import CustomerRequestSchema from "../models/customerRequest.js";
+import { mongoose } from "mongoose";
 
 export default class orderController {
   static addOrder = async (req, res) => {
@@ -39,7 +40,7 @@ export default class orderController {
 
   static getOrder = async (req, res) => {
     try {
-      const { customerRequestId, artistId, orderId } = req.query;
+      const { customerRequestId, artistId, orderId, customerId } = req.query;
 
       const artistRequest = await ArtistRequestSchema.findOne({
         artistId: artistId,
@@ -77,7 +78,7 @@ export default class orderController {
               },
             ],
           })
-          .populate("status.statusId")
+          .populate("status.statusId");
         return res.json(order);
       }
 
@@ -110,7 +111,7 @@ export default class orderController {
               },
             ],
           })
-          .populate("status.statusId")
+          .populate("status.statusId");
         return res.json(order);
       }
 
@@ -145,8 +146,44 @@ export default class orderController {
               },
             ],
           })
-          .populate("status.statusId")
+          .populate("status.statusId");
         return res.json(order);
+      }
+
+      const customerObjectId = new mongoose.Types.ObjectId(customerId);
+
+      if (customerId) {
+        const orders = await OrderSchema.find({isCustomerView: true})
+          .populate({
+            path: "customerRequestId",
+            match: { customerId: customerObjectId },
+            populate: [
+              {
+                path: "categoryId",
+                model: "Category", // Populate the categoryId in CustomerRequest
+              },
+              {
+                path: "customerId",
+                model: "User", // Populate the customerId in CustomerRequest
+              },
+            ],
+          })
+          .populate({
+            path: "artistRequestId",
+            populate: [
+              {
+                path: "categoryId",
+                model: "Category", // Populate the categoryId in ArtistRequest
+              },
+              {
+                path: "artistId",
+                model: "User", // Populate the artistId in ArtistRequest
+              },
+            ],
+          })
+          .populate("status.statusId");
+
+        return res.json(orders); // Возвращаем массив заказов
       }
 
       return res.status(400).json({ error: "Invalid query parameters" });
@@ -189,11 +226,13 @@ export default class orderController {
 
       order.status.statusId = status._id;
 
-      if (status.name !== "Отменён"){
-        order.isCustomerView = true
-        const requestCustomer = await CustomerRequestSchema.findOne({_id: customerRequestId})
-        requestCustomer.order = true
-        await requestCustomer.save()
+      if (status.name !== "Отменён") {
+        order.isCustomerView = true;
+        const requestCustomer = await CustomerRequestSchema.findOne({
+          _id: customerRequestId,
+        });
+        requestCustomer.order = true;
+        await requestCustomer.save();
       }
 
       await order.save();

@@ -33,7 +33,7 @@ const ArtistDetails = () => {
     if (id) {
       axios.get('/review', { params: { artistId: id } })
         .then((res) => {
-          setReviews(res.data)
+          setReviews(res.data.filter((el)=>el.approved === true))
         })
         .catch((err) => {
           console.log(err)

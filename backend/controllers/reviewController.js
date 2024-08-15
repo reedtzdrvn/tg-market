@@ -1,13 +1,14 @@
 import ReviewShema from "../models/review.js";
 import ModeratorSchema from "../models/moderator.js";
 import axios from "axios";
+import OrderSchema from "../models/order.js";
 
 export default class reviewController {
   static addReview = async (req, res) => {
     try {
-      const { customerId, artistId, reviewText, grade, reviewTitle } = req.body;
+      const { customerId, artistId, reviewText, grade, reviewTitle, orderId } = req.body;
 
-      if (!customerId || !artistId || !grade || !reviewTitle) {
+      if (!customerId || !artistId || !grade || !reviewTitle || !orderId) {
         return res
           .status(400)
           .json({
@@ -22,6 +23,12 @@ export default class reviewController {
         grade: grade,
         reviewTitle: reviewTitle
       });
+
+      const order = await OrderSchema.findOne({_id: orderId})
+
+      order.review = true
+
+      await order.save()
 
       const moderators = await ModeratorSchema.find({}).select('telegramId')
 
