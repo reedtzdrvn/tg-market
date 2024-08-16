@@ -92,8 +92,8 @@ const Header = () => {
 
   return (
     <div className='relative'>
-      <div className="h-[48px] shadow-custom flex justify-between items-center px-[16px] bg-white">
-        <div className="current_city flex justify-start w-1/2">
+      <div className="h-[48px] shadow-custom flex justify-between items-center px-[16px] bg-white relative">
+        <div className="current_city flex justify-start w-1/3">
           <select
             value={user.setCitySearch}
             onChange={(event) => handleCityChange(event)}
@@ -106,10 +106,12 @@ const Header = () => {
             ))}
           </select>
         </div>
-        <Link to="/" className="text-[16px] font-bold text-center absolute w-full l-0 ml-[-16px]">
-          EVENTRA
-        </Link>
-        {user.role && user.role !== "" && <Link to={`${user.role === 'customer' ? "/my-applications" : "my-requests"}`} className="text-[14px] flex justify-end font-bold w-1/2">
+        <div className='absolute left-[50%] ml-[-38px] text-center'>
+          <Link to="/" className="text-[16px] font-bold w-max">
+            EVENTRA
+          </Link>
+        </div>
+        {user.role && user.role !== "" && <Link to={`${user.role === 'customer' ? "/my-applications" : "my-requests"}`} className="text-[14px] flex justify-end font-bold w-1/3">
           Мой профиль
         </Link>}
       </div>
