@@ -108,9 +108,9 @@ const Header = () => {
       <Link to="/" className="text-[16px] font-bold text-center w-1/3">
         EVENTRA
       </Link>
-      <Link to={`${user.role === 'customer' ? "/my-applications" : "my-requests"}`} className="text-[14px] flex justify-end font-bold w-1/3">
+      {user.role && user.role!=="" && <Link to={`${user.role === 'customer' ? "/my-applications" : "my-requests"}`} className="text-[14px] flex justify-end font-bold w-1/3">
         Мой профиль
-      </Link>
+      </Link>}
     </div>
   );
 };
