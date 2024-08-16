@@ -157,9 +157,9 @@ const ArtistDetails = () => {
         </div>
         </>
         }
-        {request.link_video[0] + request.link_video[1] + request.link_video[2] + request.link_video[3] + request.link_video[4] + request.link_video[5] !== " "
-         && request.link_video[0] + request.link_video[1] + request.link_video[2] + request.link_video[3] + request.link_video[4] + request.link_video[5] !=="" 
-         && request.link_video[0] + request.link_video[1] + request.link_video[2] + request.link_video[3] + request.link_video[4] + request.link_video[5] !== "     " &&
+        {(request.link_video[0] + request.link_video[1] + request.link_video[2] + request.link_video[3] + request.link_video[4] + request.link_video[5]) !== " "
+         && (request.link_video[0] + request.link_video[1] + request.link_video[2] + request.link_video[3] + request.link_video[4] + request.link_video[5]) !=="" 
+         && (request.link_video[0] + request.link_video[1] + request.link_video[2] + request.link_video[3] + request.link_video[4] + request.link_video[5]) !== "     " &&
           <div className="mt-[50px]">
             <div className="mb-[32px] text-[20px] font-bold">Видео с ютуба</div>
             <div>
