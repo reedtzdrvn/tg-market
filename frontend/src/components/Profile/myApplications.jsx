@@ -63,7 +63,6 @@ const MyApplications = () => {
         return <Loader />
     }
 
-
     const getStatusColorClass = (statusName) => {
         const statusColorMap = {
             "Создан": "bg-customgreen",
@@ -101,7 +100,7 @@ const MyApplications = () => {
         return (
             <div className="px-[16px] bg-back min-h-screen">
                 <div className="py-[44px] flex gap-[33px] justify-center">
-                    <Link to={"/my-add-application"} className="text-[20px] opacity-60">Создать заявку</Link><div className="underline font-bold text-[20px]">Мои заявки ({applications.length})</div>
+                    <Link to={"/my-add-application"} className="text-[20px] opacity-60">Создать заявку</Link><div className="underline font-bold text-[20px]">Мои заявки ({applications.length + orders.length})</div>
                 </div>
                 <div className="min-h-screen flex justify-center items-center mt-[-200px]"><CatalogBanner /></div>
             </div>
@@ -121,7 +120,7 @@ const MyApplications = () => {
                     </div>
                 </div>}
             <div className="py-[44px] flex gap-[33px] justify-center">
-                <Link to={"/my-add-application"} className="text-[20px] opacity-60">Создать заявку</Link><div className="underline font-bold text-[20px]">Мои заявки ({applications.length})</div>
+                <Link to={"/my-add-application"} className="text-[20px] opacity-60">Создать заявку</Link><div className="underline font-bold text-[20px]">Мои заявки ({applications.length + orders.length})</div>
             </div>
             <div className="flex flex-col gap-[24px] last:pb-[24px]">
                 {applications.map((application) => {

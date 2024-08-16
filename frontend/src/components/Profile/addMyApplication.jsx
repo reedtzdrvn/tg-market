@@ -14,12 +14,24 @@ const AddMyApplication = () => {
     const { categories } = useCategories();
     const navigate = useNavigate();
     const {user} = useUser()
-
+    const [orders, setOrders] = useState([])
     const [applications, setApplications] = useState([])
     const [loading, setLoading] = useState(true)
 
     
     useEffect(() => {
+        if (user) {
+            axios.get("/order", { params: { customerId: user._id } })
+                .then((res) => {
+                    setOrders(res.data)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+                .finally(() => {
+                    setLoading(false)
+                })
+        }
         if (user) {
             axios.get(`/customer-requests?customerId=${user._id}`)
                 .then((res) => {
@@ -28,9 +40,6 @@ const AddMyApplication = () => {
                 .catch((err) => {
                     console.log(err);
                 })
-                .finally(() => {
-                    setLoading(false);
-                });
         }
     }, [user]);
 
@@ -101,7 +110,7 @@ const AddMyApplication = () => {
     return (
         <div className="px-[16px] bg-main">
             <div className="py-[44px] flex gap-[33px] justify-center">
-                <div className="underline font-bold text-[20px]">Создать заявку</div><Link to={"/my-applications"} className="text-[20px] opacity-60" >Мои заявки ({applications.length})</Link>
+                <div className="underline font-bold text-[20px]">Создать заявку</div><Link to={"/my-applications"} className="text-[20px] opacity-60" >Мои заявки ({applications.length + orders.length})</Link>
             </div>
             <div>
             <form className=" px-[16px]" onSubmit={handleSubmit}>

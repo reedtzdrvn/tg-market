@@ -163,6 +163,8 @@ export default class artistRequestController {
       if (categoryId) {
         const request = await ArtistRequestSchema.find({
           categoryId: categoryId,
+          approved: true,
+          isRejected: false
         })
           .populate("categoryId")
           .populate("artistId");

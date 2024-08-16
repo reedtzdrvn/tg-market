@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import bgartist from "../../images/bgartist.png";
-import avatar from "../../images/avatar.png";
 import star from "../../images/Star.svg";
 import coins from "../../images/Coins.svg";
 import inst from "../../images/Instagram.svg";
 import vk from "../../images/VK.svg";
 import tiktok from "../../images/Tiktok.svg";
 import youtube from "../../images/Youtube.svg";
-import photo from "../../images/photo 1.png";
 import arrow from "../../images/arrow.svg";
 import Review from "./review";
 import crossIcon from "../../images/close.svg";
@@ -42,6 +39,7 @@ const ArtistDetails = () => {
   }, [id])
 
   const handleContactClick = () => {
+    
     window.location.href = `https://t.me/${request.artistId.userName}`;
   };
 
