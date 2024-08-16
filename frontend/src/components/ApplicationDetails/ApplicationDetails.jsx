@@ -9,14 +9,20 @@ import axios from "../../axios";
 import Loader from "../UI/Loader/loader";
 import CategoriesButton from "../UI/Categories/categoryButton";
 import {useUser} from "../../context/userContext"
+import { useArtist } from "../../context/artistContext";
 
 const ApplicationDetails = () => {
   const { id } = useParams();
   const { user } = useUser()
   const [loading, setLoading] = useState(true)
   const [application, setApplication] = useState({})
+  const {artist} = useArtist()
 
   const handleContactClick = () => {
+
+    if (!artist){
+      window.location.href='/add-artist-request'
+    }
 
     axios.post('/order', {
       customerRequestId: id,
