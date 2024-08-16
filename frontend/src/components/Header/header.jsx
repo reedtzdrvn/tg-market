@@ -4,7 +4,7 @@ import { useCategories } from '../../context/categoryContext';
 import Loader from '../UI/Loader/loader';
 import axios from "../../axios";
 import { useUser } from '../../context/userContext';
-import {useArtist} from "../../context/artistContext"
+import { useArtist } from "../../context/artistContext"
 
 const Header = () => {
   let tg = window.Telegram.WebApp;
@@ -15,7 +15,7 @@ const Header = () => {
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [loadingUser, setLoadingUser] = useState(true);
   const [loadingArtist, setLoadingArtist] = useState(true);
-  const {artist, setArtist} = useArtist()
+  const { artist, setArtist } = useArtist()
 
   const cities = [
     'Екатеринбург',
@@ -91,27 +91,30 @@ const Header = () => {
   }
 
   return (
-    <div className="h-[48px] shadow-custom flex justify-between items-center px-[16px] relative bg-white">
-      <div className="current_city flex justify-start w-1/2 relative">
-        <select
-          value={user.setCitySearch}
-          onChange={(event) => handleCityChange(event)}
-          className="text-[12px] underline w-[110px]"
-        >
-          {cities.map((city, index) => (
-            <option key={index} value={city}>
-              {city}
-            </option>
-          ))}
-        </select>
+    <div className='relative'>
+      <div className="h-[48px] shadow-custom flex justify-between items-center px-[16px] bg-white">
+        <div className="current_city flex justify-start w-1/2">
+          <select
+            value={user.setCitySearch}
+            onChange={(event) => handleCityChange(event)}
+            className="text-[12px] underline w-[110px]"
+          >
+            {cities.map((city, index) => (
+              <option key={index} value={city}>
+                {city}
+              </option>
+            ))}
+          </select>
+        </div>
+        <Link to="/" className="text-[16px] font-bold text-center absolute w-full l-0 ml-[-16px]">
+          EVENTRA
+        </Link>
+        {user.role && user.role !== "" && <Link to={`${user.role === 'customer' ? "/my-applications" : "my-requests"}`} className="text-[14px] flex justify-end font-bold w-1/2">
+          Мой профиль
+        </Link>}
       </div>
-      <Link to="/" className="text-[16px] font-bold text-center absolute w-full">
-        EVENTRA
-      </Link>
-      {user.role && user.role!=="" && <Link to={`${user.role === 'customer' ? "/my-applications" : "my-requests"}`} className="text-[14px] flex justify-end font-bold w-1/2">
-        Мой профиль
-      </Link>}
     </div>
+
   );
 };
 
