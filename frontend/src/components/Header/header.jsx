@@ -92,7 +92,7 @@ const Header = () => {
 
   return (
     <div className="h-[48px] shadow-custom flex justify-between items-center px-[16px] relative bg-white">
-      <div className="current_city flex justify-start w-1/3">
+      <div className="current_city flex justify-start w-1/2 relative">
         <select
           value={user.setCitySearch}
           onChange={(event) => handleCityChange(event)}
@@ -105,10 +105,10 @@ const Header = () => {
           ))}
         </select>
       </div>
-      <Link to="/" className="text-[16px] font-bold text-center w-1/3">
+      <Link to="/" className="text-[16px] font-bold text-center absolute w-full">
         EVENTRA
       </Link>
-      {user.role && user.role!=="" && <Link to={`${user.role === 'customer' ? "/my-applications" : "my-requests"}`} className="text-[14px] flex justify-end font-bold w-1/3">
+      {user.role && user.role!=="" && <Link to={`${user.role === 'customer' ? "/my-applications" : "my-requests"}`} className="text-[14px] flex justify-end font-bold w-1/2">
         Мой профиль
       </Link>}
     </div>
