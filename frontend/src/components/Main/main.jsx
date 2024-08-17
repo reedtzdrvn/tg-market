@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { LightButton } from '../UI/Button/button';
 import axios from "../../axios"
 import { useNavigate } from 'react-router-dom';
+import mainsvgt from "../../images/mainsvgt.svg"
 
 const Main = () => {
 
@@ -13,7 +14,7 @@ const Main = () => {
     let userId = ''
 
     if (!tg.initDataUnsafe.user) {
-        userId = '1073631065'
+        userId = '5835906613'
     }
     else {
         userId = tg.initDataUnsafe.user?.id
@@ -43,7 +44,8 @@ const Main = () => {
         <div className='relative h-max'>
             <img src={bg} alt="bg" className='w-full absolute h-full -z-10' />
             <div className='py-[31px] text-white'>
-                <div className='mt-[195px] text-white text-[40px] font-bold text-center w-full leading-[44px] tracking-[0%]'>
+                <div className=' mt-[110px] mb-[85px] flex justify-center items-center'><img src={mainsvgt} alt="mainsvg" /></div>
+                <div className=' text-white text-[40px] font-bold text-center w-full leading-[44px] tracking-[0%]'>
                     Создай событие,<br /> которое <br /> запомнится!
                 </div>
                 <div className='mt-[58px] flex flex-col gap-[12px] px-[23px]'>

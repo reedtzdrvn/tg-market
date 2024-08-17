@@ -14,7 +14,6 @@ const About = () => {
                 <Link to={"/share"}><LightButton2 text={<div className="flex gap-[32px] items-center justify-center"><img src={shareabout} alt="" className="h-[29px] w-[29px]" />Рассказать другу</div>} /></Link>
                 <LightButton2 text={"Поддержка"} />
                 <LightButton2 text={"Оферта"} />
-                <LightButton2 text={"Колесо Сира: путь к мастерству"} />
             </div>
         </div>
      );
