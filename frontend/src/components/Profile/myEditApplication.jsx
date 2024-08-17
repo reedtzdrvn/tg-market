@@ -93,7 +93,18 @@ const EditMyApplication = () => {
         }
     };
 
+    const validateFullName = (fullName) => {
+        const words = fullName.trim().split(" ");
+        return words.length === 2 && words[0] && words[1];
+    };
+
     const handleSubmit = async (e) => {
+
+        if (!validateFullName(formData.fullName)) {
+            alert("Поле 'Имя Фамилия' должно содержать два слова, разделённых пробелом.");
+            return;
+        }
+        
         e.preventDefault();
         try {
             const response = await axios.patch('/customer-request', {isReject: false, approved: false, fee: formData.feeFrom + ' - ' + formData.feeTo, eventName: formData.eventName, description: formData.eventDetails, city: formData.city, requestId: id, categoryId: formData.category, date: formData.date, time: formData.timeInterval, guestCount: formData.guestCount, approved: false });

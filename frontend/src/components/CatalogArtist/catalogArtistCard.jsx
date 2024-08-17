@@ -8,6 +8,7 @@ import axios from '../../axios';
 import { useState, useEffect } from 'react';
 import Loader from '../UI/Loader/loader';
 import CategoriesButton from '../UI/Categories/categoryButton';
+import { useUser } from '../../context/userContext';
 
 const CatalogArtistCard = ({ info, category }) => {
 

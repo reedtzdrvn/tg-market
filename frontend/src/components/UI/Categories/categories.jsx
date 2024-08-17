@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const Categories = ({categories}) => {
     return ( 
-        <div className="flex flex-wrap w-full justify-around">
+        <div className="flex flex-wrap px-2 w-full justify-between">
           {categories.map((el) => (
             <Link to={`/catalog-artist?id=${el._id}`} key={el.name} className="relative my-[27px] w-[110px]">
               <div className="w-full flex flex-col items-center gap-[12px]">

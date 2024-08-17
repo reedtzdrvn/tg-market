@@ -11,11 +11,11 @@ import { Link } from "react-router-dom";
 import { useCategories } from "../../context/categoryContext.js";
 import CategoriesButton from "../UI/Categories/categoryButton.jsx";
 import { useArtist } from "../../context/artistContext.js";
+import { useUser } from "../../context/userContext.js";
 
 const CatalogApplications = () => {
 
   const location = useLocation();
-  // в category - айди текущей категории выбранной
   const [category, setCategory] = useState(null);
   const { categories } = useCategories();
   const queryParams = new URLSearchParams(location.search);
@@ -23,6 +23,7 @@ const CatalogApplications = () => {
   const [loading, setLoading] = useState(true)
   const {artist} = useArtist()
   const [applications, setApplications] = useState([])
+  const {user} = useUser()
 
   useEffect(() => {
     if (category) {
@@ -71,12 +72,12 @@ const CatalogApplications = () => {
       </div>
       {loading ? <Loader /> :
         <div className="mt-[38px] flex flex-col">
-          {applications.length === 0 ? <div className="center font-bold text-center text-2xl mt-[24px]">Нет заявок с этой категорией! <div className="mt-[24px]">{(artist===undefined || artist===null)  ? <CatalogBanner /> : ""}</div> </div> :
+          {applications.length === 0 ? <div className="center font-bold text-center text-2xl mt-[24px]">Нет заявок в этой категории <div className="mt-[24px]">{(artist===undefined || artist===null) && user.role==='artist'  ? <CatalogBanner /> : ""}</div> </div> :
             <>
               {applications.map((application, index) => {
                 return (
                   <>
-                    {index % 3 === 0 && index !== 0 && (artist===undefined || artist===null)  ? <CatalogBanner /> : ""}
+                    {index % 3 === 0 && user.role==='artist' && index !== 0 && (artist===undefined || artist===null)  ? <CatalogBanner /> : ""}
                     <div key={application._id} >
                       <div className="bg-white p-4 shadow-custom mb-6">
                         <div className="pt-7 pb-[24px] font-[Inter] font-bold text-2xl leading-8">
@@ -111,7 +112,7 @@ const CatalogApplications = () => {
                         </Link>
                       </div>
                     </div>
-                    {applications.length === index + 1  && (artist===undefined || artist===null)  ? <CatalogBanner /> : ""}
+                    {applications.length === index + 1 && user.role==='artist'  && (artist===undefined || artist===null)  ? <CatalogBanner /> : ""}
                   </>
                 )
               })}

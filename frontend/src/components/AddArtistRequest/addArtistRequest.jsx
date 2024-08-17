@@ -7,19 +7,13 @@ import { DarkButton } from "../UI/Button/button";
 import { useUser } from "../../context/userContext";
 import { useState } from "react";
 import axios from "../../axios"
-import Loader from "../UI/Loader/loader";
 import { useEffect } from "react";
 
 const AddArtistRequest = () => {
 
     const { user } = useUser()
 
-    const [loading, setLoading] = useState(false)
-
     const { categories } = useCategories()
-
-
-    const navigate = useNavigate()
 
     const cities = [
         'Екатеринбург',
@@ -30,8 +24,18 @@ const AddArtistRequest = () => {
         'Челябинск'
     ];
 
+    const validateFullName = (fullName) => {
+        const words = fullName.trim().split(" ");
+        return words.length === 2 && words[0] && words[1];
+    };
+
     const handleGoForm = async (e) => {
         e.preventDefault();
+
+        if (!validateFullName(formData.fullName)) {
+            alert("Поле 'Имя Фамилия' должно содержать два слова, разделённых пробелом.");
+            return;
+        }
 
         let formDataToSend = new FormData();
 
@@ -110,7 +114,7 @@ const AddArtistRequest = () => {
         backGroundPhotoFile: null,
         gallery: [],
         galleryFiles: [],
-        videoLinks: ['', '', '', '', ''],
+        videoLinks: ['', '', ''],
     });
 
     console.log(formData)
@@ -151,7 +155,7 @@ const AddArtistRequest = () => {
         if (user && categories) {
             setFormData({
                 ...formData,
-                fullName: `${user?.lastName || ''} ${user?.firstName || ''}`,
+                fullName: `${user?.lastName + ' ' || ''}${user?.firstName || ''}`,
                 userName: user?.userName || '',
                 phoneNumber: user?.phoneNumber || '',
                 category: categories?.length > 0 ? [categories?.[0]?._id] : [],
@@ -165,10 +169,6 @@ const AddArtistRequest = () => {
         const selectedOptions = Array.from(options).filter(option => option.selected).map(option => option.value);
         setFormData({ ...formData, [name]: selectedOptions });
     };
-
-    if (loading) {
-        return <Loader />
-    }
 
     return (
         <div>
@@ -204,7 +204,7 @@ const AddArtistRequest = () => {
                     <div className="flex flex-col gap-[8px]">
                         <div className="flex text-[14px] opacity-70 gap-[8px]"><div>Категория</div><div><img src={zvezda} alt="zvezda" /></div></div>
                         <div className="select-wrapper">
-                            <select multiple required value={formData.category} name="category" onChange={handleChange} className="custom-select" id="1">
+                            <select required value={formData.category} name="category" onChange={handleChange} className="custom-select" id="1">
                                 {categories.map((el) => (
                                     <option key={el._id} value={el._id}>{el.name}</option>
                                 ))}
@@ -323,10 +323,7 @@ const AddArtistRequest = () => {
                         <div><input name="link_1" value={formData.videoLinks[0]} onChange={(event) => handleUpdateVideoLink(event)} type="text" placeholder="https://" className="px-[24px] py-[16px] border-black border-solid border-2 w-full" /></div>
                         {formData.videoLinks[0] !== '' && <div><input name="link_2" value={formData.videoLinks[1]} onChange={(event) => handleUpdateVideoLink(event)} type="text" placeholder="https://" className="px-[24px] py-[16px] border-black border-solid border-2 w-full" /></div>}
                         {formData.videoLinks[0] !== '' && formData.videoLinks[1] !== '' && <div><input name="link_3" value={formData.videoLinks[2]} onChange={(event) => handleUpdateVideoLink(event)} type="text" placeholder="https://" className="px-[24px] py-[16px] border-black border-solid border-2 w-full" /></div>}
-                        {formData.videoLinks[0] !== '' && formData.videoLinks[1] !== '' && formData.videoLinks[2] !== '' && <div><input name="link_4" value={formData.videoLinks[3]} onChange={(event) => handleUpdateVideoLink(event)} type="text" placeholder="https://" className="px-[24px] py-[16px] border-black border-solid border-2 w-full" /></div>}
-                        {formData.videoLinks[0] !== '' && formData.videoLinks[1] !== '' && formData.videoLinks[2] !== '' && formData.videoLinks[3] !== '' && <div><input name="link_5" value={formData.videoLinks[4]} onChange={(event) => handleUpdateVideoLink(event)} type="text" placeholder="https://" className="px-[24px] py-[16px] border-black border-solid border-2 w-full" /></div>}
                     </div>
-
                     <div className="mb-6">
                         <DarkButton text={"Отправить"} />
                     </div>
