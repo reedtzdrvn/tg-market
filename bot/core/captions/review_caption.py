@@ -1,7 +1,7 @@
 def generate_review_caption(review, page, total_pages):
     caption = f"""
-Отзыв оставил: {review.get('customerDetails')['firstName']} {review.get('customerDetails')['lastName']}
-Исполнитель: {review.get('artistDetails')['firstName']} {review.get('artistDetails')['lastName']}
+Отзыв оставил: {review.get('customerDetails')['firstName'] if review.get('customerDetails')['firstName'] else ""} {review.get('customerDetails')['lastName'] if review.get('customerDetails')['lastName'] else ""}
+Исполнитель: {review.get('artistDetails')['firstName'] if review.get('artistDetails')['firstName'] else ""} {review.get('artistDetails')['lastName'] if review.get('artistDetails')['lastName'] else ""}
 
 Оценка: {review.get('grade')}/5
 
