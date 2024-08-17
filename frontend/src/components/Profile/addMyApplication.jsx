@@ -79,9 +79,13 @@ const AddMyApplication = () => {
 
     useEffect(() => {
         if (user && categories) {
+            let namePerson = ''
+            if (user.firstName && user.lastName){
+                namePerson = user.firstName + ' ' + user.lastName
+            }
             setFormData(prevData => ({
                 ...prevData,
-                name: `${user?.lastName + ' ' || ''}${user?.firstName || ''}`,
+                name: namePerson,
                 telegramNick: user.userName,
                 phoneNumber: user.phoneNumber,
                 city: user.setCitySearch,
@@ -98,7 +102,7 @@ const AddMyApplication = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!validateFullName(formData.fullName)) {
+        if (!validateFullName(formData.name)) {
             alert("Поле 'Имя Фамилия' должно содержать два слова, разделённых пробелом.");
             return;
         }

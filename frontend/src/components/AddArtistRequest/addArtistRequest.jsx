@@ -153,9 +153,13 @@ const AddArtistRequest = () => {
 
     useEffect(() => {
         if (user && categories) {
+            let namePerson = ''
+            if (user?.firstName && user?.lastName){
+                namePerson = user?.firstName + ' ' + user?.lastName
+            }
             setFormData({
                 ...formData,
-                fullName: `${user?.lastName + ' ' || ''}${user?.firstName || ''}`,
+                fullName: namePerson,
                 userName: user?.userName || '',
                 phoneNumber: user?.phoneNumber || '',
                 category: categories?.length > 0 ? [categories?.[0]?._id] : [],

@@ -49,19 +49,24 @@ const AddApplication = () => {
 
     useEffect(() => {
         if (user && categories) {
+            let namePerson = ''
+            if (user.firstName && user.lastName){
+                namePerson = user.firstName + ' ' + user.lastName
+            }
             setFormData(prevData => ({
                 ...prevData,
-                name: `${user?.lastName + ''} ${user?.firstName || ''}` || '',
+                name: namePerson,
                 telegramNick: user.userName,
                 phoneNumber: user.phoneNumber,
                 city: user.setCitySearch,
-                category: [categories?.[0]._id]
+                category: [categories?.[0]?._id]
             }));
         }
     }, [user, categories]);
 
+    console.log(formData)
+
     const validateFullName = (fullName) => {
-        console.log(fullName)
         const words = fullName.trim().split(" ");
         return words.length === 2 && words[0] && words[1];
     };
@@ -69,7 +74,7 @@ const AddApplication = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!validateFullName(formData.fullName)) {
+        if (!validateFullName(formData.name)) {
             alert("Поле 'Имя Фамилия' должно содержать два слова, разделённых пробелом.");
             return;
         }

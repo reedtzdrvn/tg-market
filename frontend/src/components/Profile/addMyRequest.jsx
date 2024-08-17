@@ -76,9 +76,13 @@ const AddMyRequest = () => {
 
     useEffect(() => {
         if (user && categories) {
+            let namePerson = ''
+            if (user?.firstName && user?.lastName){
+                namePerson = user?.firstName + ' ' + user?.lastName
+            }
             setFormData((prevData) => ({
                 ...prevData,
-                fullName: `${user?.lastName || ''} ${user?.firstName || ''}`.trim(),
+                fullName: namePerson,
                 userName: user.userName || '',
                 phoneNumber: user.phoneNumber || '',
             }));
