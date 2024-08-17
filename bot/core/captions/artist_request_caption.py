@@ -8,7 +8,7 @@ ID: {person.get('_id')}
 
 Telegram: <a href="https://t.me/{person.get('artistDetails')['userName']}">Ссылка</a>
 
-Instagram: f"<a href="https://instagram.com/{person.get('instagram')}">Ссылка</a>" if person.get('instagram') else "нет информации"
+Instagram: f"<a href="https://instagram.com/{person.get('instagram')}">Ссылка</a>"
 Вконтакте: {"<a href=" + person.get('vk') + ">Ссылка</a>" if person.get('vk') else "нет информации"}
 Youtube: {"<a href=" + person.get('youtube') + ">Ссылка</a>" if person.get('youtube') else "нет информации"}
 Tiktok: {"<a href=" + person.get('tiktok') + ">Ссылка</a>" if person.get('tiktok') else "нет информации"}
