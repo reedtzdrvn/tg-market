@@ -8,26 +8,39 @@ import { useEffect, useState } from "react";
 import axios from "../../axios";
 import Loader from "../UI/Loader/loader";
 import CategoriesButton from "../UI/Categories/categoryButton";
-import {useUser} from "../../context/userContext"
+import { useUser } from "../../context/userContext"
+import { useArtist } from "../../context/artistContext";
 
 const ApplicationDetails = () => {
   const { id } = useParams();
   const { user } = useUser()
   const [loading, setLoading] = useState(true)
   const [application, setApplication] = useState({})
+  const { artist } = useArtist()
 
   const handleContactClick = () => {
 
-    axios.post('/order', {
-      customerRequestId: id,
-      artistId: user._id
-    })
-      .then((res) => {
-        window.location.href = `https://t.me/${application.customerId.userName}`;
+    if (!artist) {
+      window.location.href = '/add-artist-request'
+    }
+
+    else if (artist.approved === false) {
+      window.location.href = "/my-add-request"
+    }
+
+    else {
+      axios.post('/order', {
+        customerRequestId: id,
+        artistId: user._id
       })
-      .catch((err) => {
-        console.log(err)
-      })
+        .then((res) => {
+          window.location.href = `https://t.me/${application.customerId.userName}`;
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+
   };
 
   useEffect(() => {

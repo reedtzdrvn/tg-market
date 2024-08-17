@@ -30,7 +30,7 @@ const ArtistDetails = () => {
     if (id) {
       axios.get('/review', { params: { artistId: id } })
         .then((res) => {
-          setReviews(res.data.filter((el)=>el.approved === true))
+          setReviews(res.data.filter((el) => el.approved === true))
         })
         .catch((err) => {
           console.log(err)
@@ -39,7 +39,7 @@ const ArtistDetails = () => {
   }, [id])
 
   const handleContactClick = () => {
-    
+
     window.location.href = `https://t.me/${request.artistId.userName}`;
   };
 
@@ -133,7 +133,7 @@ const ArtistDetails = () => {
             <div>г.{request.city}</div>
           </div>
         </div>
-        <div className="mt-[39px]">
+        {request.photo.length > 0 && <> <div className="mt-[39px]">
           <div className="font-bold text-[24px]">Галерея</div>
           <div className="mt-[16px] flex flex-wrap gap-[5px] justify-around">
             {request.photo.slice(0, visiblePhotos).map((photo, index) => (
@@ -145,6 +145,7 @@ const ArtistDetails = () => {
               />
             ))}
           </div>
+
           <div className="mt-[29px] flex justify-center">
             <img
               src={showMore ? arrow : arrow}
@@ -154,30 +155,36 @@ const ArtistDetails = () => {
             />
           </div>
         </div>
-        <div className="mt-[50px]">
-          <div className="mb-[32px] text-[20px] font-bold">Видео с ютуба</div>
-          <div>
-            {request.link_video.map((el, index) => {
-              if (el !== "") {
-                const videoId = el.split("v=")[1];
-                const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+        </>
+        }
+        {(request.link_video[0] + request.link_video[1] + request.link_video[2] + request.link_video[3] + request.link_video[4] + request.link_video[5]) !== " "
+         && (request.link_video[0] + request.link_video[1] + request.link_video[2] + request.link_video[3] + request.link_video[4] + request.link_video[5]) !=="" 
+         && (request.link_video[0] + request.link_video[1] + request.link_video[2] + request.link_video[3] + request.link_video[4] + request.link_video[5]) !== "     " &&
+          <div className="mt-[50px]">
+            <div className="mb-[32px] text-[20px] font-bold">Видео с ютуба</div>
+            <div>
+              {request.link_video.map((el, index) => {
+                if (el !== "") {
+                  const videoId = el.split("v=")[1];
+                  const embedUrl = `https://www.youtube.com/embed/${videoId}`;
 
-                return (
-                  <iframe
-                    key={index}
-                    src={embedUrl}
-                    title={`YouTube video player ${index}`}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="w-full h-[200px]"
-                  ></iframe>
-                );
-              }
-              return null;
-            })}
+                  return (
+                    <iframe
+                      key={index}
+                      src={embedUrl}
+                      title={`YouTube video player ${index}`}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="w-full h-[200px]"
+                    ></iframe>
+                  );
+                }
+                return null;
+              })}
+            </div>
+
           </div>
-
-        </div>
+        }
         {reviews.length > 0 && <div className="mt-[50px] w-full">
           <div className="text-[20px] font-bold">Отзывы ({reviews.length})</div>
           <div className="flex flex-col gap-[23px] mt-[32px] w-full">
