@@ -68,7 +68,7 @@ const ApplicationDetails = () => {
   }
 
   return (
-    <div className="font-[Inter] bg-white">
+    <div className="font-[Inter] bg-white h-screen">
       <div className="w-full flex justify-end px-[44px] pt-[46px]">
         <Link to={"/catalog-applications"}>
           <img className="w-[16px]" src={crossIcon} alt="close" />
@@ -120,9 +120,9 @@ const ApplicationDetails = () => {
         {application.description}
       </div>
 
-      <div className="px-4 py-10">
+      {user.role === 'artist' && <div className="px-4 py-10">
         <DarkButton text={"Откликнуться"} onClick={handleContactClick} />
-      </div>
+      </div>}
     </div>
   );
 };

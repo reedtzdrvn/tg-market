@@ -34,7 +34,7 @@ const AddMyRequest = () => {
         mainPhoto: null,
         backGroundPhoto: null,
         gallery: [],
-        videoLinks: ['', '', '', '', ''],
+        videoLinks: ['', '', ''],
     });
 
     const cities = [
@@ -109,7 +109,7 @@ const AddMyRequest = () => {
                 mainPhoto: request.mainPhoto || null,
                 backGroundPhoto: request.backGroundPhoto || null,
                 gallery: request.photo || [],
-                videoLinks: request.link_video || ['', '', '', '', ''],
+                videoLinks: request.link_video || ['', '', ''],
             }));
         }
     }, [request]);
@@ -119,6 +119,8 @@ const AddMyRequest = () => {
         const selectedOptions = Array.from(options).filter(option => option.selected).map(option => option.value);
         setFormData({ ...formData, [name]: selectedOptions });
     };
+
+    console.log(formData)
 
     const handleFileChange = async (e) => {
         const { name, files } = e.target;
@@ -169,8 +171,19 @@ const AddMyRequest = () => {
         }));
     };
 
+    const validateFullName = (fullName) => {
+        const words = fullName.trim().split(" ");
+        return words.length === 2 && words[0] && words[1];
+    };
+
     const handleGoForm = async (e) => {
         e.preventDefault();
+
+        if (!validateFullName(formData.fullName)) {
+            alert("Поле 'Имя Фамилия' должно содержать два слова, разделённых пробелом.");
+            return;
+        }
+
         try {
             await axios.patch("/artist-request", {
                 city: formData.setCitySearch,
@@ -226,8 +239,10 @@ const AddMyRequest = () => {
             </div>
             <form className=" px-[16px]" onSubmit={handleGoForm}>
                 <div>
-                    {request.isRejected && <div className="bg-custompink py-[16px] w-full mb-8 rounded-xl ">{request.isRejected && <div className="text-center font-bold">Анкета отклонена модератором, отредактируйте её. Подробнее прочтите в чате или напишите в поддержку</div>}</div>}
-                    {!request.approved && <div className="bg-custompink py-[16px] w-full mb-8 rounded-xl ">{!request.approved && <div className="text-center font-bold">Анкета еще на модераторации. Дождитесь модерации или напишите в поддержку</div>}</div>}
+                    {request.isRejected && <div className="bg-custompink py-[16px] w-full mb-8 rounded-xl px-2">{request.isRejected && <div className="text-center font-bold">Анкета отклонена модератором, отредактируйте её. Подробнее прочтите в чате или напишите в поддержку</div>}</div>}
+                    {!request.approved && <div className="bg-custompink py-[16px] w-full mb-8 rounded-xl px-2 ">{!request.approved && <div className="text-center font-bold">Ваша анкета на модерации. Дождитесь подтверждения, чтобы оставлять отклики.<br/>
+
+Если у вас возникли вопросы, обратитесь в поддержку через бот или по кнопке внизу экрана</div>}</div>}
                     <div className="text-[20px] font-bold">Контактная информация</div>
                 </div>
                 <div className="mt-[27px] flex flex-col gap-[24px]">
@@ -253,7 +268,7 @@ const AddMyRequest = () => {
                     <div className="flex flex-col gap-[8px]">
                         <div className="flex text-[14px] opacity-70 gap-[8px]"><div>Категория</div><div><img src={zvezda} alt="zvezda" /></div></div>
                         <div className="select-wrapper">
-                            <select multiple required value={formData.category} onChange={handleChange} className="custom-select" name="category" id="1">
+                            <select required value={formData.category} onChange={handleChange} className="custom-select" name="category" id="1">
                                 {categories.map((el) => (
                                     <option key={el._id} value={el._id}>{el.name}</option>
                                 ))}
@@ -384,8 +399,6 @@ const AddMyRequest = () => {
                         <div><input name="link_1" value={formData.videoLinks[0]} onChange={(event) => handleUpdateVideoLink(event)} type="text" placeholder="https://" className="px-[24px] py-[16px] border-black border-solid border-2 w-full" /></div>
                         {formData.videoLinks[0] !== '' && <div><input name="link_2" value={formData.videoLinks[1]} onChange={(event) => handleUpdateVideoLink(event)} type="text" placeholder="https://" className="px-[24px] py-[16px] border-black border-solid border-2 w-full" /></div>}
                         {formData.videoLinks[0] !== '' && formData.videoLinks[1] !== '' && <div><input name="link_3" value={formData.videoLinks[2]} onChange={(event) => handleUpdateVideoLink(event)} type="text" placeholder="https://" className="px-[24px] py-[16px] border-black border-solid border-2 w-full" /></div>}
-                        {formData.videoLinks[0] !== '' && formData.videoLinks[1] !== '' && formData.videoLinks[2] !== '' && <div><input name="link_4" value={formData.videoLinks[3]} onChange={(event) => handleUpdateVideoLink(event)} type="text" placeholder="https://" className="px-[24px] py-[16px] border-black border-solid border-2 w-full" /></div>}
-                        {formData.videoLinks[0] !== '' && formData.videoLinks[1] !== '' && formData.videoLinks[2] !== '' && formData.videoLinks[3] !== '' && <div><input name="link_5" value={formData.videoLinks[4]} onChange={(event) => handleUpdateVideoLink(event)} type="text" placeholder="https://" className="px-[24px] py-[16px] border-black border-solid border-2 w-full" /></div>}
                     </div>
 
                     <div className="mb-6">

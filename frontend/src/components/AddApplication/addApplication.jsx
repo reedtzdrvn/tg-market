@@ -51,7 +51,7 @@ const AddApplication = () => {
         if (user && categories) {
             setFormData(prevData => ({
                 ...prevData,
-                name: `${user?.lastName || ''} ${user?.firstName || ''}`,
+                name: `${user?.lastName + ' ' || ''}${user?.firstName || ''}`,
                 telegramNick: user.userName,
                 phoneNumber: user.phoneNumber,
                 city: user.setCitySearch,
@@ -60,8 +60,19 @@ const AddApplication = () => {
         }
     }, [user, categories]);
 
+    const validateFullName = (fullName) => {
+        const words = fullName.trim().split(" ");
+        return words.length === 2 && words[0] && words[1];
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!validateFullName(formData.fullName)) {
+            alert("Поле 'Имя Фамилия' должно содержать два слова, разделённых пробелом.");
+            return;
+        }
+
         try {
             const response = await axios.post('/customer-request', {
                 fee: formData.feeFrom + ' - ' + formData.feeTo,
