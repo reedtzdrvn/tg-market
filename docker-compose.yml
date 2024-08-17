@@ -6,7 +6,7 @@ services:
     ports:
       - '4444:4444'
     volumes:
-      -./backend/media:/media
+      -./backend/media:/backend/media
   
   bot:
     build: ./bot
@@ -19,3 +19,6 @@ services:
       - '3000:3000'
     stdin_open: true
     tty: true
+
+volumes:
+  media:
