@@ -112,7 +112,7 @@ export default class orderController {
             ],
           })
           .populate("status.statusId");
-        return res.json(order);
+        return res.json(order.filter((el) => el.customerRequestId !== null));
       }
 
       // If a customerRequestId is provided, find the order by customerRequestId and populate all fields including categories and user
@@ -147,13 +147,13 @@ export default class orderController {
             ],
           })
           .populate("status.statusId");
-        return res.json(order);
+        return res.json(order.filter((el) => el.customerRequestId !== null));
       }
 
       const customerObjectId = new mongoose.Types.ObjectId(customerId);
 
       if (customerId) {
-        const orders = await OrderSchema.find({isCustomerView: true})
+        const orders = await OrderSchema.find({ isCustomerView: true })
           .populate({
             path: "customerRequestId",
             match: { customerId: customerObjectId },
@@ -183,7 +183,7 @@ export default class orderController {
           })
           .populate("status.statusId");
 
-        return res.json(orders); // Возвращаем массив заказов
+        return res.json(orders.filter((el) => el.customerRequestId !== null));
       }
 
       return res.status(400).json({ error: "Invalid query parameters" });
