@@ -89,7 +89,7 @@ const AddMyApplication = () => {
                 telegramNick: user.userName,
                 phoneNumber: user.phoneNumber,
                 city: user.setCitySearch,
-                category: [categories[0]._id]
+                category: [categories?.[0]?._id]
             }));
         }
     }, [user, categories]);
