@@ -2,7 +2,7 @@ def generate_artist_request_caption(person):
     caption = f"""
 ID: {person.get('_id')}
     
-Имя Фамилия: {person.get('artistDetails', {})['firstName'] if person.get('artistDetails', {})['firstName'] else ""} {person.get('artistDetails', {})['lastName'] if person.get('artistDetails', {})['lastName'] else ""}
+Имя Фамилия: {person.get('artistDetails', {}).get('firstName', '')} {person.get('artistDetails', {}).get('lastName', "")}
 Номер телефона: {person.get('artistDetails')['phoneNumber']}
 Город: {person.get('city')}
 
