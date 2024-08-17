@@ -4,7 +4,7 @@ def generate_customer_request_caption(request, page, total_pages):
     caption = f"""
 ID: {request.get('_id')}
 
-Имя фамилия <b>Заказчика</b>: {request.get('artistDetails')['firstName'] if request.get('artistDetails')['firstName'] else ""} {request.get('artistDetails')['lastName'] if request.get('artistDetails')['lastName'] else ""}
+Имя фамилия <b>Заказчика</b>: {request.get('artistDetails', {})['firstName'] if request.get('artistDetails', {})['firstName'] else ""} {request.get('artistDetails', {})['lastName'] if request.get('artistDetails', {})['lastName'] else ""}
 Номер телефона: {request.get('artistDetails')['phoneNumber']}
 
 Telegram: <a href="https://t.me/{request.get('artistDetails')['userName']}">Ссылка</a>
