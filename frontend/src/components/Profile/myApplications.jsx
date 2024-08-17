@@ -98,7 +98,8 @@ const MyApplications = () => {
     };
 
 
-    if (applications.length === 0) {
+
+    if (applications.length === 0 && orders===0) {
         return (
             <div className="px-[16px] bg-back min-h-screen">
                 <div className="py-[44px] flex gap-[33px] justify-center">
@@ -128,6 +129,8 @@ const MyApplications = () => {
                 {applications.map((application) => {
                     const isExpired = Date.now() > new Date(application.date);
                     const isExpiringSoon = (new Date(application.date) - Date.now()) <= 3 * 24 * 60 * 60 * 1000;
+
+                    console.log(1)
 
                     return (
                         <div className={`flex-col ${isExpired && application.approved === true ? "opacity-50" : ""}`}>

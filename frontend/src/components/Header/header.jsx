@@ -8,7 +8,7 @@ import { useArtist } from "../../context/artistContext"
 
 const Header = () => {
   let tg = window.Telegram.WebApp;
-  let userId = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "1073631065";
+  let userId = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "5835906613";
 
   const { categories, setCategories } = useCategories();
   const { user, setUser } = useUser();
