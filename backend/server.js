@@ -19,7 +19,8 @@ const app = express();
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "media/");
+    console.log('Destination:', path.join(__dirname, 'media'));
+    cb(null, path.join(__dirname, 'media'));
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -35,7 +36,7 @@ const upload = multer({
   limits: { fileSize: 50 * 1024 * 1024 },
 });
 
-app.use("/media", express.static("media"));
+app.use(express.static(__dirname))
 app.use(express.json());
 app.use(cors());
 app.use(express.json({ limit: "50mb" }));
