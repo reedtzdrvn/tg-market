@@ -17,6 +17,7 @@ const AddMyApplication = () => {
     const [orders, setOrders] = useState([])
     const [applications, setApplications] = useState([])
     const [loading, setLoading] = useState(true)
+    const [loading2, setLoading2] = useState(true)
 
     
     useEffect(() => {
@@ -40,7 +41,10 @@ const AddMyApplication = () => {
                 .catch((err) => {
                     console.log(err);
                 })
-        }
+                .finally(()=>{
+                    setLoading2(false)
+                })
+            }
     }, [user]);
 
     const [formData, setFormData] = useState({
@@ -118,7 +122,7 @@ const AddMyApplication = () => {
         }
     };
 
-    if (loading){
+    if (loading || loading2){
         return <Loader />
     }
 

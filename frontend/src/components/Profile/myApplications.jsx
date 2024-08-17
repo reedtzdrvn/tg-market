@@ -15,6 +15,7 @@ const MyApplications = () => {
     const [applications, setApplications] = useState([])
     const [loading, setLoading] = useState(true)
     const { user } = useUser()
+    const [loading2, setLoading2] = useState(true)
     const [orders, setOrders] = useState([])
     const [isDelete, setIdDelete] = useState('')
     const [showPopup, setShowPopup] = useState(false);
@@ -25,6 +26,7 @@ const MyApplications = () => {
             axios.get(`/customer-requests?customerId=${user._id}`)
                 .then((res) => {
                     setApplications(res.data);
+                    setLoading2(false)
                 })
                 .catch((err) => {
                     console.log(err);
@@ -59,7 +61,7 @@ const MyApplications = () => {
         setShowPopup(true)
     }
 
-    if (loading) {
+    if (loading || loading2) {
         return <Loader />
     }
 

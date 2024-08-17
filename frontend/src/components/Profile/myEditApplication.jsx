@@ -18,6 +18,7 @@ const EditMyApplication = () => {
     const [orders, setOrders] = useState([])
     const [applications, setApplications] = useState([])
     const [loading, setLoading] = useState(true)
+    const [loading2, setLoading2] = useState(true)
     const [application, setApplication] = useState(null);
     const [formData, setFormData] = useState({
         eventName: '',
@@ -51,6 +52,7 @@ const EditMyApplication = () => {
                     setApplications(res.data);
                     const foundApplication = res.data.find((el) => el._id === id);
                     setApplication(foundApplication);
+                    setLoading2(false)
                 })
                 .catch((err) => {
                     console.log(err);
@@ -104,7 +106,7 @@ const EditMyApplication = () => {
             alert("Поле 'Имя Фамилия' должно содержать два слова, разделённых пробелом.");
             return;
         }
-        
+
         e.preventDefault();
         try {
             const response = await axios.patch('/customer-request', {isReject: false, approved: false, fee: formData.feeFrom + ' - ' + formData.feeTo, eventName: formData.eventName, description: formData.eventDetails, city: formData.city, requestId: id, categoryId: formData.category, date: formData.date, time: formData.timeInterval, guestCount: formData.guestCount, approved: false });
@@ -116,7 +118,7 @@ const EditMyApplication = () => {
         }
     };
 
-    if (loading) {
+    if (loading || loading2) {
         return <Loader />
     }
 
