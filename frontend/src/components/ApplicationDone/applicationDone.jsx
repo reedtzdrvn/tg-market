@@ -13,7 +13,7 @@ const ApplicationDone = () => {
     const [orders, setOrders] = useState([])
     const [applications, setApplications] = useState([])
     const [loading, setLoading] = useState(true)
-
+    const [loading2, setLoading2] = useState(true)
     
     useEffect(() => {
         if (user) {
@@ -32,6 +32,7 @@ const ApplicationDone = () => {
             axios.get(`/customer-requests?customerId=${user._id}`)
                 .then((res) => {
                     setApplications(res.data);
+                    setLoading2(false)
                 })
                 .catch((err) => {
                     console.log(err);
@@ -47,7 +48,7 @@ const ApplicationDone = () => {
         navigate("/my-applications")
     }
 
-    if (loading){
+    if (loading || loading2){
         return <Loader />
     }
 

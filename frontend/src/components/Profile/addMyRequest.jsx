@@ -13,6 +13,7 @@ import { useArtist } from "../../context/artistContext";
 const AddMyRequest = () => {
     const { user } = useUser();
     const [loading, setLoading] = useState(true);
+    const [loading2, setLoading2] = useState(true);
     const { categories } = useCategories();
     const navigate = useNavigate();
     const [request, setRequest] = useState({});
@@ -66,6 +67,7 @@ const AddMyRequest = () => {
                     setRequest(res.data[0]);
                     if (res.data.length > 0) {
                         setAdded(true);
+                        setLoading2(false)
                     }
                 })
                 .catch((err) => {
@@ -221,7 +223,7 @@ const AddMyRequest = () => {
         }
     };
 
-    if (loading) {
+    if (loading || loading2) {
         return <Loader />;
     }
 

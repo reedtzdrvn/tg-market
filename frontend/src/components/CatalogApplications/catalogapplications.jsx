@@ -21,9 +21,9 @@ const CatalogApplications = () => {
   const queryParams = new URLSearchParams(location.search);
   const id = queryParams.get('id');
   const [loading, setLoading] = useState(true)
-  const {artist} = useArtist()
+  const { artist } = useArtist()
   const [applications, setApplications] = useState([])
-  const {user} = useUser()
+  const { user } = useUser()
 
   useEffect(() => {
     if (category) {
@@ -72,49 +72,52 @@ const CatalogApplications = () => {
       </div>
       {loading ? <Loader /> :
         <div className="mt-[38px] flex flex-col">
-          {applications.length === 0 ? <div className="center font-bold text-center text-2xl mt-[24px]">Нет заявок в этой категории <div className="mt-[24px]">{(artist===undefined || artist===null) && user.role==='artist'  ? <CatalogBanner /> : ""}</div> </div> :
+          {applications.length === 0 ? <div className="center font-bold text-center text-2xl mt-[24px]">Нет заявок в этой категории <div className="mt-[24px]">{(artist === undefined || artist === null) && user.role === 'artist' ? <CatalogBanner /> : ""}</div> </div> :
             <>
               {applications.map((application, index) => {
-                return (
-                  <>
-                    {index % 3 === 0 && user.role==='artist' && index !== 0 && (artist===undefined || artist===null)  ? <CatalogBanner /> : ""}
-                    <div key={application._id} >
-                      <div className="bg-white p-4 shadow-custom mb-6">
-                        <div className="pt-7 pb-[24px] font-[Inter] font-bold text-2xl leading-8">
-                          <span className="mb-[24px]">{application.eventName}</span>
-                        </div>
-                        <div className="flex flex-row gap-4 font-[Inter] text-[12px] font-normal flex-wrap">
-                          {application.categoryId.map((el) => (
-                            <CategoriesButton category={el} />
-                          ))}
-                        </div>
-
-                        <div className="mt-[24px] flex justify-between items-center font-[Inter] text-4 font-semibold">
-                          <div className="flex items-center">
-                            <img className="w-[18px] mr-2" src={calendarIcon} alt="data" />
-                            <span>{normDate(application.date)}</span>
+                const isExpired = Date.now() > new Date(application.date);
+                if (!isExpired) {
+                  return (
+                    <>
+                      {index % 3 === 0 && user.role === 'artist' && index !== 0 && (artist === undefined || artist === null) ? <CatalogBanner /> : ""}
+                      <div key={application._id} >
+                        <div className="bg-white p-4 shadow-custom mb-6">
+                          <div className="pt-7 pb-[24px] font-[Inter] font-bold text-2xl leading-8">
+                            <span className="mb-[24px]">{application.eventName}</span>
+                          </div>
+                          <div className="flex flex-row gap-4 font-[Inter] text-[12px] font-normal flex-wrap">
+                            {application.categoryId.map((el) => (
+                              <CategoriesButton category={el} />
+                            ))}
                           </div>
 
-                          <div className="flex items-center">
-                            <img className="w-[16px] mr-2" src={moneyIcon} alt="money" />
-                            <span>{application.fee} ₽</span>
+                          <div className="mt-[24px] flex justify-between items-center font-[Inter] text-4 font-semibold">
+                            <div className="flex items-center">
+                              <img className="w-[18px] mr-2" src={calendarIcon} alt="data" />
+                              <span>{normDate(application.date)}</span>
+                            </div>
+
+                            <div className="flex items-center">
+                              <img className="w-[16px] mr-2" src={moneyIcon} alt="money" />
+                              <span>{application.fee} ₽</span>
+                            </div>
                           </div>
-                        </div>
 
-                        <div className="mt-4 font-[Inter] text-[14px] opacity-50 leading-4">
-                          {application.description}
-                        </div>
+                          <div className="mt-4 font-[Inter] text-[14px] opacity-50 leading-4">
+                            {application.description}
+                          </div>
 
-                        <Link to={`/application-details/${application._id}`}>
-                          <button className="mt-4 w-full flex justify-center items-center bg-black font-[Inter] text-[20px] font-bold rounded-2xl text-white py-4">
-                            Откликнуться
-                          </button>
-                        </Link>
+                          <Link to={`/application-details/${application._id}`}>
+                            <button className="mt-4 w-full flex justify-center items-center bg-black font-[Inter] text-[20px] font-bold rounded-2xl text-white py-4">
+                              Откликнуться
+                            </button>
+                          </Link>
+                        </div>
                       </div>
-                    </div>
-                    {applications.length === index + 1 && user.role==='artist'  && (artist===undefined || artist===null)  ? <CatalogBanner /> : ""}
-                  </>
-                )
+                      {applications.length === index + 1 && user.role === 'artist' && (artist === undefined || artist === null) ? <CatalogBanner /> : ""}
+                    </>
+                  )
+                }
               })}
             </>
           }
