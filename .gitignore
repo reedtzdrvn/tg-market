@@ -4,6 +4,7 @@ venv/
 pycache/
 
 **/.env
+**/media
 .env
 /ngrok
 
