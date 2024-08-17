@@ -51,7 +51,7 @@ const AddApplication = () => {
         if (user && categories) {
             setFormData(prevData => ({
                 ...prevData,
-                name: `${user?.lastName + ' ' || ''}${user?.firstName || ''}`,
+                name: `${user?.lastName + ''} ${user?.firstName || ''}` || '',
                 telegramNick: user.userName,
                 phoneNumber: user.phoneNumber,
                 city: user.setCitySearch,
@@ -61,6 +61,7 @@ const AddApplication = () => {
     }, [user, categories]);
 
     const validateFullName = (fullName) => {
+        console.log(fullName)
         const words = fullName.trim().split(" ");
         return words.length === 2 && words[0] && words[1];
     };
