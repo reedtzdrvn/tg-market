@@ -13,7 +13,7 @@ const Main = () => {
     let userId = ''
 
     if (!tg.initDataUnsafe.user) {
-        userId = '703999322'
+        userId = '1073631065'
     }
     else {
         userId = tg.initDataUnsafe.user?.id
