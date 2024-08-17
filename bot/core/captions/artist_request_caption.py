@@ -3,7 +3,7 @@ def generate_artist_request_caption(person):
 ID: {person.get('_id')}
     
 Имя Фамилия: {person.get('artistDetails', {}).get('firstName', '')} {person.get('artistDetails', {}).get('lastName', "")}
-Номер телефона: {person.get('artistDetails')['phoneNumber']}
+Номер телефона: {person.get('artistDetails').get('phoneNumber', "")}
 Город: {person.get('city')}
 
 Telegram: <a href="https://t.me/{person.get('artistDetails')['userName']}">Ссылка</a>

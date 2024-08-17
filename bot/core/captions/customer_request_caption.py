@@ -5,7 +5,7 @@ def generate_customer_request_caption(request, page, total_pages):
 ID: {request.get('_id')}
 
 Имя фамилия <b>Заказчика</b>: {request.get('artistDetails', {}).get('firstName', '')} {request.get('artistDetails', {}).get('lastName', "")}
-Номер телефона: {request.get('artistDetails')['phoneNumber']}
+Номер телефона: {request.get('artistDetails').get('phoneNumber', "")}
 
 Telegram: <a href="https://t.me/{request.get('artistDetails')['userName']}">Ссылка</a>
 
