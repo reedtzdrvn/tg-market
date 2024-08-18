@@ -17,7 +17,7 @@ const AddArtistRequest = () => {
     const [disabled, setDisabled] = useState(false)
     const { categories } = useCategories()
 
-    const cities = useCities()
+    const {cities} = useCities()
 
     const validateFullName = (fullName) => {
         const words = fullName.trim().split(" ");
@@ -114,7 +114,6 @@ const AddArtistRequest = () => {
         videoLinks: ['', '', ''],
     });
 
-    console.log(formData)
 
     const handleFileChange = (e) => {
         const { name, files } = e.target;
@@ -175,6 +174,10 @@ const AddArtistRequest = () => {
         const selectedOptions = Array.from(options).filter(option => option.selected).map(option => option.value);
         setFormData({ ...formData, [name]: selectedOptions });
     };
+
+    if (!cities){
+        return <Loader/>
+    }
 
 
     return (
