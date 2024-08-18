@@ -135,7 +135,7 @@ const AddArtistRequest = () => {
             }));
         } else {
             const index = parseInt(name.replace('gallery', ''), 10) - 1;
-    
+            
             setFormData((prevData) => {
                 const updatedGalleryFiles = [...prevData.galleryFiles];
                 updatedGalleryFiles[index] = file;
@@ -292,7 +292,7 @@ const AddArtistRequest = () => {
                             <div>Добавьте фото в галерею</div>
                         </div>
                         <div className="flex w-full gap-[16px]">
-                            <input type="file" name="gallery" id="gallery1" className="hidden" onChange={(e) => handleFileChange(e)} />
+                            <input type="file" name="gallery1" id="gallery1" className="hidden" onChange={(e) => handleFileChange(e)} />
                             <label htmlFor="gallery1" className="border-black border-solid border-2 w-full h-[60px] flex items-center justify-center text-[40px]">
                                 {formData.galleryFiles[0] ? (
                                     <img src={URL.createObjectURL(formData.galleryFiles[0])} alt="gallery1" className="w-full h-full object-cover" />
@@ -300,7 +300,7 @@ const AddArtistRequest = () => {
                                     '+'
                                 )}
                             </label>
-                            <input type="file" name="gallery" id="gallery2" className="hidden" onChange={(e) => handleFileChange(e)} />
+                            <input type="file" name="gallery2" id="gallery2" className="hidden" onChange={(e) => handleFileChange(e)} />
                             <label htmlFor="gallery2" className="border-black border-solid border-2 w-full h-[60px] flex items-center justify-center text-[40px]">
                                 {formData.galleryFiles[1] ? (
                                     <img src={URL.createObjectURL(formData.galleryFiles[1])} alt="gallery2" className="w-full h-full object-cover" />
@@ -308,7 +308,7 @@ const AddArtistRequest = () => {
                                     '+'
                                 )}
                             </label>
-                            <input type="file" name="gallery" id="gallery3" className="hidden" onChange={(e) => handleFileChange(e)} />
+                            <input type="file" name="gallery3" id="gallery3" className="hidden" onChange={(e) => handleFileChange(e)} />
                             <label htmlFor="gallery3" className="border-black border-solid border-2 w-full h-[60px] flex items-center justify-center text-[40px]">
                                 {formData.galleryFiles[2] ? (
                                     <img src={URL.createObjectURL(formData.galleryFiles[2])} alt="gallery2" className="w-full h-full object-cover" />
@@ -316,7 +316,7 @@ const AddArtistRequest = () => {
                                     '+'
                                 )}
                             </label>
-                            <input type="file" name="gallery" id="gallery4" className="hidden" onChange={(e) => handleFileChange(e)} />
+                            <input type="file" name="gallery4" id="gallery4" className="hidden" onChange={(e) => handleFileChange(e)} />
                             <label htmlFor="gallery4" className="border-black border-solid border-2 w-full h-[60px] flex items-center justify-center text-[40px]">
                                 {formData.galleryFiles[3] ? (
                                     <img src={URL.createObjectURL(formData.galleryFiles[3])} alt="gallery2" className="w-full h-full object-cover" />
