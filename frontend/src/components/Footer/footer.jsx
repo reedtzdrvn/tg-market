@@ -23,7 +23,7 @@ const Footer = () => {
                 <div className="flex flex-col gap-[23px] justify-start items-start w-1/2 pl-[30px]">
                     <Link  to="/about" > О приложении </Link>
                     <div onClick={()=>handleGoSupport()} > Поддержка </div>
-                    <Link to="/docs" > Документы </Link>
+                    <Link to="https://taplink.cc/sirviler" > Колесо Сира:<br/> путь к мастерству </Link>
                 </div>
             </div>
         </div>

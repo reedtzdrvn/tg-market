@@ -49,18 +49,6 @@ export default class categoryController {
               as: "customerRequests",
             },
           },
-          {
-            $addFields: {
-              countArtist: { $size: "$artistRequests" },
-              countCustomer: { $size: "$customerRequests" },
-            },
-          },
-          {
-            $project: {
-              artistRequests: 0, // Исключаем массив artistRequests из результата
-              customerRequests: 0, // Исключаем массив customerRequests из результата
-            },
-          },
         ]);
         return res.json(categories);
       }

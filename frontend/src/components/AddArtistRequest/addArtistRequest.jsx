@@ -8,21 +8,16 @@ import { useUser } from "../../context/userContext";
 import { useState } from "react";
 import axios from "../../axios"
 import { useEffect } from "react";
+import Loader from "../UI/Loader/loader";
+import { useCities } from "../../context/citiesContext";
 
 const AddArtistRequest = () => {
 
     const { user } = useUser()
-
+    const [disabled, setDisabled] = useState(false)
     const { categories } = useCategories()
 
-    const cities = [
-        'Екатеринбург',
-        'Москва',
-        'Санкт-Петербург',
-        'Новосибирск',
-        'Казань',
-        'Челябинск'
-    ];
+    const cities = useCities()
 
     const validateFullName = (fullName) => {
         const words = fullName.trim().split(" ");
@@ -31,8 +26,10 @@ const AddArtistRequest = () => {
 
     const handleGoForm = async (e) => {
         e.preventDefault();
+        setDisabled(true);
 
         if (!validateFullName(formData.fullName)) {
+            setDisabled(false);
             alert("Поле 'Имя Фамилия' должно содержать два слова, разделённых пробелом.");
             return;
         }
@@ -123,8 +120,6 @@ const AddArtistRequest = () => {
         const { name, files } = e.target;
         const file = files[0];
 
-        console.log(file)
-
         if (name === 'mainPhoto') {
             setFormData((prevData) => ({
                 ...prevData,
@@ -136,12 +131,19 @@ const AddArtistRequest = () => {
                 backGroundPhotoFile: file,
             }));
         } else {
-            setFormData((prevData) => ({
-                ...prevData,
-                galleryFiles: [...prevData.galleryFiles, file],
-            }));
+            const index = parseInt(name.replace('gallery', ''), 10) - 1;
+
+            setFormData((prevData) => {
+                const updatedGalleryFiles = [...prevData.galleryFiles];
+                updatedGalleryFiles[index] = file;
+                return {
+                    ...prevData,
+                    galleryFiles: updatedGalleryFiles,
+                };
+            });
         }
     };
+
 
     const handleUpdateVideoLink = (event) => {
         const parts = event.target.name.split('_');
@@ -154,7 +156,7 @@ const AddArtistRequest = () => {
     useEffect(() => {
         if (user && categories) {
             let namePerson = ''
-            if (user?.firstName && user?.lastName){
+            if (user?.firstName && user?.lastName) {
                 namePerson = user?.firstName + ' ' + user?.lastName
             }
             setFormData({
@@ -173,6 +175,7 @@ const AddArtistRequest = () => {
         const selectedOptions = Array.from(options).filter(option => option.selected).map(option => option.value);
         setFormData({ ...formData, [name]: selectedOptions });
     };
+
 
     return (
         <div>
@@ -287,7 +290,7 @@ const AddArtistRequest = () => {
                             <div>Добавьте фото в галерею</div>
                         </div>
                         <div className="flex w-full gap-[16px]">
-                            <input type="file" name="gallery" id="gallery1" className="hidden" onChange={(e) => handleFileChange(e)} />
+                            <input type="file" name="gallery1" id="gallery1" className="hidden" onChange={(e) => handleFileChange(e)} />
                             <label htmlFor="gallery1" className="border-black border-solid border-2 w-full h-[60px] flex items-center justify-center text-[40px]">
                                 {formData.galleryFiles[0] ? (
                                     <img src={URL.createObjectURL(formData.galleryFiles[0])} alt="gallery1" className="w-full h-full object-cover" />
@@ -295,7 +298,7 @@ const AddArtistRequest = () => {
                                     '+'
                                 )}
                             </label>
-                            <input type="file" name="gallery" id="gallery2" className="hidden" onChange={(e) => handleFileChange(e)} />
+                            <input type="file" name="gallery2" id="gallery2" className="hidden" onChange={(e) => handleFileChange(e)} />
                             <label htmlFor="gallery2" className="border-black border-solid border-2 w-full h-[60px] flex items-center justify-center text-[40px]">
                                 {formData.galleryFiles[1] ? (
                                     <img src={URL.createObjectURL(formData.galleryFiles[1])} alt="gallery2" className="w-full h-full object-cover" />
@@ -303,7 +306,7 @@ const AddArtistRequest = () => {
                                     '+'
                                 )}
                             </label>
-                            <input type="file" name="gallery" id="gallery3" className="hidden" onChange={(e) => handleFileChange(e)} />
+                            <input type="file" name="gallery3" id="gallery3" className="hidden" onChange={(e) => handleFileChange(e)} />
                             <label htmlFor="gallery3" className="border-black border-solid border-2 w-full h-[60px] flex items-center justify-center text-[40px]">
                                 {formData.galleryFiles[2] ? (
                                     <img src={URL.createObjectURL(formData.galleryFiles[2])} alt="gallery2" className="w-full h-full object-cover" />
@@ -311,7 +314,7 @@ const AddArtistRequest = () => {
                                     '+'
                                 )}
                             </label>
-                            <input type="file" name="gallery" id="gallery4" className="hidden" onChange={(e) => handleFileChange(e)} />
+                            <input type="file" name="gallery4" id="gallery4" className="hidden" onChange={(e) => handleFileChange(e)} />
                             <label htmlFor="gallery4" className="border-black border-solid border-2 w-full h-[60px] flex items-center justify-center text-[40px]">
                                 {formData.galleryFiles[3] ? (
                                     <img src={URL.createObjectURL(formData.galleryFiles[3])} alt="gallery2" className="w-full h-full object-cover" />
@@ -323,13 +326,13 @@ const AddArtistRequest = () => {
                     </div>
                     <div className="flex flex-col gap-[8px]">
                         <div className="flex text-[14px] opacity-70 gap-[8px]"><div>Добавьте видео</div></div>
-                        <div className="flex gap-2 text-[12px] items-center opacity-70"><img src={attention} alt="attention" />Ссылка на видео в YouTube, Vimeo, VK Video</div>
+                        <div className="flex gap-2 text-[12px] items-center opacity-70"><img src={attention} alt="attention" />Ссылка на видео в YouTube</div>
                         <div><input name="link_1" value={formData.videoLinks[0]} onChange={(event) => handleUpdateVideoLink(event)} type="text" placeholder="https://" className="px-[24px] py-[16px] border-black border-solid border-2 w-full" /></div>
                         {formData.videoLinks[0] !== '' && <div><input name="link_2" value={formData.videoLinks[1]} onChange={(event) => handleUpdateVideoLink(event)} type="text" placeholder="https://" className="px-[24px] py-[16px] border-black border-solid border-2 w-full" /></div>}
                         {formData.videoLinks[0] !== '' && formData.videoLinks[1] !== '' && <div><input name="link_3" value={formData.videoLinks[2]} onChange={(event) => handleUpdateVideoLink(event)} type="text" placeholder="https://" className="px-[24px] py-[16px] border-black border-solid border-2 w-full" /></div>}
                     </div>
-                    <div className="mb-6">
-                        <DarkButton text={"Отправить"} />
+                    <div className={`mb-6 ${disabled ? "opacity-50" : ""}`} >
+                        <DarkButton text={"Отправить"} disabled={disabled}/>
                     </div>
                 </div>
             </form>

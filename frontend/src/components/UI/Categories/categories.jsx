@@ -1,6 +1,16 @@
 import { Link } from "react-router-dom";
 
 const Categories = ({categories}) => {
+  function counterApplicatiion(category){
+    let count = 0
+    category.artistRequests.map((el)=>{
+      const isExpired = Date.now() > new Date(el.date);
+      if (!isExpired && el.approved === true && el.isRejected === false){
+        count++
+      }
+    })
+    return count
+  }
     return ( 
         <div className="flex flex-wrap px-2 w-full justify-between">
           {categories.map((el) => (
@@ -10,7 +20,7 @@ const Categories = ({categories}) => {
                 <span className="text-[16px] font-bold">{el.name}</span>
               </div>
               <div className={`rounded-[15px] py-[4px] px-[8px] flex items-center justify-center absolute right-4 -top-8 text-[12px] ${getClassColor(el.color)}`}>
-                {el.countArtist}
+                {counterApplicatiion(el)}
               </div>
             </Link>
           ))}

@@ -10,6 +10,7 @@ import axios from "../../axios"
 import Loader from "../UI/Loader/loader";
 import { useEffect } from "react";
 import { useArtist } from "../../context/artistContext";
+import { useCities } from "../../context/citiesContext";
 const AddMyRequest = () => {
     const { user } = useUser();
     const [loading, setLoading] = useState(true);
@@ -38,14 +39,7 @@ const AddMyRequest = () => {
         videoLinks: ['', '', ''],
     });
 
-    const cities = [
-        'Екатеринбург',
-        'Москва',
-        'Санкт-Петербург',
-        'Новосибирск',
-        'Казань',
-        'Челябинск'
-    ];
+    const {cities} = useCities()
 
     useEffect(() => {
         if (user) {
@@ -154,6 +148,7 @@ const AddMyRequest = () => {
                 }));
             } else {
                 const index = parseInt(name.replace('gallery', ''), 10) - 1;
+                console.log(index)
                 const updatedGallery = [...formData.gallery];
                 updatedGallery[index] = uploadedFile;
 
@@ -392,7 +387,7 @@ const AddMyRequest = () => {
                             <input type="file" name="gallery4" id="gallery4" className="hidden" onChange={(e) => handleFileChange(e)} />
                             <label htmlFor="gallery4" className="border-black border-solid border-2 w-full h-[60px] flex items-center justify-center text-[40px]">
                                 {formData.gallery?.[3] ? (
-                                    <img src={process.env.REACT_APP_API_URL + formData.galleryFiles[3]} alt="gallery2" className="w-full h-full object-cover" />
+                                    <img src={process.env.REACT_APP_API_URL + formData.gallery[3]} alt="gallery2" className="w-full h-full object-cover" />
                                 ) : (
                                     '+'
                                 )}
@@ -401,7 +396,7 @@ const AddMyRequest = () => {
                     </div>
                     <div className="flex flex-col gap-[8px]">
                         <div className="flex text-[14px] opacity-70 gap-[8px]"><div>Добавьте видео</div></div>
-                        <div className="flex gap-2 text-[12px] items-center opacity-70"><img src={attention} alt="attention" />Ссылка на видео в YouTube, Vimeo, VK Video</div>
+                        <div className="flex gap-2 text-[12px] items-center opacity-70"><img src={attention} alt="attention" />Ссылка на видео в YouTube</div>
                         <div><input name="link_1" value={formData.videoLinks[0]} onChange={(event) => handleUpdateVideoLink(event)} type="text" placeholder="https://" className="px-[24px] py-[16px] border-black border-solid border-2 w-full" /></div>
                         {formData.videoLinks[0] !== '' && <div><input name="link_2" value={formData.videoLinks[1]} onChange={(event) => handleUpdateVideoLink(event)} type="text" placeholder="https://" className="px-[24px] py-[16px] border-black border-solid border-2 w-full" /></div>}
                         {formData.videoLinks[0] !== '' && formData.videoLinks[1] !== '' && <div><input name="link_3" value={formData.videoLinks[2]} onChange={(event) => handleUpdateVideoLink(event)} type="text" placeholder="https://" className="px-[24px] py-[16px] border-black border-solid border-2 w-full" /></div>}
