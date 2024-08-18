@@ -1,4 +1,9 @@
 def generate_artist_request_caption(person):
+    inst_info = f'<a href="https://instagram.com/{person.get("vk")}">Ссылка</a>' if person.get('vk') else "нет информации"
+    vk_info = f'<a href="https://vk.com/{person.get("vk")}">Ссылка</a>' if person.get('vk') else "нет информации"
+    youtube_info = f'<a href="https://youtube.com/{person.get("youtube")}">Ссылка</a>' if person.get('youtube') else "нет информации"
+    tiktok_info = f'<a href="https://tiktok.com/{person.get("tiktok")}">Ссылка</a>' if person.get('tiktok') else "нет информации"
+
     caption = f"""
 ID: {person.get('_id')}
     
@@ -8,10 +13,10 @@ ID: {person.get('_id')}
 
 Telegram: <a href="https://t.me/{person.get('artistDetails')['userName']}">Ссылка</a>
 
-Instagram: <a href="https://instagram.com/{person.get('instagram')}">Ссылка</a>
-Вконтакте: {"<a href=" + person.get('vk') + ">Ссылка</a>" if person.get('vk') else "нет информации"}
-Youtube: {"<a href=" + person.get('youtube') + ">Ссылка</a>" if person.get('youtube') else "нет информации"}
-Tiktok: {"<a href=" + person.get('tiktok') + ">Ссылка</a>" if person.get('tiktok') else "нет информации"}
+Instagram: {inst_info}
+Вконтакте: {vk_info}
+Youtube: {youtube_info}
+Tiktok: {tiktok_info}
 Цены: {person.get('price')}
 Описание:
 {f"<b>{person.get('description')}</b>" if person.get('description') else "нет информации"}

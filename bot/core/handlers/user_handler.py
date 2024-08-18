@@ -26,10 +26,9 @@ async def message_handler(message: Message, _user_controller) -> None:
 
         await message.answer(
             f"Здравствуйте, <b>{message.from_user.full_name}!</b>\n\n"
-            "Вы успешно прошли первичную регистрацию в приложении <b>Events App!</b>\n\n"
-            "Это приложение для быстрого поиска артистов для вашего события, а также для продажи своих услуг, если вы артист.\n\n"
-            "Покупайте или продавайте впечатления, общайтесь с артистами или заказчиками.\n\n",
-            reply_markup=kb.web_app_keyboard_inline,
+            "Вы присоединились к приложению <b>EVENTRA</b>\n\n"
+            "Нажмите \"Открыть\" для запуска\n\n",
+            reply_markup=kb.web_app_keyboard_inline
         )
 
         if not message.text == 'Открыть веб-апп':
@@ -40,7 +39,8 @@ async def message_handler(message: Message, _user_controller) -> None:
     except DuplicateKeyError as dke:
         logging.info(dke)
         await message.answer(
-            "Здравствуйте. Вы уже зарегестрированы в приложении Events App!\n\nПереходите к WebApp.",
+            "Вы уже зарегистрированы в приложении <b>EVENTRA</b>.\n\n"
+            "Нажмите \"Открыть\" для запуска\n\n",
             reply_markup=kb.web_app_keyboard_inline,
         )
 
