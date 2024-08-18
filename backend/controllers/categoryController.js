@@ -26,8 +26,8 @@ export default class categoryController {
 
   static getCategory = async (req, res) => {
     try {
-      const { categoryId } = req.query;
-
+      const { categoryId, city } = req.query;
+  
       if (!categoryId) {
         const categories = await CategorySсhema.aggregate([
           {
@@ -35,8 +35,18 @@ export default class categoryController {
               from: "artistrequests",
               let: { categoryId: "$_id" },
               pipeline: [
-                { $match: { $expr: { $in: ["$$categoryId", "$categoryId"] } } }, // Используем $in для проверки массива categoryId
+                {
+                  $lookup: {
+                    from: "users", // используем коллекцию "users"
+                    localField: "artistId",
+                    foreignField: "_id",
+                    as: "artist",
+                  },
+                },
+                { $unwind: "$artist" }, // развернем массив artist, чтобы упростить фильтрацию
+                { $match: { $expr: { $in: ["$$categoryId", "$categoryId"] } } },
                 { $match: { approved: true, isRejected: false } },
+                { $match: { "artist.setCitySearch": city } }, // фильтрация по городу
               ],
               as: "artistRequests",
             },
@@ -44,15 +54,28 @@ export default class categoryController {
           {
             $lookup: {
               from: "customerrequests",
-              localField: "_id",
-              foreignField: "categoryId",
+              let: { categoryId: "$_id" },
+              pipeline: [
+                {
+                  $lookup: {
+                    from: "users", // используем коллекцию "users"
+                    localField: "customerId",
+                    foreignField: "_id",
+                    as: "customer",
+                  },
+                },
+                { $unwind: "$customer" }, // развернем массив customer
+                { $match: { $expr: { $eq: ["$categoryId", "$$categoryId"] } } },
+                { $match: { approved: true, isReject: false } },
+                { $match: { "customer.setCitySearch": city } }, // фильтрация по городу
+              ],
               as: "customerRequests",
             },
           },
         ]);
         return res.json(categories);
       }
-
+  
       const category = await CategorySсhema.aggregate([
         { $match: { _id: new mongoose.Types.ObjectId(categoryId) } },
         {
@@ -60,8 +83,18 @@ export default class categoryController {
             from: "artistrequests",
             let: { categoryId: "$_id" },
             pipeline: [
-              { $match: { $expr: { $in: ["$$categoryId", "$categoryId"] } } }, // Используем $in для проверки массива categoryId
+              {
+                $lookup: {
+                  from: "users",
+                  localField: "artistId",
+                  foreignField: "_id",
+                  as: "artist",
+                },
+              },
+              { $unwind: "$artist" },
+              { $match: { $expr: { $in: ["$$categoryId", "$categoryId"] } } },
               { $match: { approved: true, isRejected: false } },
+              { $match: { "artist.setCitySearch": city } },
             ],
             as: "artistRequests",
           },
@@ -69,8 +102,21 @@ export default class categoryController {
         {
           $lookup: {
             from: "customerrequests",
-            localField: "_id",
-            foreignField: "categoryId",
+            let: { categoryId: "$_id" },
+            pipeline: [
+              {
+                $lookup: {
+                  from: "users",
+                  localField: "customerId",
+                  foreignField: "_id",
+                  as: "customer",
+                },
+              },
+              { $unwind: "$customer" },
+              { $match: { $expr: { $eq: ["$categoryId", "$$categoryId"] } } },
+              { $match: { approved: true, isReject: false } },
+              { $match: { "customer.setCitySearch": city } },
+            ],
             as: "customerRequests",
           },
         },
@@ -82,22 +128,23 @@ export default class categoryController {
         },
         {
           $project: {
-            artistRequests: 0, // Exclude the artistRequests array from the result
-            customerRequests: 0, // Exclude the customerRequests array from the result
+            artistRequests: 0, // Исключаем массив artistRequests из результата
+            customerRequests: 0, // Исключаем массив customerRequests из результата
           },
         },
       ]);
-
+  
       if (!category.length) {
         return res.status(404).json({ message: "Category not found" });
       }
-
-      return res.json(category[0]); // category will be an array, return the first element
+  
+      return res.json(category[0]);
     } catch (e) {
       console.error(e);
       return res.status(500).json({ error: e.message });
     }
   };
+  
 
   static deleteCategory = async (req, res) => {
     try {

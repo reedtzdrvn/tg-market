@@ -20,9 +20,6 @@ const Header = () => {
 
   const {cities} = useCities()
 
-  console.log(cities)
-
-
   const handleCityChange = (event) => {
     const newCity = event.target.value;
 
@@ -30,6 +27,7 @@ const Header = () => {
       axios.patch("/selectcity", { telegramId: user.telegramId, setCitySearch: newCity })
         .then(() => {
           setUser(prevUser => ({ ...prevUser, setCitySearch: newCity }));
+          window.location.reload()
         })
         .catch((err) => {
           console.log(err);
@@ -38,8 +36,8 @@ const Header = () => {
   };
 
   useEffect(() => {
-    if (categories.length === 0) {
-      axios.get("/category")
+    if (categories.length === 0 && user) {
+      axios.get("/category", {params: { city: user.setCitySearch}})
         .then((res) => {
           setCategories(res.data);
           setLoadingCategories(false);
@@ -50,7 +48,7 @@ const Header = () => {
     } else {
       setLoadingCategories(false);
     }
-  }, [categories, setCategories]);
+  }, [categories, setCategories, user]);
 
   useEffect(() => {
 
