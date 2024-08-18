@@ -39,7 +39,7 @@ async def message_handler(message: Message, _user_controller) -> None:
     except DuplicateKeyError as dke:
         logging.info(dke)
         await message.answer(
-            "Вы присоединились к приложению <b>EVENTRA</b>\n\n"
+            "Вы уже зарегистрированы в приложении <b>EVENTRA</b>.\n\n"
             "Нажмите \"Открыть\" для запуска\n\n",
             reply_markup=kb.web_app_keyboard_inline,
         )
