@@ -122,9 +122,7 @@ const AddArtistRequest = () => {
     const handleFileChange = (e) => {
         const { name, files } = e.target;
         const file = files[0];
-
-        console.log(file)
-
+    
         if (name === 'mainPhoto') {
             setFormData((prevData) => ({
                 ...prevData,
@@ -136,12 +134,19 @@ const AddArtistRequest = () => {
                 backGroundPhotoFile: file,
             }));
         } else {
-            setFormData((prevData) => ({
-                ...prevData,
-                galleryFiles: [...prevData.galleryFiles, file],
-            }));
+            const index = parseInt(name.replace('gallery', ''), 10) - 1;
+    
+            setFormData((prevData) => {
+                const updatedGalleryFiles = [...prevData.galleryFiles];
+                updatedGalleryFiles[index] = file;
+                return {
+                    ...prevData,
+                    galleryFiles: updatedGalleryFiles,
+                };
+            });
         }
     };
+    
 
     const handleUpdateVideoLink = (event) => {
         const parts = event.target.name.split('_');
