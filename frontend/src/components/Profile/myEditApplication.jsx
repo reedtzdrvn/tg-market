@@ -77,7 +77,7 @@ const EditMyApplication = () => {
         }
     }, [application]);
 
-    const cities = useCities()
+    const {cities} = useCities()
 
     const handleChange = (e) => {
         const { name, value, options } = e.target;

@@ -63,7 +63,7 @@ const AddMyApplication = () => {
         guestCount: '50-100',
     });
 
-    const cities = useCities()
+    const {cities} = useCities()
 
     const handleChange = (e) => {
         const { name, value, options } = e.target;
