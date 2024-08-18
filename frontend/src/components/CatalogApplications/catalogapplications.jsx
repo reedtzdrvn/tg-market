@@ -29,7 +29,7 @@ const CatalogApplications = () => {
     if (category) {
       axios.get(`/customer-requests?categoryId=${category}`)
         .then((res) => {
-          setApplications(res.data)
+          setApplications(res.data.filter((el)=>el.city==user.setCitySearch))
         })
         .catch((err) => {
           console.log(err)

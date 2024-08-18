@@ -18,6 +18,8 @@ const CatalogArtist = () => {
   const [loading, setLoading] = useState(true)
   const {user} = useUser()
 
+  console.log(loading)
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -30,7 +32,7 @@ const CatalogArtist = () => {
         } else {
           data = null;
         }
-        setApplications(data);
+        setApplications(data.filter((el)=>el.city==user.setCitySearch));
         setLoading(false)
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -41,7 +43,7 @@ const CatalogArtist = () => {
     if (category) {
       fetchData();
     }
-  }, [category]);
+  }, [category, id, categories]);
 
   useEffect(() => {
     if (id) {
