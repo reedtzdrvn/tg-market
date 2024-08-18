@@ -12,7 +12,7 @@ web_app_keyboard_inline = InlineKeyboardMarkup(
 
 tech_keyboard = ReplyKeyboardMarkup(
     keyboard=[
-        [KeyboardButton(text="Открыть приложение"),]
+        [KeyboardButton(text="Открыть приложение")],
         [KeyboardButton(text='Тех. Поддержка')],
     ],
     resize_keyboard=True,

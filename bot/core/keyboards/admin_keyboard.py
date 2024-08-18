@@ -9,7 +9,7 @@ main_keyboard = ReplyKeyboardMarkup(
             KeyboardButton(text="Отзывы"),
         ],
         [
-            KeyboardButton(text="Открыть веб-апп"),
+            KeyboardButton(text="Открыть приложение"),
         ],
     ],
     resize_keyboard=True,
