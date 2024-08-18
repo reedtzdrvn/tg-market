@@ -8,11 +8,12 @@ import { useUser } from "../../context/userContext";
 import { useState } from "react";
 import axios from "../../axios"
 import { useEffect } from "react";
+import Loader from "../UI/Loader/loader";
 
 const AddArtistRequest = () => {
 
     const { user } = useUser()
-
+    const [disabled, setDisabled] = useState(false)
     const { categories } = useCategories()
 
     const cities = [
@@ -31,8 +32,10 @@ const AddArtistRequest = () => {
 
     const handleGoForm = async (e) => {
         e.preventDefault();
+        setDisabled(true);
 
         if (!validateFullName(formData.fullName)) {
+            setDisabled(false);
             alert("Поле 'Имя Фамилия' должно содержать два слова, разделённых пробелом.");
             return;
         }
@@ -122,7 +125,7 @@ const AddArtistRequest = () => {
     const handleFileChange = (e) => {
         const { name, files } = e.target;
         const file = files[0];
-    
+
         if (name === 'mainPhoto') {
             setFormData((prevData) => ({
                 ...prevData,
@@ -135,7 +138,7 @@ const AddArtistRequest = () => {
             }));
         } else {
             const index = parseInt(name.replace('gallery', ''), 10) - 1;
-            
+
             setFormData((prevData) => {
                 const updatedGalleryFiles = [...prevData.galleryFiles];
                 updatedGalleryFiles[index] = file;
@@ -146,7 +149,7 @@ const AddArtistRequest = () => {
             });
         }
     };
-    
+
 
     const handleUpdateVideoLink = (event) => {
         const parts = event.target.name.split('_');
@@ -159,7 +162,7 @@ const AddArtistRequest = () => {
     useEffect(() => {
         if (user && categories) {
             let namePerson = ''
-            if (user?.firstName && user?.lastName){
+            if (user?.firstName && user?.lastName) {
                 namePerson = user?.firstName + ' ' + user?.lastName
             }
             setFormData({
@@ -178,6 +181,7 @@ const AddArtistRequest = () => {
         const selectedOptions = Array.from(options).filter(option => option.selected).map(option => option.value);
         setFormData({ ...formData, [name]: selectedOptions });
     };
+
 
     return (
         <div>
@@ -333,8 +337,8 @@ const AddArtistRequest = () => {
                         {formData.videoLinks[0] !== '' && <div><input name="link_2" value={formData.videoLinks[1]} onChange={(event) => handleUpdateVideoLink(event)} type="text" placeholder="https://" className="px-[24px] py-[16px] border-black border-solid border-2 w-full" /></div>}
                         {formData.videoLinks[0] !== '' && formData.videoLinks[1] !== '' && <div><input name="link_3" value={formData.videoLinks[2]} onChange={(event) => handleUpdateVideoLink(event)} type="text" placeholder="https://" className="px-[24px] py-[16px] border-black border-solid border-2 w-full" /></div>}
                     </div>
-                    <div className="mb-6">
-                        <DarkButton text={"Отправить"} />
+                    <div className={`mb-6 ${disabled ? "opacity-50" : ""}`} >
+                        <DarkButton text={"Отправить"} disabled={disabled}/>
                     </div>
                 </div>
             </form>
