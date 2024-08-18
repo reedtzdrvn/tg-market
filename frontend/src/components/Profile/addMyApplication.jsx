@@ -8,6 +8,7 @@ import { useCategories } from "../../context/categoryContext";
 import { DarkButton } from "../UI/Button/button";
 import { useUser } from '../../context/userContext';
 import Loader from '../UI/Loader/loader';
+import { useCities } from '../../context/citiesContext';
 
 const AddMyApplication = () => {
 
@@ -62,14 +63,7 @@ const AddMyApplication = () => {
         guestCount: '50-100',
     });
 
-    const cities = [
-        'Екатеринбург',
-        'Москва',
-        'Санкт-Петербург',
-        'Новосибирск',
-        'Казань',
-        'Челябинск',
-    ];
+    const cities = useCities()
 
     const handleChange = (e) => {
         const { name, value, options } = e.target;

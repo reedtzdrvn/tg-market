@@ -10,6 +10,7 @@ import axios from "../../axios"
 import Loader from "../UI/Loader/loader";
 import { useEffect } from "react";
 import { useArtist } from "../../context/artistContext";
+import { useCities } from "../../context/citiesContext";
 const AddMyRequest = () => {
     const { user } = useUser();
     const [loading, setLoading] = useState(true);
@@ -38,14 +39,7 @@ const AddMyRequest = () => {
         videoLinks: ['', '', ''],
     });
 
-    const cities = [
-        'Екатеринбург',
-        'Москва',
-        'Санкт-Петербург',
-        'Новосибирск',
-        'Казань',
-        'Челябинск'
-    ];
+    const {cities} = useCities()
 
     useEffect(() => {
         if (user) {

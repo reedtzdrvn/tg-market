@@ -9,6 +9,7 @@ import { useState } from "react";
 import axios from "../../axios"
 import { useEffect } from "react";
 import Loader from "../UI/Loader/loader";
+import { useCities } from "../../context/citiesContext";
 
 const AddArtistRequest = () => {
 
@@ -16,14 +17,7 @@ const AddArtistRequest = () => {
     const [disabled, setDisabled] = useState(false)
     const { categories } = useCategories()
 
-    const cities = [
-        'Екатеринбург',
-        'Москва',
-        'Санкт-Петербург',
-        'Новосибирск',
-        'Казань',
-        'Челябинск'
-    ];
+    const cities = useCities()
 
     const validateFullName = (fullName) => {
         const words = fullName.trim().split(" ");

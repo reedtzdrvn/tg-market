@@ -9,6 +9,7 @@ import { useCategories } from "../../context/categoryContext";
 import { DarkButton } from "../UI/Button/button";
 import { useUser } from '../../context/userContext';
 import Loader from '../UI/Loader/loader';
+import { useCities } from "../../context/citiesContext";
 
 
 const EditMyApplication = () => {
@@ -76,14 +77,7 @@ const EditMyApplication = () => {
         }
     }, [application]);
 
-    const cities = [
-        'Екатеринбург',
-        'Москва',
-        'Санкт-Петербург',
-        'Новосибирск',
-        'Казань',
-        'Челябинск',
-    ];
+    const cities = useCities()
 
     const handleChange = (e) => {
         const { name, value, options } = e.target;

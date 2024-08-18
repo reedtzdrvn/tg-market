@@ -7,6 +7,7 @@ import attention from "../../images/attention.svg";
 import { useCategories } from "../../context/categoryContext";
 import { DarkButton } from "../UI/Button/button";
 import { useUser } from '../../context/userContext';
+import { useCities } from '../../context/citiesContext';
 
 const AddApplication = () => {
     const { categories } = useCategories();
@@ -28,14 +29,7 @@ const AddApplication = () => {
         guestCount: '50-100',
     });
 
-    const cities = [
-        'Екатеринбург',
-        'Москва',
-        'Санкт-Петербург',
-        'Новосибирск',
-        'Казань',
-        'Челябинск',
-    ];
+    const {cities} = useCities()
 
     const handleChange = (e) => {
         const { name, value, options } = e.target;

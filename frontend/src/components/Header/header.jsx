@@ -5,6 +5,7 @@ import Loader from '../UI/Loader/loader';
 import axios from "../../axios";
 import { useUser } from '../../context/userContext';
 import { useArtist } from "../../context/artistContext"
+import { useCities } from '../../context/citiesContext';
 
 const Header = () => {
   let tg = window.Telegram.WebApp;
@@ -17,14 +18,9 @@ const Header = () => {
   const [loadingArtist, setLoadingArtist] = useState(true);
   const { artist, setArtist } = useArtist()
 
-  const cities = [
-    'Екатеринбург',
-    'Москва',
-    'Санкт-Петербург',
-    'Новосибирск',
-    'Казань',
-    'Челябинск'
-  ];
+  const {cities} = useCities()
+
+  console.log(cities)
 
 
   const handleCityChange = (event) => {
