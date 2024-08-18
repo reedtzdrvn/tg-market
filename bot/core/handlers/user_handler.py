@@ -14,7 +14,7 @@ user_router = Router()
 
 
 @user_router.message(CommandStart())
-@user_router.message(F.text == "Открыть веб-апп")
+@user_router.message(F.text == "Открыть приложение")
 async def message_handler(message: Message, _user_controller) -> None:
     try:
         await message.bot.send_chat_action(
@@ -33,7 +33,7 @@ async def message_handler(message: Message, _user_controller) -> None:
             reply_markup=kb.web_app_keyboard_inline,
         )
 
-        if not message.text == "Открыть веб-апп":
+        if not message.text == "Открыть приложение":
             await message.answer(
                 text="Если у Вас будут какие-то вопросы, то можете написать в тех.поддержку",
                 reply_markup=kb.tech_keyboard,
@@ -48,7 +48,7 @@ async def message_handler(message: Message, _user_controller) -> None:
             reply_markup=kb.web_app_keyboard_inline,
         )
 
-        if not message.text == "Открыть веб-апп":
+        if not message.text == "Открыть приложение":
             await message.answer(
                 text="Если у Вас будут какие-то вопросы, то можете написать в тех.поддержку",
                 reply_markup=kb.tech_keyboard,
@@ -60,7 +60,7 @@ async def message_handler(message: Message, _user_controller) -> None:
         )
 
 
-@user_router.message(F.text == "Тех.поддержка")
+@user_router.message(F.text == "Тех. Поддержка")
 async def print_moderators(message, _moderator_controller: ModeratorController):
     await message.bot.send_chat_action(
         chat_id=message.from_user.id, action=ChatAction.TYPING
