@@ -154,6 +154,7 @@ const AddMyRequest = () => {
                 }));
             } else {
                 const index = parseInt(name.replace('gallery', ''), 10) - 1;
+                console.log(index)
                 const updatedGallery = [...formData.gallery];
                 updatedGallery[index] = uploadedFile;
 
@@ -392,7 +393,7 @@ const AddMyRequest = () => {
                             <input type="file" name="gallery4" id="gallery4" className="hidden" onChange={(e) => handleFileChange(e)} />
                             <label htmlFor="gallery4" className="border-black border-solid border-2 w-full h-[60px] flex items-center justify-center text-[40px]">
                                 {formData.gallery?.[3] ? (
-                                    <img src={process.env.REACT_APP_API_URL + formData.galleryFiles[3]} alt="gallery2" className="w-full h-full object-cover" />
+                                    <img src={process.env.REACT_APP_API_URL + formData.gallery[3]} alt="gallery2" className="w-full h-full object-cover" />
                                 ) : (
                                     '+'
                                 )}
