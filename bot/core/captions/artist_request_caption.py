@@ -1,8 +1,8 @@
 def generate_artist_request_caption(person):
     inst_info = f'<a href="https://instagram.com/{person.get("vk")}">Ссылка</a>' if person.get('vk') else "нет информации"
-    vk_info = f'<a href="https://vk.com/{person.get("vk")}">Ссылка</a>' if person.get('vk') else "нет информации"
-    youtube_info = f'<a href="https://youtube.com/{person.get("youtube")}">Ссылка</a>' if person.get('youtube') else "нет информации"
-    tiktok_info = f'<a href="https://tiktok.com/{person.get("tiktok")}">Ссылка</a>' if person.get('tiktok') else "нет информации"
+    vk_info = f'<a href="https://vk.com/{person.get("vk")}">Ссылка</a>' if person.get('vk').startswith('https://') else "нет информации"
+    youtube_info = f'<a href="https://youtube.com/{person.get("youtube")}">Ссылка</a>' if person.get('youtube').startswith('https://') else "нет информации"
+    tiktok_info = f'<a href="https://tiktok.com/{person.get("tiktok")}">Ссылка</a>' if person.get('tiktok').startswith('https://') else "нет информации"
 
     caption = f"""
 ID: {person.get('_id')}
