@@ -79,9 +79,10 @@ async def artist_message(
             ),
             InputMediaPhoto(media=f"{BACKEND_URL}{person.get('backGroundPhoto')}"),
         ]
+
         for photo in person.get("photo"):
             media.append(InputMediaPhoto(media=f"{BACKEND_URL}{photo}"))
-            print(media)
+
 
         await message.answer_media_group(media=media)
 
