@@ -95,6 +95,7 @@ const MyApplications = () => {
 
     const handleContactClick = (userName) => {
         window.location.href = `https://t.me/${userName}`;
+        window.close()
     };
 
 
