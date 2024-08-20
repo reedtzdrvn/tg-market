@@ -55,9 +55,31 @@ const CatalogApplications = () => {
     }
   };
 
-  function handleContactClick(event, userName){
+  function handleContactClick(event, userName, customerRequestId) {
     event.stopPropagation();
-    window.location.href = `https://t.me/${userName}`;
+
+    if (!artist) {
+      window.location.href = '/add-artist-request'
+    }
+
+    else if (artist.approved === false) {
+      window.location.href = "/my-add-request"
+    }
+
+    else {
+      axios.post('/order', {
+        customerRequestId: customerRequestId,
+        artistId: user._id
+      })
+        .then((res) => {
+          window.location.href = `https://t.me/${userName}`;
+
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+
   };
 
   function normDate(date) {
@@ -112,7 +134,7 @@ const CatalogApplications = () => {
                         </div>
                       </Link>
 
-                      <div onClick={(e) => handleContactClick(e, application.customerId.userName)}>
+                      <div onClick={(e) => handleContactClick(e, application.customerId.userName, application._id)}>
                         <button className="mt-4 w-full flex justify-center items-center bg-black font-[Inter] text-[20px] font-bold rounded-2xl text-white py-4">
                           Откликнуться
                         </button>
