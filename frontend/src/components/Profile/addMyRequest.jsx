@@ -3,7 +3,7 @@ import createArtistRequest from "../../images/createArtistRequest.png"
 import zvezda from "../../images/zvezda.svg"
 import attention from "../../images/attention.svg"
 import { useCategories } from "../../context/categoryContext";
-import { DarkButton } from "../UI/Button/button";
+import { DarkButton, LightButton2 } from "../UI/Button/button";
 import { useUser } from "../../context/userContext";
 import { useState } from "react";
 import axios from "../../axios"
@@ -25,7 +25,7 @@ const AddMyRequest = () => {
         fullName: '',
         userName: '',
         phoneNumber: '',
-        category: [], 
+        category: [],
         setCitySearch: "",
         priceFrom: '',
         priceTo: '',
@@ -40,7 +40,7 @@ const AddMyRequest = () => {
         videoLinks: ['', '', ''],
     });
 
-    const {cities} = useCities()
+    const { cities } = useCities()
 
     useEffect(() => {
         if (user) {
@@ -74,7 +74,7 @@ const AddMyRequest = () => {
     useEffect(() => {
         if (user && categories) {
             let namePerson = ''
-            if (user?.firstName && user?.lastName){
+            if (user?.firstName && user?.lastName) {
                 namePerson = user?.firstName + ' ' + user?.lastName
             }
             setFormData((prevData) => ({
@@ -98,7 +98,7 @@ const AddMyRequest = () => {
 
             setFormData((prevData) => ({
                 ...prevData,
-                category: request.categoryId?.map((el)=>(el._id)) || [],
+                category: request.categoryId?.map((el) => (el._id)) || [],
                 setCitySearch: request.city || '',
                 priceFrom,
                 priceTo,
@@ -114,7 +114,7 @@ const AddMyRequest = () => {
             }));
         }
     }, [request]);
-    
+
     const handleChange = (e) => {
         const { name, options } = e.target;
         const selectedOptions = Array.from(options).filter(option => option.selected).map(option => option.value);
@@ -127,7 +127,7 @@ const AddMyRequest = () => {
 
         try {
 
-            const res = await axios.post("/upload", {files: file}, {
+            const res = await axios.post("/upload", { files: file }, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -178,6 +178,11 @@ const AddMyRequest = () => {
 
     const handleGoForm = async (e) => {
         e.preventDefault();
+        
+        if ( request.approved === true ){
+            return
+        }
+
         setDisabled(true)
 
         if (!validateFullName(formData.fullName)) {
@@ -235,17 +240,28 @@ const AddMyRequest = () => {
         );
     }
 
+
+    const handleContactClick = (userName) => {
+        window.location.href = `https://t.me/${userName}`;
+
+        if (window.Telegram && window.Telegram.WebApp && typeof window.Telegram.WebApp.close === 'function') {
+            window.Telegram.WebApp.close();
+        } else {
+            window.close();
+        }
+    };
+
     return (
         <div>
             <div className="py-[44px] flex gap-[33px] justify-center">
                 <div className="underline font-bold text-[20px]">Моя анкета</div><Link to={"/my-requests"} className="text-[20px] opacity-60" >Мои заказы ({orders.length})</Link>
             </div>
-            <form className=" px-[16px]" onSubmit={handleGoForm}>
+            <form className=" px-[16px]" onSubmit={ handleGoForm }>
                 <div>
                     {request.isRejected && <div className="bg-custompink py-[16px] w-full mb-8 rounded-xl px-2">{request.isRejected && <div className="text-center font-bold">Анкета отклонена модератором, отредактируйте её. Подробнее прочтите в чате или напишите в поддержку</div>}</div>}
-                    {!request.approved && <div className="bg-custompink py-[16px] w-full mb-8 rounded-xl px-2 ">{!request.approved && <div className="text-center font-bold">Ваша анкета на модерации. Дождитесь подтверждения, чтобы оставлять отклики.<br/>
+                    {!request.approved && !request.isRejected && <div className="bg-custompink py-[16px] w-full mb-8 rounded-xl px-2 ">{!request.approved && <div className="text-center font-bold">Ваша анкета на модерации. Дождитесь подтверждения, чтобы оставлять отклики.<br />
 
-Если у вас возникли вопросы, обратитесь в поддержку через бот или по кнопке внизу экрана</div>}</div>}
+                        Если у вас возникли вопросы, обратитесь в поддержку через бот или по кнопке внизу экрана</div>}</div>}
                     <div className="text-[20px] font-bold">Контактная информация</div>
                 </div>
                 <div className="mt-[27px] flex flex-col gap-[24px]">
@@ -404,8 +420,9 @@ const AddMyRequest = () => {
                         {formData.videoLinks[0] !== '' && formData.videoLinks[1] !== '' && <div><input name="link_3" value={formData.videoLinks[2]} onChange={(event) => handleUpdateVideoLink(event)} type="text" placeholder="https://" className="px-[24px] py-[16px] border-black border-solid border-2 w-full" /></div>}
                     </div>
 
-                    <div className={`mb-6 ${disabled ? "opacity-50" : ""}`}>
-                        <DarkButton disabled={disabled} text={"Сохранить"} />
+                    <div className={`mb-6 flex flex-col gap-4 ${disabled ? "opacity-50" : ""}`}>
+                        {request.approved === true || request.isRejected === true ? <DarkButton disabled={disabled} text={"Сохранить"} /> : ""}
+                        {!request.approved && <DarkButton text={"Написать в поддержку"} onClick={()=>handleContactClick("eventApp_bot")} />}
                     </div>
                 </div>
             </form>

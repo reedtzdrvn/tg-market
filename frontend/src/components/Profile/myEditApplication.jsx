@@ -150,7 +150,6 @@ const EditMyApplication = () => {
                                     name="category"
                                     value={formData.category}
                                     onChange={handleChange}
-                                    multiple
                                     required
                                 >
                                     {categories.map((el) => (

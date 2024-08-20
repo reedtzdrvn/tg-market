@@ -179,7 +179,7 @@ const MyApplications = () => {
                                                 {!application.approved && <Link className="w-full" to={`/my-edit-application/${application._id}`}>
                                                     {isExpired && application.approved === true ? "" : <LightButton2 text={"Редактировать"} />}
                                                 </Link>}
-                                                {!application.approved && (
+                                                {application.approved && !isExpired && (
                                                     <Link className="w-full" onClick={() => handleDeleteApplication(application._id)}>
                                                         <LightButton2 text={"Отменить"} />
                                                     </Link>
