@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import axios from "../../axios";
 import Loader from "../UI/Loader/loader";
 import ConfirmationPopup from "./StatusChangePopup";
+import { Link } from "react-router-dom";
 
 const ArtistOrder = ({ el }) => {
     const [statuses, setStatuses] = useState([]);
@@ -76,7 +77,7 @@ const ArtistOrder = ({ el }) => {
 
     const handleConfirmChange = () => {
         setLoading(true)
-        axios.patch("/order", {status: nextStatus, orderId: el._id, customerRequestId: el.customerRequestId._id})
+        axios.patch("/order", { status: nextStatus, orderId: el._id, customerRequestId: el.customerRequestId._id })
             .then(() => {
                 setStatus(nextStatus);
             })
@@ -146,6 +147,7 @@ const ArtistOrder = ({ el }) => {
                         <div className="text-[16px] font-bold">{el.customerRequestId.fee} P</div>
                     </div>
                 </div>
+                {el.review == true && <div className="mt-[40px]"><Link to={`/artist/${el.artistRequestId.artistId._id}/66a51564e7d6e093d50f969a`} className="font-bold text-[20px] !opacity-100 underline">*Есть отзыв по этому заказу</Link></div>}
                 {(status.name === "Создан" || status.name === "Договор") && <div className="mt-[20px]">
                     <LightButton2 onClick={() => handleGoTg(el)} text={"Связаться"} />
                 </div>}

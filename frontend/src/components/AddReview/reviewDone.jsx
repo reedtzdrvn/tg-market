@@ -1,4 +1,4 @@
-import done from "../../images/done.png"
+import done from "../../images/donereview.png"
 import Loader from "../UI/Loader/loader";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -30,8 +30,8 @@ const ReviewDone = () => {
     return (
         <div className="h-screen flex flex-col items-center justify-center px-[16px]">
             <img src={done} alt="done" className="mb-[25px]" />
-            <div className="text-24px font-bold text-center">
-                Спасибо, ваш отзыв об {order.artistRequestId.artistId.firstName + ' ' + order.artistRequestId.artistId.lastName} пригодится будущим заказчикам
+            <div className="text-[24px] font-bold text-center">
+                Спасибо, ваш отзыв об <div className="underline">{order.artistRequestId.artistId.firstName + ' ' + order.artistRequestId.artistId.lastName}</div> пригодится будущим заказчикам
             </div>
         </div>
     );
