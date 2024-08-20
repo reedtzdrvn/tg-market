@@ -19,6 +19,7 @@ const AddMyApplication = () => {
     const [applications, setApplications] = useState([])
     const [loading, setLoading] = useState(true)
     const [loading2, setLoading2] = useState(true)
+    const [disabled, setDisabled] = useState(false)
 
     
     useEffect(() => {
@@ -99,8 +100,10 @@ const AddMyApplication = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setDisabled(true)
 
         if (!validateFullName(formData.name)) {
+            setDisabled(false)
             alert("Поле 'Имя Фамилия' должно содержать два слова, разделённых пробелом.");
             return;
         }
@@ -112,6 +115,7 @@ const AddMyApplication = () => {
                 window.location.href = "/application-done";
             }
         } catch (error) {
+            setDisabled(false)
             console.error('Error submitting form', error);
         }
     };
@@ -344,8 +348,8 @@ const AddMyApplication = () => {
                             </select>
                         </div>
                     </div>
-                    <div className="mb-6">
-                        <DarkButton text={"Отправить"} />
+                    <div className={`mb-6 ${disabled ? "opacity-50" : ""}`}>
+                        <DarkButton disabled={disabled} text={"Отправить"} />
                     </div>
                 </div>
             </form>

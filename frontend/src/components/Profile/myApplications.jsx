@@ -130,8 +130,6 @@ const MyApplications = () => {
                     const isExpired = Date.now() > new Date(application.date);
                     const isExpiringSoon = (new Date(application.date) - Date.now()) <= 3 * 24 * 60 * 60 * 1000;
 
-                    console.log(1)
-
                     return (
                         <div className={`flex-col ${isExpired && application.approved === true ? "opacity-50" : ""}`}>
                             <div className={`h-[59px] ${application.isReject ? "bg-customorange" : application.approved ? isExpired ? "bg-customorange" : isExpiringSoon ? "bg-customyellow" : "bg-customgreen" : "bg-custompink"} flex items-center justify-center text-white text-[18px] font-bold`}>
@@ -155,7 +153,7 @@ const MyApplications = () => {
                                     </div>
                                 </div>
                                 <>
-                                    {!application.isReject && <div className="flex gap-[14px] mt-[20px]">
+                                    {!application.isReject || !application.approved && <div className="flex gap-[14px] mt-[20px]">
                                         <div>
                                             <img className="w-[11px]" src={zvezda} alt="zvezda" />
                                         </div>
@@ -164,13 +162,13 @@ const MyApplications = () => {
                                         </div>
                                     </div>}
                                     <div className="mt-[20px] flex gap-2 w-full">
-                                        {application.isReject ? (
+                                        {application.isReject? (
                                             <LightButton2 onClick={() => handleContactClick("EventsApp_bot")} text={"Написать в поддержку"} />
                                         ) : (
                                             <>
-                                                <Link className="w-full" to={`/my-edit-application/${application._id}`}>
+                                                {!application.approved && <Link className="w-full" to={`/my-edit-application/${application._id}`}>
                                                     {isExpired && application.approved === true ? "" : <LightButton2 text={"Редактировать"} />}
-                                                </Link>
+                                                </Link> }
                                                 {!application.approved && (
                                                     <Link className="w-full" onClick={() => handleDeleteApplication(application._id)}>
                                                         <LightButton2 text={"Отменить"} />

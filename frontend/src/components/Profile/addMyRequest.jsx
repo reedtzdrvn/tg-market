@@ -20,6 +20,7 @@ const AddMyRequest = () => {
     const [request, setRequest] = useState({});
     const [added, setAdded] = useState(false);
     const [orders, setOrders] = useState([])
+    const [disabled, setDisabled] = useState(false)
     const [formData, setFormData] = useState({
         fullName: '',
         userName: '',
@@ -120,8 +121,6 @@ const AddMyRequest = () => {
         setFormData({ ...formData, [name]: selectedOptions });
     };
 
-    console.log(formData)
-
     const handleFileChange = async (e) => {
         const { name, files } = e.target;
         const file = files[0];
@@ -179,8 +178,10 @@ const AddMyRequest = () => {
 
     const handleGoForm = async (e) => {
         e.preventDefault();
+        setDisabled(true)
 
         if (!validateFullName(formData.fullName)) {
+            setDisabled(false)
             alert("Поле 'Имя Фамилия' должно содержать два слова, разделённых пробелом.");
             return;
         }
@@ -215,6 +216,7 @@ const AddMyRequest = () => {
             window.location.href = "/artist-request-done";
         } catch (err) {
             console.error(err);
+            setDisabled(false)
         }
     };
 
@@ -402,8 +404,8 @@ const AddMyRequest = () => {
                         {formData.videoLinks[0] !== '' && formData.videoLinks[1] !== '' && <div><input name="link_3" value={formData.videoLinks[2]} onChange={(event) => handleUpdateVideoLink(event)} type="text" placeholder="https://" className="px-[24px] py-[16px] border-black border-solid border-2 w-full" /></div>}
                     </div>
 
-                    <div className="mb-6">
-                        <DarkButton text={"Сохранить"} />
+                    <div className={`mb-6 ${disabled ? "opacity-50" : ""}`}>
+                        <DarkButton disabled={disabled} text={"Сохранить"} />
                     </div>
                 </div>
             </form>

@@ -9,7 +9,7 @@ import { useCities } from '../../context/citiesContext';
 
 const Header = () => {
   let tg = window.Telegram.WebApp;
-  let userId = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "1073631065";
+  let userId = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "703999322";
 
   const { categories, setCategories } = useCategories();
   const { user, setUser } = useUser();
