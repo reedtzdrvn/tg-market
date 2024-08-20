@@ -18,3 +18,17 @@ tech_keyboard = ReplyKeyboardMarkup(
     resize_keyboard=True,
     input_field_placeholder='Перейдите в приложение, либо напишите в тех.поддержку'
 )
+
+moderator_keyboard = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(text="Вопрос модератору заявок и анкет", url='https://t.me/konstbel'),
+        ],
+        [
+            InlineKeyboardButton(text="Техническая ошибка", url='https://t.me/elenhello'),
+        ],
+        [
+            InlineKeyboardButton(text="Отзыв или предложение", url='https://t.me/konstbel'),
+        ],
+    ]
+)

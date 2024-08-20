@@ -42,7 +42,7 @@ async def message_handler(message: Message, _user_controller) -> None:
         logging.info(dke)
         await message.answer(
             text=f"""
-Вы уже зарегистрированы в приложении <b>EVENTRA</b>
+Вы присоединились к приложению <b>EVENTRA</b>
 Нажмите \"Открыть\" для запуска
             """,
             reply_markup=kb.web_app_keyboard_inline,
@@ -66,14 +66,6 @@ async def print_moderators(message, _moderator_controller: ModeratorController):
         chat_id=message.from_user.id, action=ChatAction.TYPING
     )
 
-    moderators = await _moderator_controller.get_moderators()
+    text = "Выберите тип обращения"
 
-    text = ""
-
-    for moderator in moderators:
-        text += f"""
-Имя Фамилия: {moderator.get('moderatorDetails')['firstName']} {moderator.get('moderatorDetails')['lastName']}
-Telegram: <a href="https://t.me/{moderator.get('moderatorDetails')['userName']}">Перейти</a>
-"""
-
-    await message.answer(text=text)
+    await message.answer(text=text, reply_markup=kb.moderator_keyboard)
