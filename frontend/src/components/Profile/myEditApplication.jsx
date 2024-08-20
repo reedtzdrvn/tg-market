@@ -98,7 +98,7 @@ const EditMyApplication = () => {
         try {
             const response = await axios.patch('/customer-request', {isReject: false, approved: false, fee: formData.feeFrom + ' - ' + formData.feeTo, eventName: formData.eventName, description: formData.eventDetails, city: formData.city, requestId: id, categoryId: formData.category, date: formData.date, time: formData.timeInterval, guestCount: formData.guestCount, approved: false });
             if (response.status === 200) {
-                // window.location.href = "/application-done";
+                window.location.href = "/application-done";
             }
         } catch (error) {
             console.error('Error submitting form', error);
