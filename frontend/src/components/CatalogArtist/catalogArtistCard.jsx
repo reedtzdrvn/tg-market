@@ -38,37 +38,46 @@ const CatalogArtistCard = ({ info, category }) => {
         return <Loader />
     }
 
+    const handleContactClick = (event) => {
+        event.stopPropagation();
+        window.location.href = `https://t.me/${info.artistId.userName}`;
+    };
+
     return (
         <div className='bg-main px-[16px] py-[25px] shadow-custom '>
-            <div className='flex items-center gap-[12px]'>
-                <img src={process.env.REACT_APP_API_URL + info.mainPhoto} className='w-[88px] h-[88px] rounded-full ' alt="1" />
-                <div className='flex flex-col gap-[12px] h-full justify-center'>
-                    <span className='font-bold text-[24px]'>{info.artistId.firstName} {info.artistId.lastName}</span>
-                    <div className='gap-2 flex flex-wrap'>
-                        {info.categoryId.map((el) => (
-                            <CategoriesButton key={el._id} category={el} />
-                        ))}
+            <Link to={`/artist/${info.artistId._id}/${category}`}>
+                <div className='flex items-center gap-[12px]'>
+                    <img src={process.env.REACT_APP_API_URL + info.mainPhoto} className='w-[88px] h-[88px] rounded-full ' alt="1" />
+                    <div className='flex flex-col gap-[12px] h-full justify-center'>
+                        <span className='font-bold text-[24px]'>{info.artistId.firstName} {info.artistId.lastName}</span>
+                        <div className='gap-2 flex flex-wrap'>
+                            {info.categoryId.map((el) => (
+                                <CategoriesButton key={el._id} category={el} />
+                            ))}
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div className='mt-[24px]'>
-                <div className='flex justify-between'>
-                    <div className='flex items-center'>
-                        <img src={star} alt="2" className='-mt-1' /> <span className='text-[20px] font-bold mr-[8px] ml-[2px]'>{ratingCalculate(reviews)}</span> <span className='text-[16px]'> Отзывы ({reviews.length})</span>
-                    </div>
-                    <div className='flex items-center gap-1'>
-                        <img src={coins} alt="3" /> <span className='text-[16px]'>{info.price} Р</span>
+                <div className='mt-[24px]'>
+                    <div className='flex justify-between'>
+                        <div className='flex items-center'>
+                            <img src={star} alt="2" className='-mt-1' /> <span className='text-[20px] font-bold mr-[8px] ml-[2px]'>{ratingCalculate(reviews)}</span> <span className='text-[16px]'> Отзывы ({reviews.length})</span>
+                        </div>
+                        <div className='flex items-center gap-1'>
+                            <img src={coins} alt="3" /> <span className='text-[16px]'>{info.price} Р</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div className='my-[17px] opacity-50 text-[14px]'>
-                {info.description}
-            </div>
-            <div className='flex justify-between flex-wrap opacity-50'>
-                {info.photo.map((img) => <img src={process.env.REACT_APP_API_URL + img} className='w-[32%]' alt="1" />)}
-            </div>
+                <div className='my-[17px] opacity-50 text-[14px]'>
+                    {info.description}
+                </div>
+                <div className='flex justify-between flex-wrap opacity-50'>
+                    {info.photo.map((img) => <img src={process.env.REACT_APP_API_URL + img} className='w-[32%]' alt="1" />)}
+                </div>
+            </Link>
             <div className='mt-[16px] text-[18px]'>
-                <Link to={`/artist/${info.artistId._id}/${category}`}><DarkButton text={"Связаться"} /></Link>
+                <div onClick={handleContactClick}>
+                    <DarkButton text={"Связаться"} />
+                </div>
             </div>
         </div>
     );

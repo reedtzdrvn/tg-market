@@ -21,6 +21,7 @@ const EditMyApplication = () => {
     const [loading, setLoading] = useState(true)
     const [loading2, setLoading2] = useState(true)
     const [application, setApplication] = useState(null);
+    const [disabled, setDisabled] = useState(false)
     const [formData, setFormData] = useState({
         eventName: '',
         category: [],
@@ -89,19 +90,11 @@ const EditMyApplication = () => {
         }
     };
 
-    const validateFullName = (fullName) => {
-        const words = fullName.trim().split(" ");
-        return words.length === 2 && words[0] && words[1];
-    };
-
     const handleSubmit = async (e) => {
 
-        if (!validateFullName(formData.fullName)) {
-            alert("Поле 'Имя Фамилия' должно содержать два слова, разделённых пробелом.");
-            return;
-        }
-
         e.preventDefault();
+
+        setDisabled(true)
         try {
             const response = await axios.patch('/customer-request', {isReject: false, approved: false, fee: formData.feeFrom + ' - ' + formData.feeTo, eventName: formData.eventName, description: formData.eventDetails, city: formData.city, requestId: id, categoryId: formData.category, date: formData.date, time: formData.timeInterval, guestCount: formData.guestCount, approved: false });
             if (response.status === 200) {
@@ -109,6 +102,7 @@ const EditMyApplication = () => {
             }
         } catch (error) {
             console.error('Error submitting form', error);
+            setDisabled(false)
         }
     };
 
@@ -279,8 +273,8 @@ const EditMyApplication = () => {
                                 </select>
                             </div>
                         </div>
-                        <div className="mb-6">
-                            <DarkButton text={"Обновить"} />
+                        <div className={`mb-6 ${disabled ? "opacity-50" : ""}`}>
+                            <DarkButton disabled={disabled} text={"Обновить"} />
                         </div>
                     </div>
                 </form>

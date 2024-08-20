@@ -13,6 +13,7 @@ const AddApplication = () => {
     const { categories } = useCategories();
     const navigate = useNavigate();
     const { user } = useUser();
+    const [disabled, setDisabled] = useState(false)
 
     const [formData, setFormData] = useState({
         name: '',
@@ -66,9 +67,11 @@ const AddApplication = () => {
     };
 
     const handleSubmit = async (e) => {
+        setDisabled(true);
         e.preventDefault();
 
         if (!validateFullName(formData.name)) {
+            setDisabled(false);
             alert("Поле 'Имя Фамилия' должно содержать два слова, разделённых пробелом.");
             return;
         }
@@ -328,8 +331,8 @@ const AddApplication = () => {
                             </select>
                         </div>
                     </div>
-                    <div className="mb-6">
-                        <DarkButton text={"Отправить"} />
+                    <div className={`mb-6 ${disabled ? "opacity-50" : ""}`}>
+                        <DarkButton text={"Отправить"} disabled={disabled}/>
                     </div>
                 </div>
             </form>

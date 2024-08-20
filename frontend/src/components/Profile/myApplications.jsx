@@ -80,13 +80,13 @@ const MyApplications = () => {
 
     const handleConfirmChange = () => {
         axios.delete(`/customer-request?requestId=${isDelete}`)
-        .then(() => {
-            setApplications(applications.filter((el) => (el._id !== isDelete)))
-            setShowPopup(false)
-        })
-        .catch((err) => {
-            console.log(err)
-        })
+            .then(() => {
+                setApplications(applications.filter((el) => (el._id !== isDelete)))
+                setShowPopup(false)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     };
 
     const handleCancelChange = () => {
@@ -94,12 +94,22 @@ const MyApplications = () => {
     };
 
     const handleContactClick = (userName) => {
+        // Redirect to the Telegram bot
         window.location.href = `https://t.me/${userName}`;
+
+        // Check if the Telegram Web App API is available
+        if (window.Telegram && window.Telegram.WebApp && typeof window.Telegram.WebApp.close === 'function') {
+            // Close the Telegram Web App
+            window.Telegram.WebApp.close();
+        } else {
+            // Fallback for non-Telegram environments
+            window.close();
+        }
     };
 
 
 
-    if (applications.length === 0 && orders===0) {
+    if (applications.length === 0 && orders === 0) {
         return (
             <div className="px-[16px] bg-back min-h-screen">
                 <div className="py-[44px] flex gap-[33px] justify-center">
@@ -130,8 +140,6 @@ const MyApplications = () => {
                     const isExpired = Date.now() > new Date(application.date);
                     const isExpiringSoon = (new Date(application.date) - Date.now()) <= 3 * 24 * 60 * 60 * 1000;
 
-                    console.log(1)
-
                     return (
                         <div className={`flex-col ${isExpired && application.approved === true ? "opacity-50" : ""}`}>
                             <div className={`h-[59px] ${application.isReject ? "bg-customorange" : application.approved ? isExpired ? "bg-customorange" : isExpiringSoon ? "bg-customyellow" : "bg-customgreen" : "bg-custompink"} flex items-center justify-center text-white text-[18px] font-bold`}>
@@ -155,7 +163,7 @@ const MyApplications = () => {
                                     </div>
                                 </div>
                                 <>
-                                    {!application.isReject && <div className="flex gap-[14px] mt-[20px]">
+                                    {!application.isReject || !application.approved && <div className="flex gap-[14px] mt-[20px]">
                                         <div>
                                             <img className="w-[11px]" src={zvezda} alt="zvezda" />
                                         </div>
@@ -168,9 +176,9 @@ const MyApplications = () => {
                                             <LightButton2 onClick={() => handleContactClick("EventsApp_bot")} text={"Написать в поддержку"} />
                                         ) : (
                                             <>
-                                                <Link className="w-full" to={`/my-edit-application/${application._id}`}>
+                                                {!application.approved && <Link className="w-full" to={`/my-edit-application/${application._id}`}>
                                                     {isExpired && application.approved === true ? "" : <LightButton2 text={"Редактировать"} />}
-                                                </Link>
+                                                </Link>}
                                                 {!application.approved && (
                                                     <Link className="w-full" onClick={() => handleDeleteApplication(application._id)}>
                                                         <LightButton2 text={"Отменить"} />
@@ -206,7 +214,7 @@ const MyApplications = () => {
                                     </div>
                                 </div>
                                 <div className="mt-[20px] flex gap-2 w-full">
-                                    {order.status.statusId.name === "Завершён" && order.review===false && <Link className="w-full" to={`/addReview/${order._id}`} ><DarkButton text={"Написать отзыв"} /></Link>}
+                                    {order.status.statusId.name === "Завершён" && order.review === false && <Link className="w-full" to={`/addReview/${order._id}`} ><DarkButton text={"Написать отзыв"} /></Link>}
                                     {order.status.statusId.name === "Договор" && <LightButton2 onClick={() => handleContactClick(order.artistRequestId.artistId.userName)} text={"Связаться"} />}
                                 </div>
                             </div>
