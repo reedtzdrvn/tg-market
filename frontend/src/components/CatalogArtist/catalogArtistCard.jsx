@@ -38,8 +38,13 @@ const CatalogArtistCard = ({ info, category }) => {
         return <Loader />
     }
 
+    const handleContactClick = (event) => {
+        event.stopPropagation();
+        window.location.href = `https://t.me/${info.artistId.userName}`;
+      };
+
     return (
-        <div className='bg-main px-[16px] py-[25px] shadow-custom '>
+        <Link to={`/artist/${info.artistId._id}/${category}`} className='bg-main px-[16px] py-[25px] shadow-custom '>
             <div className='flex items-center gap-[12px]'>
                 <img src={process.env.REACT_APP_API_URL + info.mainPhoto} className='w-[88px] h-[88px] rounded-full ' alt="1" />
                 <div className='flex flex-col gap-[12px] h-full justify-center'>
@@ -68,9 +73,9 @@ const CatalogArtistCard = ({ info, category }) => {
                 {info.photo.map((img) => <img src={process.env.REACT_APP_API_URL + img} className='w-[32%]' alt="1" />)}
             </div>
             <div className='mt-[16px] text-[18px]'>
-                <Link to={`/artist/${info.artistId._id}/${category}`}><DarkButton text={"Связаться"} /></Link>
+                <div onClick={(e) => handleContactClick(e)}><DarkButton text={"Связаться"} /></div>
             </div>
-        </div>
+        </Link>
     );
 }
 
