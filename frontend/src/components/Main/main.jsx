@@ -71,7 +71,7 @@ const Main = () => {
             <div className='py-[31px] text-white'>
                 <div className=' mt-[110px] mb-[85px] flex justify-center items-center'><img src={mainsvgt} alt="mainsvg" /></div>
                 <div className=' text-white text-[40px] font-bold text-center w-full leading-[44px] tracking-[0%]'>
-                    Создай событие,<br /> которое <br /> запомнится!
+                    Создай событие,<br /> которое <br /> запомнится
                 </div>
                 <div className='mt-[58px] flex flex-col gap-[12px] px-[23px]'>
                     <button onClick={() => handleOk("артиста")}><LightButton text="Я артист" /></button>

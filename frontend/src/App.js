@@ -59,7 +59,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/share" element={<Share />} />
         <Route path="/addReview/:id" element={<AddReview />} />
-        <Route path="/review-done/:id" element={<ReviewDone />} />
+        <Route path="/review-done" element={<ReviewDone />} />
       </Routes>
       <Footer />
     </>

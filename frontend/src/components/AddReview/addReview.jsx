@@ -51,7 +51,7 @@ const AddReview = () => {
             orderId: order._id, customerId: user._id, artistId: order.artistRequestId.artistId._id, reviewText: reviewData.review, grade: rating, reviewTitle: reviewData.title
         })
             .then(() => {
-                window.location.href = `/review-done/${order._id}`
+                window.location.href = `/review-done`
             })
             .catch((err) => {
                 console.log(err)

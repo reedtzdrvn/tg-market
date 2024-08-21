@@ -421,7 +421,7 @@ const AddMyRequest = () => {
                     </div>
 
                     <div className={`mb-6 flex flex-col gap-4 ${disabled ? "opacity-50" : ""}`}>
-                        {request.approved === true || request.isRejected === true ? <DarkButton disabled={disabled} text={"Сохранить"} /> : ""}
+                        {request.approved === true || request.isRejected === true ? <DarkButton disabled={disabled} text={"Обновить"} /> : ""}
                         {!request.approved && <DarkButton text={"Написать в поддержку"} onClick={()=>handleContactClick("eventApp_bot")} />}
                     </div>
                 </div>

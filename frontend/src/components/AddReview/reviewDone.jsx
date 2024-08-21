@@ -1,38 +1,14 @@
 import done from "../../images/donereview.png"
-import Loader from "../UI/Loader/loader";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import axios from "../../axios";
 
 const ReviewDone = () => {
-
-    const { id } = useParams();
-    const [order, setOrder] = useState({})
-    const [loading, setLoading] = useState(true)
-
-    useEffect(() => {
-        if (id) {
-            axios.get("/order", { params: { orderId: id } })
-                .then((res) => {
-                    setOrder(res.data)
-                    setLoading(false)
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
-        }
-    }, [id])
-
-    if (loading){
-        return <Loader />
-    }
 
     return (
         <div className="h-screen flex flex-col items-center justify-center px-[16px]">
             <img src={done} alt="done" className="mb-[25px]" />
-            <div className="text-[24px] font-bold text-center">
-                Спасибо, ваш отзыв об <div className="underline">{order.artistRequestId.artistId.firstName + ' ' + order.artistRequestId.artistId.lastName}</div> пригодится будущим заказчикам
+            <div className="text-[24px] font-bold text-center mb-[16px]">
+                Спасибо, ваш отзыв на модерации
             </div>
+            <div className="text-[18px] font-bold text-center">Ваш отзыв поможет артисту с продвижением и пригодится будущим заказчикам</div>
         </div>
     );
 }
