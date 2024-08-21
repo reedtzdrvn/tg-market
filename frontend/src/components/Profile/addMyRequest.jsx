@@ -179,7 +179,7 @@ const AddMyRequest = () => {
     const handleGoForm = async (e) => {
         e.preventDefault();
         
-        if ( request.approved === true ){
+        if ( request.approved === false && request.isRejected === false ){
             return
         }
 
