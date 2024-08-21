@@ -1,6 +1,7 @@
 import CustomerRequestSchema from "../models/customerRequest.js";
 import ModeratorSchema from "../models/moderator.js";
 import axios from "axios";
+import OrderSchema from "../models/order.js";
 
 export default class customerRequestController {
   static addCustomerRequest = async (req, res) => {
@@ -125,6 +126,16 @@ export default class customerRequestController {
 
       if (!requestId) {
         return res.status(400).json({ message: "requestId is not defined" });
+      }
+
+      const order = await OrderSchema.findOne({customerRequestId: requestId})
+
+      if (order){
+        await OrderSchema.findOneAndDelete({customerRequestId: requestId})
+        //тут уведомление артисту о том, что заявка удалена 
+        
+        //Заказчик (ссылка на контакт в телеграм) отменил заявку  (название заявки) 
+        //Возможно, событие больше неактуально😢
       }
 
       const request = await CustomerRequestSchema.findOneAndDelete({
