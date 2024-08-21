@@ -46,7 +46,7 @@ class ReviewController():
             artist_id = review.get('artistId')
 
             if artist_id:
-                artist = await self.db["users"].find_one({"_id": ObjectId(customer_id)})
+                artist = await self.db["users"].find_one({"_id": ObjectId(artist_id)})
 
                 if artist:
                     review["artistDetails"] = artist
