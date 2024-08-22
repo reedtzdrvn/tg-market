@@ -32,14 +32,14 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 50 * 1024 * 1024 },
+  // limits: { fileSize: 5 * 1024 * 1024 },
 });
 
 app.use("/media", express.static("media"));
 app.use(express.json());
 app.use(cors());
-app.use(express.json({ limit: "5mb" }));
-app.use(express.urlencoded({ limit: "5mb", extended: true }));
+// app.use(express.json({ limit: "5mb" }));
+// app.use(express.urlencoded({ limit: "5mb", extended: true }));
 
 mongoose
   .connect(process.env.NODE_DB_URL)

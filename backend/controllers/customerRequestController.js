@@ -187,9 +187,9 @@ export default class customerRequestController {
 
       const moderators = await ModeratorSchema.find({}).select('telegramId')
 
-      await this.sendTelegramNotification(moderators, true);
-
       await request.save();
+      
+      await this.sendTelegramNotification(moderators, true);
 
       return res.status(200).json({ request });
     } catch (err) {
