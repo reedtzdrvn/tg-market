@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import createArtistRequest from "../../images/createArtistRequest.png"
 import zvezda from "../../images/zvezda.svg"
 import attention from "../../images/attention.svg"
@@ -9,14 +9,15 @@ import { useState } from "react";
 import axios from "../../axios"
 import Loader from "../UI/Loader/loader";
 import { useEffect } from "react";
-import { useArtist } from "../../context/artistContext";
 import { useCities } from "../../context/citiesContext";
+import { CSSTransition } from 'react-transition-group';
+import { motion } from "framer-motion";
+
 const AddMyRequest = () => {
     const { user } = useUser();
     const [loading, setLoading] = useState(true);
     const [loading2, setLoading2] = useState(true);
     const { categories } = useCategories();
-    const navigate = useNavigate();
     const [request, setRequest] = useState({});
     const [added, setAdded] = useState(false);
     const [orders, setOrders] = useState([])
@@ -121,9 +122,35 @@ const AddMyRequest = () => {
         setFormData({ ...formData, [name]: selectedOptions });
     };
 
+    const [message, setMessage] = useState(null)
+    const [messageOn, setMessageOn] = useState(false)
+
+    const showMessage = (message) => {
+        setMessage(message);
+        setMessageOn(true)
+        setTimeout(() => {
+            setMessage(null);
+            setMessageOn(false)
+        }, 3000);
+    };
+
+
     const handleFileChange = async (e) => {
         const { name, files } = e.target;
         const file = files[0];
+        
+        const maxSize = 5 * 1024 * 1024;
+        const validFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/heic'];
+
+        if (file?.size > maxSize) {
+            showMessage("Размер фото больше 5 мб");
+            return;
+        }
+
+        if (!validFormats.includes(file?.type)) {
+            showMessage("Загрузите фото формата .jpeg/.jpg/.png");
+            return;
+        }
 
         try {
 
@@ -253,6 +280,23 @@ const AddMyRequest = () => {
 
     return (
         <div>
+            {
+                messageOn && <CSSTransition timeout={300} classNames="popup">
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.5 }}
+                        className="fixed top-0 w-full"
+                    >
+                        <div className="flex justify-center mt-[24px]">
+                            <div className="py-[8px] w-[300px] z-50 rounded-3xl text-black border-black border-[2px] bg-white flex justify-center items-center">
+                                {message}
+                            </div>
+                        </div>
+                    </motion.div>
+                </CSSTransition>
+            }
             <div className="py-[44px] flex gap-[33px] justify-center">
                 <div className="underline font-bold text-[20px]">Моя анкета</div><Link to={"/my-requests"} className="text-[20px] opacity-60" >Мои заказы ({orders.length})</Link>
             </div>
@@ -348,6 +392,7 @@ const AddMyRequest = () => {
                                 name="mainPhoto"
                                 id="mainPhoto"
                                 className="hidden"
+                                accept="image/*"
                                 onChange={(e) => handleFileChange(e)}
                             />
                             <label htmlFor="mainPhoto" className="border-black border-solid border-2 w-full h-[60px] flex items-center justify-center text-[40px]">
@@ -362,6 +407,7 @@ const AddMyRequest = () => {
                                 name="backGroundPhoto"
                                 id="backGroundPhoto"
                                 className="hidden"
+                                accept="image/*"
                                 onChange={(e) => handleFileChange(e)}
                             />
                             <label htmlFor="backGroundPhoto" className="border-black border-solid border-2 w-full h-[60px] flex items-center justify-center text-[40px]">
@@ -378,7 +424,7 @@ const AddMyRequest = () => {
                             <div>Добавьте фото в галерею</div>
                         </div>
                         <div className="flex w-full gap-[16px]">
-                            <input type="file" name="gallery1" id="gallery1" className="hidden" onChange={(e) => handleFileChange(e)} />
+                            <input accept="image/*" type="file" name="gallery1" id="gallery1" className="hidden" onChange={(e) => handleFileChange(e)} />
                             <label htmlFor="gallery1" className="border-black border-solid border-2 w-full h-[60px] flex items-center justify-center text-[40px]">
                                 {formData.gallery?.[0] ? (
                                     <img src={process.env.REACT_APP_API_URL + formData.gallery[0]} alt="gallery1" className="w-full h-full object-cover" />
@@ -386,7 +432,7 @@ const AddMyRequest = () => {
                                     '+'
                                 )}
                             </label>
-                            <input type="file" name="gallery2" id="gallery2" className="hidden" onChange={(e) => handleFileChange(e)} />
+                            <input accept="image/*" type="file" name="gallery2" id="gallery2" className="hidden" onChange={(e) => handleFileChange(e)} />
                             <label htmlFor="gallery2" className="border-black border-solid border-2 w-full h-[60px] flex items-center justify-center text-[40px]">
                                 {formData.gallery?.[1] ? (
                                     <img src={process.env.REACT_APP_API_URL + formData.gallery[1]} alt="gallery2" className="w-full h-full object-cover" />
@@ -394,7 +440,7 @@ const AddMyRequest = () => {
                                     '+'
                                 )}
                             </label>
-                            <input type="file" name="gallery3" id="gallery3" className="hidden" onChange={(e) => handleFileChange(e)} />
+                            <input accept="image/*" type="file" name="gallery3" id="gallery3" className="hidden" onChange={(e) => handleFileChange(e)} />
                             <label htmlFor="gallery3" className="border-black border-solid border-2 w-full h-[60px] flex items-center justify-center text-[40px]">
                                 {formData.gallery?.[2] ? (
                                     <img src={process.env.REACT_APP_API_URL + formData.gallery[2]} alt="gallery2" className="w-full h-full object-cover" />
@@ -402,7 +448,7 @@ const AddMyRequest = () => {
                                     '+'
                                 )}
                             </label>
-                            <input type="file" name="gallery4" id="gallery4" className="hidden" onChange={(e) => handleFileChange(e)} />
+                            <input accept="image/*" type="file" name="gallery4" id="gallery4" className="hidden" onChange={(e) => handleFileChange(e)} />
                             <label htmlFor="gallery4" className="border-black border-solid border-2 w-full h-[60px] flex items-center justify-center text-[40px]">
                                 {formData.gallery?.[3] ? (
                                     <img src={process.env.REACT_APP_API_URL + formData.gallery[3]} alt="gallery2" className="w-full h-full object-cover" />
