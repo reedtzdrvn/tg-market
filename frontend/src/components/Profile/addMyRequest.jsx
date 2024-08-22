@@ -283,14 +283,14 @@ const AddMyRequest = () => {
             {
                 messageOn && <CSSTransition timeout={300} classNames="popup">
                     <motion.div
-                        initial={{ opacity: 0, y: -20 }}
+                        initial={{ opacity: 1, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
+                        exit={{ opacity: 1, y: -20 }}
                         transition={{ duration: 0.5 }}
                         className="fixed top-0 w-full"
                     >
                         <div className="flex justify-center mt-[24px]">
-                            <div className="py-[8px] w-[300px] z-50 rounded-3xl text-black border-black border-[2px] bg-white flex justify-center items-center">
+                            <div className="opacity-100 text-center py-[8px] w-[300px] z-50 rounded-3xl text-black border-black border-[2px] bg-white flex justify-center items-center">
                                 {message}
                             </div>
                         </div>
