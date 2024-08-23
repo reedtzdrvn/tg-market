@@ -121,7 +121,7 @@ async def accept_artist(
 
     await _artist_controller.accept_artist_request(request_id)
 
-    await bot.send_message(chat_id=telegram_id, text="Ваша заявка принята.")
+    await bot.send_message(chat_id=telegram_id, text="Ваша анкета принята.")
 
     await callback_query.answer("Исполнитель принят!")
 
@@ -137,7 +137,7 @@ async def reject_artist(
 
     await bot.send_message(
         chat_id=telegram_id,
-        text=f"Ваша заявка отклонена.\nСвяжитесь с тех.поддержкой.\n\nПри написании сообщения приложите ID заявки, чтобы получить причину отклонения.\n\nID:{request_id}",
+        text=f"Ваша анкета отклонена.\nСвяжитесь с тех.поддержкой.\n\nПри написании сообщения приложите ID заявки, чтобы получить причину отклонения.\n\nID:{request_id}",
     )
 
     await _artist_controller.reject_artist_request(request_id)

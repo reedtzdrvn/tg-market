@@ -230,49 +230,25 @@ export default class orderController {
       if (status.name !== "Отменён") {
         const { artistRequestId } = order;
 
-          const customerId = await CustomerRequestSchema.findOne({
-            _id: customerRequestId,
-          })
-            .select("customerId eventName")
-            .populate("customerId");
-  
-          const artistId = await ArtistRequestSchema.findOne({
-            _id: artistRequestId,
-          })
-            .select("artistId")
-            .populate("artistId");
+        const customerId = await CustomerRequestSchema.findOne({
+          _id: customerRequestId,
+        })
+          .select("customerId eventName")
+          .populate("customerId");
 
-        if (status.name === 'Завершён') {
-            try {
-              await axios.post(
-                `https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`,
-                {
-                  chat_id: customerId.customerId.telegramId,
-                  text: `<a href="https://t.me/${
-                    artistId.artistId.userName
-                  }">${artistId.artistId.firstName} ${
-                    customerId.customerId.lastName
-                  }</a> сообщил, что заказ отменен.\nПредлагаем оставить отзыв.`,
-                  parse_mode: "HTML",
-                }
-              );
-            } catch (e) {
-              console.error(e);
-              return { error: e.message };
-            }
-        }
+        const artistId = await ArtistRequestSchema.findOne({
+          _id: artistRequestId,
+        })
+          .select("artistId")
+          .populate("artistId");
 
-        if (status.name === 'Договор') {
+        if (status.name === "Завершён") {
           try {
             await axios.post(
               `https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`,
               {
                 chat_id: customerId.customerId.telegramId,
-                text: `Артист <a href="https://t.me/${
-                  artistId.artistId.userName
-                }">${artistId.artistId.firstName} ${
-                  artistId.artistId.lastName
-                }</a> по заявке ${customerId.eventName} перевел статус сделки в договор.\n Это означает, что вы договорились об исполнении заказа. Если это не так свяжитесь с артистом, чтобы  уточнить условия или обратитесь в поддержку.\nПредлагаем оставить отзыв.`,
+                text: `<a href="https://t.me/${artistId.artistId.userName}">${artistId.artistId.firstName} ${artistId.artistId.lastName}</a> сообщил, что заказ завершен.\nПредлагаем оставить отзыв.`,
                 parse_mode: "HTML",
               }
             );
@@ -280,7 +256,23 @@ export default class orderController {
             console.error(e);
             return { error: e.message };
           }
-      }
+        }
+
+        if (status.name === "Договор") {
+          try {
+            await axios.post(
+              `https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`,
+              {
+                chat_id: customerId.customerId.telegramId,
+                text: `Артист <a href="https://t.me/${artistId.artistId.userName}">${artistId.artistId.firstName} ${artistId.artistId.lastName}</a> по заявке ${customerId.eventName} перевел статус сделки в договор.\nЭто означает, что вы договорились об исполнении заказа. Если это не так свяжитесь с артистом, чтобы  уточнить условия или обратитесь в поддержку.`,
+                parse_mode: "HTML",
+              }
+            );
+          } catch (e) {
+            console.error(e);
+            return { error: e.message };
+          }
+        }
 
         order.isCustomerView = true;
         const requestCustomer = await CustomerRequestSchema.findOne({
