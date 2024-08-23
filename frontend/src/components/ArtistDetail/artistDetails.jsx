@@ -89,6 +89,30 @@ const ArtistDetails = () => {
     return parseFloat((rating / reviews.length).toFixed(1));
   }
 
+  function getYouTubeEmbedUrl(url) {
+    let videoId;
+
+    if (url.includes("youtube.com/watch?v=")) {
+        videoId = url.split("v=")[1];
+        const ampersandPosition = videoId.indexOf("&");
+        if (ampersandPosition !== -1) {
+            videoId = videoId.substring(0, ampersandPosition);
+        }
+    } else if (url.includes("youtu.be/")) {
+        videoId = url.split("youtu.be/")[1];
+        const questionMarkPosition = videoId.indexOf("?");
+        if (questionMarkPosition !== -1) {
+            videoId = videoId.substring(0, questionMarkPosition);
+        }
+    }
+
+    if (videoId) {
+        return `https://www.youtube.com/embed/${videoId}`;
+    } else {
+        return null;
+    }
+}
+
   if (loading) return <Loader />;
 
   return (
@@ -181,8 +205,8 @@ const ArtistDetails = () => {
             <div>
               {request.link_video.map((el, index) => {
                 if (el !== "") {
-                  const videoId = el.split("v=")[1];
-                  const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+
+                  const embedUrl = getYouTubeEmbedUrl(el);
 
                   return (
                     <iframe
