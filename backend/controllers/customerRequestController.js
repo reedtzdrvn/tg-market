@@ -2,6 +2,7 @@ import CustomerRequestSchema from "../models/customerRequest.js";
 import ModeratorSchema from "../models/moderator.js";
 import axios from "axios";
 import OrderSchema from "../models/order.js";
+import ArtistRequestSchema from "../models/artistRequest.js";
 
 export default class customerRequestController {
   static addCustomerRequest = async (req, res) => {
@@ -37,7 +38,7 @@ export default class customerRequestController {
         guestCount,
       });
 
-      const moderators = await ModeratorSchema.find({}).select('telegramId')
+      const moderators = await ModeratorSchema.find({}).select("telegramId");
 
       await this.sendTelegramNotification(moderators);
 
@@ -50,7 +51,7 @@ export default class customerRequestController {
     }
   };
 
-  static sendTelegramNotification = async (moderators, isEditing=false) => {
+  static sendTelegramNotification = async (moderators, isEditing = false) => {
     try {
       const { unapproved_count } = await this.getUnapprovedCustomerRequests();
 
@@ -59,7 +60,9 @@ export default class customerRequestController {
           `https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`,
           {
             chat_id: moderator.telegramId,
-            text: `Пришла новая заявка от <b>Заказчика.</b>\n\nВсего сейчас непроверенных заявок исполнителей: <b>${isEditing ? unapproved_count : unapproved_count + 1}</b>`,
+            text: `Пришла новая заявка от <b>Заказчика.</b>\n\nВсего сейчас непроверенных заявок исполнителей: <b>${
+              isEditing ? unapproved_count : unapproved_count + 1
+            }</b>`,
             parse_mode: "HTML",
           }
         );
@@ -128,14 +131,42 @@ export default class customerRequestController {
         return res.status(400).json({ message: "requestId is not defined" });
       }
 
-      const order = await OrderSchema.findOne({customerRequestId: requestId})
+      const order = await OrderSchema.findOne({ customerRequestId: requestId });
 
-      if (order){
-        await OrderSchema.findOneAndDelete({customerRequestId: requestId})
-        //тут уведомление артисту о том, что заявка удалена 
-        
-        //Заказчик (ссылка на контакт в телеграм) отменил заявку  (название заявки) 
-        //Возможно, событие больше неактуально😢
+      if (order) {
+        await OrderSchema.findOneAndDelete({ customerRequestId: requestId });
+
+        const { artistRequestId } = order;
+
+        const customerId = await CustomerRequestSchema.findOne({
+          _id: requestId,
+        })
+          .select("customerId eventName")
+          .populate("customerId");
+
+        const artistId = await ArtistRequestSchema.findOne({
+          _id: artistRequestId,
+        })
+          .select("artistId")
+          .populate("artistId");
+
+        try {
+          await axios.post(
+            `https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`,
+            {
+              chat_id: artistId.artistId.telegramId,
+              text: `Заказчик <a href="https://t.me/${
+                customerId.customerId.userName
+              }">${customerId.customerId.firstName} ${
+                customerId.customerId.lastName
+              }</a> отменил заявку ${customerId.eventName}\nВозможно, событие больше неактуально😢`,
+              parse_mode: "HTML",
+            }
+          );
+        } catch (e) {
+          console.error(e);
+          return { error: e.message };
+        }
       }
 
       const request = await CustomerRequestSchema.findOneAndDelete({
@@ -166,7 +197,7 @@ export default class customerRequestController {
         time,
         guestCount,
         approved,
-        isReject
+        isReject,
       } = req.body;
 
       const request = await CustomerRequestSchema.findOne({ _id: requestId });
@@ -174,8 +205,10 @@ export default class customerRequestController {
       if (!request) {
         return res.status(404).json({ error: "request not found" });
       }
-      if (isReject!==null && isReject!==undefined) request.isReject = isReject
-      if (approved!==null && isReject!==undefined) request.approved = approved;
+      if (isReject !== null && isReject !== undefined)
+        request.isReject = isReject;
+      if (approved !== null && isReject !== undefined)
+        request.approved = approved;
       if (categoryId) request.categoryId = categoryId;
       if (description) request.description = description;
       if (city) request.city = city;
@@ -185,10 +218,10 @@ export default class customerRequestController {
       if (guestCount) request.guestCount = guestCount;
       if (eventName) request.eventName = eventName;
 
-      const moderators = await ModeratorSchema.find({}).select('telegramId')
+      const moderators = await ModeratorSchema.find({}).select("telegramId");
 
       await request.save();
-      
+
       await this.sendTelegramNotification(moderators, true);
 
       return res.status(200).json({ request });
