@@ -3,6 +3,7 @@ import StatusShema from "../models/status.js";
 import ArtistRequestSchema from "../models/artistRequest.js";
 import CustomerRequestSchema from "../models/customerRequest.js";
 import { mongoose } from "mongoose";
+import axios from "axios";
 
 export default class orderController {
   static addOrder = async (req, res) => {
