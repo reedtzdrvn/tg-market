@@ -274,28 +274,28 @@ export default class orderController {
           }
         }
 
-        if (status.name === "Отменён") {
-          try {
-            await axios.post(
-              `https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`,
-              {
-                chat_id: customerId.customerId.telegramId,
-                text: `Артист <a href="https://t.me/${artistId.artistId.userName}">${artistId.artistId.firstName} ${artistId.artistId.lastName}</a> отменил заявку.`,
-                parse_mode: "HTML",
-              }
-            );
-          } catch (e) {
-            console.error(e);
-            return { error: e.message };
-          }
-        }
-
         order.isCustomerView = true;
         const requestCustomer = await CustomerRequestSchema.findOne({
           _id: customerRequestId,
         });
         requestCustomer.order = true;
         await requestCustomer.save();
+      }
+
+      if (status.name === "Отменён") {
+        try {
+          await axios.post(
+            `https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`,
+            {
+              chat_id: customerId.customerId.telegramId,
+              text: `Артист <a href="https://t.me/${artistId.artistId.userName}">${artistId.artistId.firstName} ${artistId.artistId.lastName}</a> отменил заявку.`,
+              parse_mode: "HTML",
+            }
+          );
+        } catch (e) {
+          console.error(e);
+          return { error: e.message };
+        }
       }
 
       await order.save();
