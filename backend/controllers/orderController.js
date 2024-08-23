@@ -227,8 +227,7 @@ export default class orderController {
 
       order.status.statusId = status._id;
 
-      if (status.name !== "Отменён") {
-        const { artistRequestId } = order;
+      const { artistRequestId } = order;
 
         const customerId = await CustomerRequestSchema.findOne({
           _id: customerRequestId,
@@ -242,6 +241,7 @@ export default class orderController {
           .select("artistId")
           .populate("artistId");
 
+      if (status.name !== "Отменён") {
         if (status.name === "Завершён") {
           try {
             await axios.post(
