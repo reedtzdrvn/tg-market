@@ -26,9 +26,22 @@ const ArtistDetails = () => {
   const [loading, setLoading] = useState(true);
   const { user } = useUser();
   const [reviews, setReviews] = useState([]);
+  const [myApplications, setMyApplications] = useState([])
 
   // Create a reference for the reviews section
   const reviewsRef = useRef(null);
+
+  useEffect(() => {
+    if (user) {
+      axios.get('/customer-requests', { params: { customerId: user._id } })
+        .then((res) => {
+          setMyApplications(res.data.filter((el) => el.order == false && el.approved == true && el.isReject == false))
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+  }, [user])
 
   useEffect(() => {
     if (id) {
@@ -43,6 +56,10 @@ const ArtistDetails = () => {
   }, [id]);
 
   const handleContactClick = () => {
+    if (myApplications.length === 0) {
+      window.location.href = '/my-add-application'
+      return
+    }
     window.location.href = `https://t.me/${request.artistId.userName}`;
   };
 
@@ -88,30 +105,14 @@ const ArtistDetails = () => {
     }
     return parseFloat((rating / reviews.length).toFixed(1));
   }
-
-  function getYouTubeEmbedUrl(url) {
+  function getVKVideoEmbedUrl(url) {
     let videoId;
-
-    if (url.includes("youtube.com/watch?v=")) {
-        videoId = url.split("v=")[1];
-        const ampersandPosition = videoId.indexOf("&");
-        if (ampersandPosition !== -1) {
-            videoId = videoId.substring(0, ampersandPosition);
-        }
-    } else if (url.includes("youtu.be/")) {
-        videoId = url.split("youtu.be/")[1];
-        const questionMarkPosition = videoId.indexOf("?");
-        if (questionMarkPosition !== -1) {
-            videoId = videoId.substring(0, questionMarkPosition);
-        }
-    }
-
-    if (videoId) {
-        return `https://www.youtube.com/embed/${videoId}`;
-    } else {
-        return null;
-    }
-}
+    const parts = url.split("/");
+    videoId = parts[parts.length - 1];
+    const oid = videoId.split('-')[1].split('_')[0]
+    const id = videoId.split('-')[1].split('_')[1]
+    return `https://vk.com/video_ext.php?oid=-${oid}&id=${id}&hd=2&autoplay=0`
+  }
 
   if (loading) return <Loader />;
 
@@ -205,18 +206,18 @@ const ArtistDetails = () => {
             <div>
               {request.link_video.map((el, index) => {
                 if (el !== "") {
-
-                  const embedUrl = getYouTubeEmbedUrl(el);
+                  const embedUrl = getVKVideoEmbedUrl(el);
 
                   return (
                     <iframe
                       key={index}
                       src={embedUrl}
-                      title={`YouTube video player ${index}`}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      title={`VK video player ${index}`}
+                      width="560" height="315"
+                      frameBorder="0"
                       allowFullScreen
-                      className="w-full h-[200px]"
-                    ></iframe>
+                      className="w-full h-[200px] border rounded-lg overflow-hidden"
+                    />
                   );
                 }
                 return null;

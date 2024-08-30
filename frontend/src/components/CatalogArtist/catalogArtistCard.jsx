@@ -1,4 +1,4 @@
-import { DarkButton } from '../UI/Button/button';
+import { DarkButton, LightButton2 } from '../UI/Button/button';
 import picture from "../../images/picture.png";
 import image from "../../images/photo 1.png";
 import star from "../../images/Star.svg";
@@ -14,6 +14,9 @@ const CatalogArtistCard = ({ info, category }) => {
 
     const [reviews, setReviews] = useState([])
     const [loading, setLoading] = useState(true)
+    const [myApplications, setMyApplications] = useState([])
+    const { user } = useUser()
+    const [showPopup, setShowPopup] = useState(false);
 
     useEffect(() => {
         axios.get('/review', { params: { artistId: info.artistId._id } })
@@ -25,6 +28,18 @@ const CatalogArtistCard = ({ info, category }) => {
                 console.log(err)
             })
     }, [])
+
+    useEffect(() => {
+        if (user) {
+            axios.get('/customer-requests', { params: { customerId: user._id } })
+                .then((res) => {
+                    setMyApplications(res.data.filter((el) => el.order == false && el.approved == true && el.isReject == false))
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
+    }, [user])
 
     function ratingCalculate(reviews) {
         let rating = 0
@@ -38,13 +53,54 @@ const CatalogArtistCard = ({ info, category }) => {
         return <Loader />
     }
 
+    const handleOk = (id) => {
+        setShowPopup(false)
+        axios.post('/order', {
+            customerRequestId: id,
+            artistId: info.artistId._id
+        })
+            .then((res) => {
+                window.location.href = `https://t.me/${info.artistId.userName}`;
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+
+    const handleExit = () => {
+        setShowPopup(false)
+    }
+
+
     const handleContactClick = (event) => {
         event.stopPropagation();
-        window.location.href = `https://t.me/${info.artistId.userName}`;
+        if (myApplications.length === 0) {
+            window.location.href = '/my-add-application'
+            return
+        }
+        else {
+            setShowPopup(true)
+        }
     };
 
     return (
         <div className='bg-main px-[16px] py-[25px] shadow-custom '>
+            {showPopup &&
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-md shadow-lg max-w-xs text-center">
+                        <p className="text-lg font-semibold">Выберите заявку по которой хотите связаться:</p>
+                        <div className='flex flex-col gap-2 mt-4'>
+                            {myApplications.map((el) => {
+                                return (
+                                    <LightButton2 text={el.eventName} onClick={() => handleOk(el._id)} />
+                                )
+                            })}
+                        </div>
+                        <div className="mt-4 flex flex-col gap-3 justify-around text-[18px]">
+                            <LightButton2 onClick={handleExit} text="Отмена" />
+                        </div>
+                    </div>
+                </div>}
             <Link to={`/artist/${info.artistId._id}/${category}`}>
                 <div className='flex items-center gap-[12px]'>
                     <img src={process.env.REACT_APP_API_URL + info.mainPhoto} className='w-[88px] h-[88px] rounded-full ' alt="1" />

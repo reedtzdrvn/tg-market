@@ -18,8 +18,6 @@ const CatalogArtist = () => {
   const [loading, setLoading] = useState(true)
   const {user} = useUser()
 
-  console.log(loading)
-
   useEffect(() => {
     const fetchData = async () => {
       try {
