@@ -10,7 +10,7 @@ import arrow from "../../images/arrow.svg";
 import Review from "./review";
 import crossIcon from "../../images/close.svg";
 import { Link } from "react-router-dom";
-import { DarkButton } from "../UI/Button/button";
+import { DarkButton, LightButton2 } from "../UI/Button/button";
 import axios from "../../axios";
 import CategoriesButton from "../UI/Categories/categoryButton";
 import Loader from "../UI/Loader/loader";
@@ -27,6 +27,7 @@ const ArtistDetails = () => {
   const { user } = useUser();
   const [reviews, setReviews] = useState([]);
   const [myApplications, setMyApplications] = useState([])
+  const [showPopup, setShowPopup] = useState(false)
 
   // Create a reference for the reviews section
   const reviewsRef = useRef(null);
@@ -55,13 +56,36 @@ const ArtistDetails = () => {
     }
   }, [id]);
 
-  const handleContactClick = () => {
+  const handleOk = (id) => {
+    setShowPopup(false)
+    axios.post('/order', {
+      customerRequestId: id,
+      artistId: request.artistId._id
+    })
+      .then((res) => {
+        // window.location.href = `https://t.me/${request.artistId.userName}`;
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  const handleExit = () => {
+    setShowPopup(false)
+  }
+
+
+  const handleContactClick = (event) => {
+    event.stopPropagation();
     if (myApplications.length === 0) {
       window.location.href = '/my-add-application'
       return
     }
-    window.location.href = `https://t.me/${request.artistId.userName}`;
+    else {
+      setShowPopup(true)
+    }
   };
+
 
   useEffect(() => {
     axios.get("/artist-request", { params: { artistId: id } })
@@ -118,6 +142,22 @@ const ArtistDetails = () => {
 
   return (
     <div className="w-full font-[Inter] relative">
+      {showPopup &&
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-md shadow-lg max-w-xs text-center">
+            <p className="text-lg font-semibold">Выберите заявку по которой хотите связаться:</p>
+            <div className='flex flex-col gap-2 mt-4'>
+              {myApplications.map((el) => {
+                return (
+                  <LightButton2 text={el.eventName} onClick={() => handleOk(el._id)} />
+                )
+              })}
+            </div>
+            <div className="mt-4 flex flex-col gap-3 justify-around text-[18px]">
+              <LightButton2 onClick={handleExit} text="Отмена" />
+            </div>
+          </div>
+        </div>}
       <div className="w-full h-[160px] ">
         <img src={process.env.REACT_APP_API_URL + request.backGroundPhoto} className="w-full h-full" alt="bgartist" />
         <Link
