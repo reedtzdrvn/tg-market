@@ -63,7 +63,7 @@ const ArtistDetails = () => {
       artistId: request.artistId._id
     })
       .then((res) => {
-        // window.location.href = `https://t.me/${request.artistId.userName}`;
+        window.location.href = `https://t.me/${request.artistId.userName}`;
       })
       .catch((err) => {
         console.log(err)
