@@ -33,13 +33,18 @@ const CatalogArtistCard = ({ info, category }) => {
         if (user) {
             axios.get('/customer-requests', { params: { customerId: user._id } })
                 .then((res) => {
-                    setMyApplications(res.data.filter((el) => el.order == false && el.approved == true && el.isReject == false))
+                    setMyApplications(
+                        res.data
+                            .filter(el => el.order === false && el.approved === true && el.isReject === false)
+                            .filter(el => new Date(el.date).getTime() > Date.now()) // Filter out past dates
+                    );
                 })
                 .catch((err) => {
-                    console.log(err)
-                })
+                    console.log(err);
+                });
         }
-    }, [user])
+    }, [user]);
+
 
     function ratingCalculate(reviews) {
         let rating = 0
@@ -91,6 +96,7 @@ const CatalogArtistCard = ({ info, category }) => {
                         <p className="text-lg font-semibold">Выберите заявку по которой хотите связаться:</p>
                         <div className='flex flex-col gap-2 mt-4'>
                             {myApplications.map((el) => {
+
                                 return (
                                     <LightButton2 text={el.eventName} onClick={() => handleOk(el._id)} />
                                 )

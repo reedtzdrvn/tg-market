@@ -12,6 +12,7 @@ import { useCategories } from "../../context/categoryContext.js";
 import CategoriesButton from "../UI/Categories/categoryButton.jsx";
 import { useArtist } from "../../context/artistContext.js";
 import { useUser } from "../../context/userContext.js";
+import { useSubscription } from "../../context/subscriptionContext.js";
 
 const CatalogApplications = () => {
 
@@ -24,6 +25,7 @@ const CatalogApplications = () => {
   const { artist } = useArtist()
   const [applications, setApplications] = useState([])
   const { user } = useUser()
+  const {subscription} = useSubscription()
 
   useEffect(() => {
     if (category) {
@@ -55,15 +57,24 @@ const CatalogApplications = () => {
     }
   };
 
+  console.log(subscription)
+
   function handleContactClick(event, userName, customerRequestId) {
     event.stopPropagation();
 
+    if (subscription===null || new Date(subscription.dateExpression) < new Date()){
+      window.location.href = '/subscription'
+      return
+    }
+
     if (!artist) {
       window.location.href = '/add-artist-request'
+      return
     }
 
     else if (artist.approved === false) {
       window.location.href = "/my-add-request"
+      return
     }
 
     else {

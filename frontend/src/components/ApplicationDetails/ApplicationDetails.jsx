@@ -10,6 +10,7 @@ import Loader from "../UI/Loader/loader";
 import CategoriesButton from "../UI/Categories/categoryButton";
 import { useUser } from "../../context/userContext"
 import { useArtist } from "../../context/artistContext";
+import { useSubscription } from "../../context/subscriptionContext";
 
 const ApplicationDetails = () => {
   const { id } = useParams();
@@ -17,8 +18,14 @@ const ApplicationDetails = () => {
   const [loading, setLoading] = useState(true)
   const [application, setApplication] = useState({})
   const { artist } = useArtist()
+  const {subscription} = useSubscription()
 
   const handleContactClick = () => {
+
+    if (subscription === null || new Date(subscription.dateExpression) < new Date()) {
+      window.location.href = '/subscription'
+      return
+    }
 
     if (!artist) {
       window.location.href = '/add-artist-request'

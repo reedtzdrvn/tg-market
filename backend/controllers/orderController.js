@@ -22,6 +22,15 @@ export default class orderController {
 
       const statusArtist = await StatusShema.findOne({ name: "Создан" });
 
+      const orderCheck = await OrderSchema.findOne({
+        artistRequestId: artistRequest._id,
+        customerRequestId: customerRequestId,
+      });
+
+      if (orderCheck){
+        return res.status(200).json(orderCheck)
+      }
+
       const order = new OrderSchema({
         artistRequestId: artistRequest._id,
         customerRequestId: customerRequestId,
@@ -229,17 +238,17 @@ export default class orderController {
 
       const { artistRequestId } = order;
 
-        const customerId = await CustomerRequestSchema.findOne({
-          _id: customerRequestId,
-        })
-          .select("customerId eventName")
-          .populate("customerId");
+      const customerId = await CustomerRequestSchema.findOne({
+        _id: customerRequestId,
+      })
+        .select("customerId eventName")
+        .populate("customerId");
 
-        const artistId = await ArtistRequestSchema.findOne({
-          _id: artistRequestId,
-        })
-          .select("artistId")
-          .populate("artistId");
+      const artistId = await ArtistRequestSchema.findOne({
+        _id: artistRequestId,
+      })
+        .select("artistId")
+        .populate("artistId");
 
       if (status.name !== "Отменён") {
         if (status.name === "Завершён") {

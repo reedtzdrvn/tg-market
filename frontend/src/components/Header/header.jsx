@@ -6,6 +6,7 @@ import axios from "../../axios";
 import { useUser } from '../../context/userContext';
 import { useArtist } from "../../context/artistContext"
 import { useCities } from '../../context/citiesContext';
+import { useSubscription } from '../../context/subscriptionContext';
 
 const Header = () => {
   let tg = window.Telegram.WebApp;
@@ -17,12 +18,12 @@ const Header = () => {
   const [loadingUser, setLoadingUser] = useState(true);
   const [loadingArtist, setLoadingArtist] = useState(true);
   const { artist, setArtist } = useArtist()
+  const { subscription, setSubscription } = useSubscription()
 
-  const {cities} = useCities()
+  const { cities } = useCities()
 
   const handleCityChange = (event) => {
     const newCity = event.target.value;
-
     if (user && user.telegramId) {
       axios.patch("/selectcity", { telegramId: user.telegramId, setCitySearch: newCity })
         .then(() => {
@@ -36,8 +37,20 @@ const Header = () => {
   };
 
   useEffect(() => {
+    if (user && user.telegramId) {
+      axios.get('/subscription', { params: {userId: user._id} })
+        .then((res) => {
+          setSubscription(res.data)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+  }, [user])
+
+  useEffect(() => {
     if (categories.length === 0 && user) {
-      axios.get("/category", {params: { city: user.setCitySearch}})
+      axios.get("/category", { params: { city: user.setCitySearch } })
         .then((res) => {
           setCategories(res.data);
           setLoadingCategories(false);
@@ -105,7 +118,8 @@ const Header = () => {
             EVENTRA
           </Link>
         </div>
-        {user.role && user.role !== "" && <Link to={`${user.role === 'customer' ? "/my-applications" : "my-requests"}`} className="text-[14px] flex justify-end font-bold w-1/3">
+
+        {user.role && user.role !== "" && <Link to={`${user.role === 'customer' ? "/my-applications" : subscription!== null && new Date(subscription.dateExpression) > new Date() ? "/my-requests" : "/subscription"}`} className="text-[14px] flex justify-end font-bold w-1/3">
           Мой профиль
         </Link>}
       </div>

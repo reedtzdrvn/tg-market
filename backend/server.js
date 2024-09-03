@@ -12,6 +12,7 @@ import orderController from "./controllers/orderController.js";
 import categoryController from "./controllers/categoryController.js";
 import artistRequestController from "./controllers/artistRequestController.js";
 import customerRequestController from "./controllers/customerRequestController.js";
+import subscriptionController from "./controllers/subscriptionController.js";
 
 dotenvConfig();
 
@@ -78,6 +79,8 @@ app.get("/artist-request", artistRequestController.getArtistRequest); // есл�
 
 app.get("/customer-requests", customerRequestController.getCustomerRequest); // если передаем requestId то получим конкретный request, если customer - то его requests, если categoryId - то все заявки с такой категорией
 
+app.get("/subscription", subscriptionController.getSubscription)
+
 //POST
 
 app.post("/upload", upload.array("files"), async (req, res) => {
@@ -103,6 +106,8 @@ app.post("/category", categoryController.addCategory);
 app.post("/artist-request", artistRequestController.addArtistRequest);
 
 app.post("/customer-request", customerRequestController.addCustomerRequest);
+
+app.post("/subscription", subscriptionController.addSubscription)
 
 //PATCH
 
