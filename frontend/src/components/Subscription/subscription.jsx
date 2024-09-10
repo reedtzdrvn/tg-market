@@ -38,10 +38,10 @@ const Subscription = () => {
         }
     }, [subscription]); // Add subscription to the dependency array
 
-    const generateSignature = (params, secretKey) => {
-        const sortedParams = Object.keys(params).sort().map(key => `${key}=${params[key]}`).join('&');
-        return CryptoJS.HmacSHA256(sortedParams, secretKey).toString(CryptoJS.enc.Hex);
-    };
+    // const generateSignature = (params, secretKey) => {
+    //     const sortedParams = Object.keys(params).sort().map(key => `${key}=${params[key]}`).join('&');
+    //     return CryptoJS.HmacSHA256(sortedParams, secretKey).toString(CryptoJS.enc.Hex);
+    // };
 
     const handleGoSub = (name, price) => {
         setPrice(price);
@@ -66,22 +66,23 @@ const Subscription = () => {
 
         var widget = new window.pw.PayWidget();
 
+        console.log(widget)
         console.log({
             serviceId: "24592",
             key: "04a25dadd74d683f2c82197f7b4dabbcec3c17e8ff9ad40eb8473d73ff6ddbb2835bcdb159a96ebcc5e52df854f22322933d1cdd7e16a40f25bace07937810f06d",
             logger: true,
         },
-        {
-            MetaData: {
-                PaymentType: "Pay",
-            },
-            PaymentRequest: {
-                OrderId: '1314vvvv',
-                Amount: String(price),
-                Currency: "RUB",
-                Description: `Оплата подписки "${name}"`,
-            }
-        })
+            {
+                MetaData: {
+                    PaymentType: "Pay",
+                },
+                PaymentRequest: {
+                    OrderId: "1314354",
+                    Amount: "123",
+                    Currency: "RUB",
+                    Description: `Оплата подписки "${name}"`,
+                },
+            })
 
         widget.pay(
             {
@@ -94,11 +95,11 @@ const Subscription = () => {
                     PaymentType: "Pay",
                 },
                 PaymentRequest: {
-                    OrderId: '1314vvvv',
-                    Amount: String(price),
+                    OrderId: "1314354",
+                    Amount: "123",
                     Currency: "RUB",
-                    Description: `Оплата подписки "${name}"`,
-                }
+                    Description: `Оплата подписки`,
+                },
             }
             , {
                 onSuccess: function (res) {
