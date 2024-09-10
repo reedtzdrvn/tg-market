@@ -61,6 +61,7 @@ const Subscription = () => {
             return;
         }
 
+
         const params = {
             serviceId: "24592",
             key: "04a25dadd74d683f2c82197f7b4dabbcec3c17e8ff9ad40eb8473d73ff6ddbb2835bcdb159a96ebcc5e52df854f22322933d1cdd7e16a40f25bace07937810f06d",
@@ -81,16 +82,14 @@ const Subscription = () => {
 
         var widget = new window.pw.PayWidget();
 
-        widget.create({
+        widget.pay({
+            ...params,
+            signature: signature,
             headers: {
                 'X-SITE-ID': '24592',
                 'X-REQUEST-ID': '1314vvvv',
                 'X-REQUEST-SIGNATURE': signature,
             }
-        })
-
-        widget.pay({
-            ...params
         }, {
             onSuccess: function (res) {
                 handleSuccessfulPayment(name, res.returnUrl);
