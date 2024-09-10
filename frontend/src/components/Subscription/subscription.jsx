@@ -61,46 +61,39 @@ const Subscription = () => {
             return;
         }
 
-
-        const params = {
-            serviceId: "24592",
-            key: "04a25dadd74d683f2c82197f7b4dabbcec3c17e8ff9ad40eb8473d73ff6ddbb2835bcdb159a96ebcc5e52df854f22322933d1cdd7e16a40f25bace07937810f06d",
-            logger: true,
-            MetaData: {
-                PaymentType: "Pay",
-            },
-            PaymentRequest: {
-                OrderId: '1314vvvv',
-                Amount: String(price),
-                Currency: "RUB",
-                Description: `Оплата подписки "${name}"`,
-            },
-        };
-
-        const secretKey = 'RUWLq9E4Ek9HDmN8';
-        const signature = generateSignature(params, secretKey);
+        // const secretKey = 'RUWLq9E4Ek9HDmN8';
+        // const signature = generateSignature(params, secretKey);
 
         var widget = new window.pw.PayWidget();
 
-        widget.pay({
-            ...params,
-            signature: signature,
-            headers: {
-                'X-SITE-ID': '24592',
-                'X-REQUEST-ID': '1314vvvv',
-                'X-REQUEST-SIGNATURE': signature,
+        widget.pay(
+            {
+                serviceId: "24592",
+                key: "04a25dadd74d683f2c82197f7b4dabbcec3c17e8ff9ad40eb8473d73ff6ddbb2835bcdb159a96ebcc5e52df854f22322933d1cdd7e16a40f25bace07937810f06d",
+                logger: true,
+            },
+            {
+                MetaData: {
+                    PaymentType: "Pay",
+                },
+                PaymentRequest: {
+                    OrderId: '1314vvvv',
+                    Amount: String(price),
+                    Currency: "RUB",
+                    Description: `Оплата подписки "${name}"`,
+                }
             }
-        }, {
-            onSuccess: function (res) {
-                handleSuccessfulPayment(name, res.returnUrl);
-            },
-            onError: function (res) {
-                handleErrorPayment();
-            },
-            onClose: function (res) {
-                window.location.reload();
-            },
-        });
+            , {
+                onSuccess: function (res) {
+                    handleSuccessfulPayment(name, res.returnUrl);
+                },
+                onError: function (res) {
+                    handleErrorPayment();
+                },
+                onClose: function (res) {
+                    window.location.reload();
+                },
+            });
     };
     const handleSuccessfulPayment = (name, returnUrl) => {
         let dateExpression = new Date();
