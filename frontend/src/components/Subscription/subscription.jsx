@@ -17,17 +17,17 @@ const Subscription = () => {
     const [payload, setPayload] = useState(false);
     const [subOn, setSubOn] = useState(false);
 
-    useEffect(() => {
-        const script = document.createElement('script');
-        script.src = "https://widget.payselection.com/lib/pay-widget.js";
-        script.async = true;
-        script.onload = () => console.log('PayWidget script loaded');
-        document.body.appendChild(script);
+    // useEffect(() => {
+    //     const script = document.createElement('script');
+    //     script.src = "https://widget.payselection.com/lib/pay-widget.js";
+    //     script.async = true;
+    //     script.onload = () => console.log('PayWidget script loaded');
+    //     document.body.appendChild(script);
 
-        return () => {
-            document.body.removeChild(script);
-        };
-    }, []);
+    //     return () => {
+    //         document.body.removeChild(script);
+    //     };
+    // }, []);
 
     useEffect(() => {
         if (subscription === null || new Date(subscription.dateExpression) < new Date()) {
