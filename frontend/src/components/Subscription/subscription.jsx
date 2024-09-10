@@ -70,7 +70,6 @@ const Subscription = () => {
             {
                 serviceId: "20071",
                 key: "045139ce4805a5d0c2f46f7f0844d1ff269dd869344bc82301a3eba0fb67eb56cb65c789a46c535d124d08d2e6348a86938494b561363c0a9b74958e24f4b2ea0d",
-                logger: true,
             },
             {
                 MetaData: {
