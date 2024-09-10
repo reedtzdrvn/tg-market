@@ -38,10 +38,10 @@ const Subscription = () => {
         }
     }, [subscription]); // Add subscription to the dependency array
 
-    const generateSignature = (params, secretKey) => {
-        const sortedParams = Object.keys(params).sort().map(key => `${key}=${params[key]}`).join('&');
-        return CryptoJS.HmacSHA256(sortedParams, secretKey).toString(CryptoJS.enc.Hex);
-    };
+    // const generateSignature = (params, secretKey) => {
+    //     const sortedParams = Object.keys(params).sort().map(key => `${key}=${params[key]}`).join('&');
+    //     return CryptoJS.HmacSHA256(sortedParams, secretKey).toString(CryptoJS.enc.Hex);
+    // };
 
     const handleGoSub = (name, price) => {
         setPrice(price);
@@ -61,40 +61,29 @@ const Subscription = () => {
             return;
         }
 
-        const secretKey = 'RUWLq9E4Ek9HDmN8';
-
-        const params = {
-            serviceId: "24592",
-            key: "04a25dadd74d683f2c82197f7b4dabbcec3c17e8ff9ad40eb8473d73ff6ddbb2835bcdb159a96ebcc5e52df854f22322933d1cdd7e16a40f25bace07937810f06d",
-            MetaData: {
-                PaymentType: "Pay",
-            },
-            PaymentRequest: {
-                OrderId: "string12",
-                Amount: "1232",
-                Currency: "RUB",
-                Description: `Оплата подписки`,
-            },
-        };
-
-        const signature = generateSignature(params, secretKey);
-
-        console.log(signature)
+        // const secretKey = 'RUWLq9E4Ek9HDmN8';
+        // const signature = generateSignature(params, secretKey);
 
         var widget = new window.pw.PayWidget();
 
         widget.pay(
             {
-                serviceId: params.serviceId,
-                key: params.key,
-                signature: signature,
+                serviceId: "20071",
+                key: "045139ce4805a5d0c2f46f7f0844d1ff269dd869344bc82301a3eba0fb67eb56cb65c789a46c535d124d08d2e6348a86938494b561363c0a9b74958e24f4b2ea0d",
                 logger: true,
             },
             {
-                MetaData: params.MetaData,
-                PaymentRequest: params.PaymentRequest,
-            },
-            {
+                MetaData: {
+                    PaymentType: "Pay",
+                },
+                PaymentRequest: {
+                    OrderId: String(Math.floor(Math.random() * (100000 - 1000) + 1000)),
+                    Amount: String(price),
+                    Currency: "RUB",
+                    Description: `Оплата подписки "${name}"`,
+                },
+            }
+            , {
                 onSuccess: function (res) {
                     handleSuccessfulPayment(name, res.returnUrl);
                 },
@@ -104,10 +93,9 @@ const Subscription = () => {
                 onClose: function (res) {
                     window.location.reload();
                 },
-            }
-        );
+            });
     };
-
+    
     const handleSuccessfulPayment = (name, returnUrl) => {
         let dateExpression = new Date();
 
@@ -138,7 +126,6 @@ const Subscription = () => {
             .catch(error => {
                 console.error('Error adding subscription:', error);
             })
-            .finally(() => window.location.href = '/');
     };
 
     const handleErrorPayment = () => {
