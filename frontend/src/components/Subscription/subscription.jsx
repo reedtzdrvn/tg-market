@@ -61,47 +61,40 @@ const Subscription = () => {
             return;
         }
 
-        // const secretKey = 'RUWLq9E4Ek9HDmN8';
-        // const signature = generateSignature(params, secretKey);
+        const secretKey = 'RUWLq9E4Ek9HDmN8';
+
+        const params = {
+            serviceId: "24592",
+            key: "04a25dadd74d683f2c82197f7b4dabbcec3c17e8ff9ad40eb8473d73ff6ddbb2835bcdb159a96ebcc5e52df854f22322933d1cdd7e16a40f25bace07937810f06d",
+            MetaData: {
+                PaymentType: "Pay",
+            },
+            PaymentRequest: {
+                OrderId: "string12",
+                Amount: "1232",
+                Currency: "RUB",
+                Description: `Оплата подписки`,
+            },
+        };
+
+        const signature = generateSignature(params, secretKey);
+
+        console.log(signature)
 
         var widget = new window.pw.PayWidget();
 
-        console.log(widget)
-        console.log({
-            serviceId: "24592",
-            key: "04a25dadd74d683f2c82197f7b4dabbcec3c17e8ff9ad40eb8473d73ff6ddbb2835bcdb159a96ebcc5e52df854f22322933d1cdd7e16a40f25bace07937810f06d",
-            logger: true,
-        },
-            {
-                MetaData: {
-                    PaymentType: "Pay",
-                },
-                PaymentRequest: {
-                    OrderId: "1314354",
-                    Amount: "123",
-                    Currency: "RUB",
-                    Description: `Оплата подписки "${name}"`,
-                },
-            })
-
         widget.pay(
             {
-                serviceId: "24592",
-                key: "04a25dadd74d683f2c82197f7b4dabbcec3c17e8ff9ad40eb8473d73ff6ddbb2835bcdb159a96ebcc5e52df854f22322933d1cdd7e16a40f25bace07937810f06d",
+                serviceId: params.serviceId,
+                key: params.key,
+                signature: signature,
                 logger: true,
             },
             {
-                MetaData: {
-                    PaymentType: "Pay",
-                },
-                PaymentRequest: {
-                    OrderId: "1314354",
-                    Amount: "123",
-                    Currency: "RUB",
-                    Description: `Оплата подписки`,
-                },
-            }
-            , {
+                MetaData: params.MetaData,
+                PaymentRequest: params.PaymentRequest,
+            },
+            {
                 onSuccess: function (res) {
                     handleSuccessfulPayment(name, res.returnUrl);
                 },
@@ -111,8 +104,10 @@ const Subscription = () => {
                 onClose: function (res) {
                     window.location.reload();
                 },
-            });
+            }
+        );
     };
+
     const handleSuccessfulPayment = (name, returnUrl) => {
         let dateExpression = new Date();
 
