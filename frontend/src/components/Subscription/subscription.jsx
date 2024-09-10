@@ -81,14 +81,16 @@ const Subscription = () => {
 
         var widget = new window.pw.PayWidget();
 
-        widget.pay({
-            ...params,
-            signature: signature,
+        widget.create({
             headers: {
                 'X-SITE-ID': '24592',
                 'X-REQUEST-ID': '1314vvvv',
                 'X-REQUEST-SIGNATURE': signature,
             }
+        })
+
+        widget.pay({
+            ...params
         }, {
             onSuccess: function (res) {
                 handleSuccessfulPayment(name, res.returnUrl);
