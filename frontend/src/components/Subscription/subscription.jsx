@@ -38,10 +38,10 @@ const Subscription = () => {
         }
     }, [subscription]); // Add subscription to the dependency array
 
-    // const generateSignature = (params, secretKey) => {
-    //     const sortedParams = Object.keys(params).sort().map(key => `${key}=${params[key]}`).join('&');
-    //     return CryptoJS.HmacSHA256(sortedParams, secretKey).toString(CryptoJS.enc.Hex);
-    // };
+    const generateSignature = (params, secretKey) => {
+        const sortedParams = Object.keys(params).sort().map(key => `${key}=${params[key]}`).join('&');
+        return CryptoJS.HmacSHA256(sortedParams, secretKey).toString(CryptoJS.enc.Hex);
+    };
 
     const handleGoSub = (name, price) => {
         setPrice(price);
