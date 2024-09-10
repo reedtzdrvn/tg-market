@@ -6,6 +6,7 @@ import coins from "../../images/Coins.svg";
 import { DarkButton, LightButton2 } from "../UI/Button/button";
 import axios from "../../axios";
 import { useUser } from "../../context/userContext";
+import CryptoJS from 'crypto-js';
 
 const Subscription = () => {
     const { subscription } = useSubscription();
@@ -37,6 +38,11 @@ const Subscription = () => {
         }
     }, [subscription]); // Add subscription to the dependency array
 
+    const generateSignature = (params, secretKey) => {
+        const sortedParams = Object.keys(params).sort().map(key => `${key}=${params[key]}`).join('&');
+        return CryptoJS.HmacSHA256(sortedParams, secretKey).toString(CryptoJS.enc.Hex);
+    };
+
     const handleGoSub = (name, price) => {
         setPrice(price);
         setName(name);
@@ -55,13 +61,10 @@ const Subscription = () => {
             return;
         }
 
-        var widget = new window.pw.PayWidget();
-
-        widget.pay({
+        const params = {
             serviceId: "24592",
             key: "04a25dadd74d683f2c82197f7b4dabbcec3c17e8ff9ad40eb8473d73ff6ddbb2835bcdb159a96ebcc5e52df854f22322933d1cdd7e16a40f25bace07937810f06d",
             logger: true,
-        }, {
             MetaData: {
                 PaymentType: "Pay",
             },
@@ -71,6 +74,21 @@ const Subscription = () => {
                 Currency: "RUB",
                 Description: `Оплата подписки "${name}"`,
             },
+        };
+
+        const secretKey = 'RUWLq9E4Ek9HDmN8';
+        const signature = generateSignature(params, secretKey);
+
+        var widget = new window.pw.PayWidget();
+
+        widget.pay({
+            ...params,
+            signature: signature,
+            headers: {
+                'X-SITE-ID': '24592',
+                'X-REQUEST-ID': '1314vvvv',
+                'X-REQUEST-SIGNATURE': signature,
+            }
         }, {
             onSuccess: function (res) {
                 handleSuccessfulPayment(name, res.returnUrl);
@@ -83,7 +101,6 @@ const Subscription = () => {
             },
         });
     };
-
     const handleSuccessfulPayment = (name, returnUrl) => {
         let dateExpression = new Date();
 
