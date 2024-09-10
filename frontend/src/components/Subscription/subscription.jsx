@@ -8,14 +8,26 @@ import axios from "../../axios";
 import { useUser } from "../../context/userContext";
 
 const Subscription = () => {
-    const { subscription } = useSubscription()
-    const [showPopup, setShowPopup] = useState(false)
-    const [popupMessage, setPopupMessage] = useState('')
-    const [price, setPrice] = useState(0)
-    const [name, setName] = useState('')
-    const { user } = useUser()
-    const [payload, setPayload] = useState(false)
-    const [subOn, setSubOn] = useState(false)
+    const { subscription } = useSubscription();
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupMessage, setPopupMessage] = useState('');
+    const [price, setPrice] = useState(0);
+    const [name, setName] = useState('');
+    const { user } = useUser();
+    const [payload, setPayload] = useState(false);
+    const [subOn, setSubOn] = useState(false);
+
+    useEffect(() => {
+        const script = document.createElement('script');
+        script.src = "https://widget.payselection.com/lib/pay-widget.js";
+        script.async = true;
+        script.onload = () => console.log('PayWidget script loaded');
+        document.body.appendChild(script);
+
+        return () => {
+            document.body.removeChild(script);
+        };
+    }, []);
 
     useEffect(() => {
         if (subscription === null || new Date(subscription.dateExpression) < new Date()) {
@@ -25,28 +37,64 @@ const Subscription = () => {
         }
     }, [subscription]); // Add subscription to the dependency array
 
-
     const handleGoSub = (name, price) => {
-        setPrice(price)
-        setName(name)
-        setPopupMessage(`Вы уверены, что хотите подключить подписку "${name} за ${price}Р`)
-        setShowPopup(true)
-    }
-
+        setPrice(price);
+        setName(name);
+        setPopupMessage(`Вы подключаете ${name === 'Пробный период' ? 'пробный период "3 дня бесплатно"' : `"` + `${name}` + `"`}. По истечению срока действия напомним о продлении тарифа👌`);
+        setShowPopup(true);
+    };
 
     const handleSubmit = () => {
         setShowPopup(false);
+        pay();
+    };
 
+    const pay = function () {
+        if (!window.pw) {
+            console.error("PayWidget is not loaded");
+            return;
+        }
+
+        var widget = new window.pw.PayWidget();
+
+        widget.pay({
+            serviceId: "24592",
+            key: "04a25dadd74d683f2c82197f7b4dabbcec3c17e8ff9ad40eb8473d73ff6ddbb2835bcdb159a96ebcc5e52df854f22322933d1cdd7e16a40f25bace07937810f06d",
+            logger: true,
+        }, {
+            MetaData: {
+                PaymentType: "Pay",
+            },
+            PaymentRequest: {
+                OrderId: '1314vvvv',
+                Amount: String(price),
+                Currency: "RUB",
+                Description: `Оплата подписки "${name}"`,
+            },
+        }, {
+            onSuccess: function (res) {
+                handleSuccessfulPayment(name, res.returnUrl);
+            },
+            onError: function (res) {
+                handleErrorPayment();
+            },
+            onClose: function (res) {
+                window.location.reload();
+            },
+        });
+    };
+
+    const handleSuccessfulPayment = (name, returnUrl) => {
         let dateExpression = new Date();
 
         if (name === 'Пробный период') {
-            dateExpression.setDate(dateExpression.getDate() + 3); // Add 3 days
+            dateExpression.setDate(dateExpression.getDate() + 3);
         } else if (name === 'Премиум 1 месяц') {
-            dateExpression.setMonth(dateExpression.getMonth() + 1); // Add 1 month
+            dateExpression.setMonth(dateExpression.getMonth() + 1);
         } else if (name === 'Премиум 3 месяца') {
-            dateExpression.setMonth(dateExpression.getMonth() + 3); // Add 3 months
+            dateExpression.setMonth(dateExpression.getMonth() + 3);
         } else if (name === 'Премиум 12 месяцев') {
-            dateExpression.setMonth(dateExpression.getMonth() + 12); // Add 12 months
+            dateExpression.setMonth(dateExpression.getMonth() + 12);
         }
 
         const dateNow = new Date().toISOString();
@@ -59,23 +107,27 @@ const Subscription = () => {
             dateExpression: dateExpressionISO
         })
             .then(() => {
-                setPayload(true)
-                setPopupMessage(`Вы успешно подключили подписку "${name}"`)
-                setShowPopup(true)
+                setPayload(true);
+                setPopupMessage(`Вы успешно подключили подписку "${name}"`);
+                setShowPopup(true);
             })
             .catch(error => {
                 console.error('Error adding subscription:', error);
-            });
+            })
+            .finally(() => window.location.href = '/');
     };
 
+    const handleErrorPayment = () => {
+        console.log('ошибка оплаты');
+    };
 
     const handleExit = () => {
-        setShowPopup(false)
-    }
+        setShowPopup(false);
+    };
 
     const handleGoHome = () => {
-        window.location.href = '/'
-    }
+        window.location.href = '/';
+    };
 
     return (
         <div className="bg-back relative min-h-screen">
@@ -119,7 +171,7 @@ const Subscription = () => {
                         {!subOn && <div className="flex flex-col justify-end h-full">
                             <DarkButton onClick={() => handleGoSub('Пробный период', 0)} text={"Создать анкету"} />
                         </div>}
-                        {subscription?.nameSubscription  === 'Пробный период' && new Date(subscription.dateExpression) > new Date() && <div className="flex flex-col justify-end h-full">
+                        {subscription?.nameSubscription === 'Пробный период' && new Date(subscription.dateExpression) > new Date() && <div className="flex flex-col justify-end h-full">
                             Подписка активна до {subscription?.dateExpression.split('T')[0]}
                         </div>}
                     </div>}
@@ -164,7 +216,7 @@ const Subscription = () => {
                         {!subOn && <div className="flex flex-col justify-end h-full">
                             <LightButton2 onClick={() => handleGoSub('Премиум 3 месяца', 2499)} text={"Продолжить"} />
                         </div>}
-                        {subscription?.nameSubscription === 'Премиум 3 месяца' && new Date(subscription.dateExpression) > new Date()  && <div className="flex flex-col justify-end h-full">
+                        {subscription?.nameSubscription === 'Премиум 3 месяца' && new Date(subscription.dateExpression) > new Date() && <div className="flex flex-col justify-end h-full">
                             Подписка активна до {subscription?.dateExpression.split('T')[0]}
                         </div>}
                     </div>
@@ -185,7 +237,7 @@ const Subscription = () => {
                         {!subOn && <div className="flex flex-col justify-end h-full">
                             <LightButton2 onClick={() => handleGoSub('Премиум 12 месяцев', 6999)} text={"Продолжить"} />
                         </div>}
-                        {subscription?.nameSubscription  === 'Премиум 12 месяцев' && new Date(subscription.dateExpression) > new Date() && <div className="flex flex-col justify-end h-full">
+                        {subscription?.nameSubscription === 'Премиум 12 месяцев' && new Date(subscription.dateExpression) > new Date() && <div className="flex flex-col justify-end h-full">
                             Подписка активна до {subscription?.dateExpression.split('T')[0]}
                         </div>}
                     </div>
