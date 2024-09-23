@@ -1,5 +1,7 @@
+import types
 from aiogram import Router, F, Bot
 from aiogram.filters import Command
+from aiogram.filters.callback_data import CallbackData
 from aiogram.types import (
     Message,
     InputMediaPhoto,
@@ -11,7 +13,7 @@ from aiogram.enums import ChatAction
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from bson import ObjectId
-
+from aiogram.utils.keyboard import InlineKeyboardBuilder
 from core.filters.Admin import AdminFilter
 from core.keyboards.admin_keyboard import (
     main_keyboard,
@@ -33,6 +35,11 @@ from config import BACKEND_URL
 
 admin_router = Router()
 
+class PromoCodeStates(StatesGroup):
+    promo = State()
+    count = State()
+    tarifs = State() 
+    percentPrice = State()
 
 class PaginationStates(StatesGroup):
     page = State()
@@ -354,6 +361,133 @@ async def reject_customer(
     await orders_message(
         callback_query.message, _customer_controller, 0, is_editing=False
     )
+
+@admin_router.callback_query(F.data.startswith("select_tariff:"))
+async def process_tariff_selection(callback_query: CallbackQuery, state: FSMContext, _tarifs_controller):
+    tariff_id = ObjectId(callback_query.data.split(":")[1])
+    
+    data = await state.get_data()
+    selected_tariffs = data.get("selected_tariffs", [])
+
+    if tariff_id in selected_tariffs:
+        selected_tariffs.remove(tariff_id)
+    else:
+        selected_tariffs.append(tariff_id)
+
+    await state.update_data(selected_tariffs=selected_tariffs)
+
+    builder = InlineKeyboardBuilder()
+    
+    tariffs = await _tarifs_controller.get_all_tarifs()
+    
+    for tariff in tariffs:
+        if ObjectId(tariff["_id"]) in selected_tariffs:
+            button_text = f"{tariff['name']} ✅"
+        else:
+            button_text = tariff["name"]
+        
+        button = InlineKeyboardButton(
+            text=button_text,
+            callback_data=f"select_tariff:{tariff['_id']}"
+        )
+        builder.add(button)
+
+    builder.add(InlineKeyboardButton(text="Готово", callback_data="finish_selection"))
+
+    await callback_query.message.edit_reply_markup(reply_markup=builder.adjust(1, 1, 1, 1).as_markup())
+
+@admin_router.callback_query(F.data == "finish_selection")
+async def finish_selection(callback_query: CallbackQuery, state: FSMContext):
+    data = await state.get_data()
+    selected_tariffs = data.get("selected_tariffs", [])
+    await state.set_state(PromoCodeStates.tarifs)
+    
+    
+    if selected_tariffs:
+        await state.update_data(tarifs=[str(t) for t in selected_tariffs])
+        
+        await callback_query.answer()
+        
+        await set_tarifs(callback_query.message, state)
+        
+    else:
+        await callback_query.answer("Вы не выбрали ни одного тарифа.")
+
+@admin_router.message(F.text == "Добавить промокод")
+async def add_promo_start(message: Message, state: FSMContext):
+    await state.set_state(PromoCodeStates.promo)
+    await message.answer("Введите название промокода:")
+
+@admin_router.message(PromoCodeStates.promo)
+async def set_promo(message: Message, state: FSMContext):
+    await state.update_data(promo=message.text)
+    await state.set_state(PromoCodeStates.count)
+    await message.answer("Введите количество использования промокода:")
+
+@admin_router.message(PromoCodeStates.count)
+async def set_count(message: Message, state: FSMContext, _tarifs_controller):
+    await state.update_data(count=int(message.text))
+    
+    builder = InlineKeyboardBuilder()
+    
+    data = await state.get_data()
+    selected_tariffs = data.get("selected_tariffs", [])
+    
+    tariffs = await _tarifs_controller.get_all_tarifs()
+
+    for tariff in tariffs:
+        if tariff["_id"] in selected_tariffs:
+            button_text = f"{tariff['name']} ✅"
+        else:
+            button_text = tariff["name"]
+        
+        button = InlineKeyboardButton(
+            text=button_text,
+            callback_data=f"select_tariff:{tariff['_id']}"
+        )
+        builder.add(button)
+
+    builder.add(InlineKeyboardButton(text="Готово", callback_data="finish_selection"))
+
+    await message.answer("Выберите тарифы:", reply_markup=builder.adjust(1, 1, 1, 1).as_markup())
+
+@admin_router.message(PromoCodeStates.tarifs)
+async def set_tarifs(message: Message, state: FSMContext):
+    await state.set_state(PromoCodeStates.percentPrice)
+    
+    await message.answer("Введите процент скидки:")
+
+@admin_router.message(PromoCodeStates.percentPrice)
+async def set_percent_price(message: Message, state: FSMContext, _promos_controller):
+    try:
+        percent_price = int(message.text)
+
+        if percent_price < 0 or percent_price > 100:
+            await message.answer("Пожалуйста, введите корректный процент скидки (от 0 до 100).")
+            return
+
+        await state.update_data(percentPrice=percent_price)
+
+
+        data = await state.get_data()
+        promo = data.get('promo')
+        count = data.get('count')
+        tarifs = data.get('tarifs')
+
+        await _promos_controller.add_promo(promo, count, tarifs, percent_price)
+        
+        await message.answer(
+            f"Промокод успешно добавлен!\n"
+            f"Новый промокод: {promo}\n"
+            f"Количество использования: {count}\n"
+            f"Тарифы (id's): {', '.join(tarifs)}\n"
+            f"Процент скидки: {percent_price}%"
+        )
+
+    except ValueError:
+        await message.answer("Пожалуйста, введите корректное число для процента скидки.")
+    
+    await state.clear()
 
 @admin_router.message()
 async def unknown_command(message: Message) -> None:
