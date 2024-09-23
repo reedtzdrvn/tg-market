@@ -10,8 +10,10 @@ class PromosController():
         self.db = db_ins.db
         self.collection = self.db["promos"]
 
-    async def add_promo(self, promo_name, count, tarifs, percent_price) -> bool:
-        
-        await self.collection.insert_one({'promo': promo_name, 'count': count, 'tarifs': tarifs, 'percentPrice': percent_price})
+    async def add_promo(self, promo_name, count, tarifs, discount_value, discount_type) -> bool:
+        if discount_type == "Процент":
+            await self.collection.insert_one({'promo': promo_name, 'count': count, 'tarifs': tarifs, 'percentPrice': discount_value})
+        else:
+            await self.collection.insert_one({'promo': promo_name, 'count': count, 'tarifs': tarifs, 'fixPrice': discount_value})
         
         logging.info(f"Promo {promo_name} added successfully!")

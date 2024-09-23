@@ -7,9 +7,12 @@ from aiogram.types import (
     InputMediaPhoto,
     InlineKeyboardMarkup,
     InlineKeyboardButton,
+    KeyboardButton,
+    ReplyKeyboardMarkup,
     CallbackQuery,
 )
 from aiogram.enums import ChatAction
+
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from bson import ObjectId
@@ -39,7 +42,8 @@ class PromoCodeStates(StatesGroup):
     promo = State()
     count = State()
     tarifs = State() 
-    percentPrice = State()
+    discount_type = State()
+    discount_value = State()
 
 class PaginationStates(StatesGroup):
     page = State()
@@ -453,39 +457,66 @@ async def set_count(message: Message, state: FSMContext, _tarifs_controller):
 
 @admin_router.message(PromoCodeStates.tarifs)
 async def set_tarifs(message: Message, state: FSMContext):
-    await state.set_state(PromoCodeStates.percentPrice)
+    await state.set_state(PromoCodeStates.discount_type)
     
-    await message.answer("Введите процент скидки:")
+    await message.answer("Выберите тип скидки:\n1. Процент\n2. Фиксированная сумма", reply_markup=ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="Процент"), KeyboardButton(text="Фиксированная сумма")]
+        ],
+        resize_keyboard=True,
+        one_time_keyboard=True
+    ))
 
-@admin_router.message(PromoCodeStates.percentPrice)
-async def set_percent_price(message: Message, state: FSMContext, _promos_controller):
+@admin_router.message(PromoCodeStates.discount_type)
+async def choose_discount_type(message: Message, state: FSMContext):
+    if message.text not in ["Процент", "Фиксированная сумма"]:
+        await message.answer("Пожалуйста, выберите корректный тип скидки.")
+        return
+
+    await state.update_data(discount_type=message.text)
+    await state.set_state(PromoCodeStates.discount_value)
+
+    if message.text == "Процент":
+        await message.answer("Введите процент скидки:")
+    else:
+        await message.answer("Введите фиксированную сумму скидки:")
+
+@admin_router.message(PromoCodeStates.discount_value)
+async def set_discount_value(message: Message, state: FSMContext, _promos_controller):
     try:
-        percent_price = int(message.text)
+        discount_value = int(message.text)
 
-        if percent_price < 0 or percent_price > 100:
-            await message.answer("Пожалуйста, введите корректный процент скидки (от 0 до 100).")
-            return
+        if (await state.get_data()).get('discount_type') == "Процент":
+            if discount_value < 0 or discount_value > 100:
+                await message.answer("Пожалуйста, введите корректный процент скидки (от 0 до 100).")
+                return
+        else:
+            if discount_value < 0:
+                await message.answer("Пожалуйста, введите корректную фиксированную сумму скидки (не отрицательную).")
+                return
 
-        await state.update_data(percentPrice=percent_price)
-
+        await state.update_data(discount_value=discount_value)
 
         data = await state.get_data()
         promo = data.get('promo')
         count = data.get('count')
         tarifs = data.get('tarifs')
+        discount_type = data.get('discount_type')
 
-        await _promos_controller.add_promo(promo, count, tarifs, percent_price)
+        await _promos_controller.add_promo(promo, count, tarifs, discount_value, discount_type)
         
         await message.answer(
             f"Промокод успешно добавлен!\n"
             f"Новый промокод: {promo}\n"
             f"Количество использования: {count}\n"
             f"Тарифы (id's): {', '.join(tarifs)}\n"
-            f"Процент скидки: {percent_price}%"
+            f"Тип скидки: {discount_type}\n"
+            f"Сумма скидки: {discount_value}",
+            reply_markup=main_keyboard
         )
 
     except ValueError:
-        await message.answer("Пожалуйста, введите корректное число для процента скидки.")
+        await message.answer("Пожалуйста, введите корректное число для суммы скидки.", reply_markup=main_keyboard)
     
     await state.clear()
 
