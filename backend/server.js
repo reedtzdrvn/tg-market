@@ -13,6 +13,8 @@ import categoryController from "./controllers/categoryController.js";
 import artistRequestController from "./controllers/artistRequestController.js";
 import customerRequestController from "./controllers/customerRequestController.js";
 import subscriptionController from "./controllers/subscriptionController.js";
+import tarifController from "./controllers/tarifController.js";
+import promoController from "./controllers/promoController.js";
 
 dotenvConfig();
 
@@ -81,6 +83,10 @@ app.get("/customer-requests", customerRequestController.getCustomerRequest); // 
 
 app.get("/subscription", subscriptionController.getSubscription)
 
+app.get("/tarif", tarifController.getTarif);
+
+app.get('/promo', promoController.getPromo)
+
 //POST
 
 app.post("/upload", upload.array("files"), async (req, res) => {
@@ -93,9 +99,13 @@ app.post("/upload", upload.array("files"), async (req, res) => {
   }
 });
 
+app.post('/promo', promoController.addPromo)
+
 app.post("/status", statusController.addStatus);
 
 app.post("/moderator", moderatorController.addModerator);
+
+app.post("/tarif", tarifController.addTarif);
 
 app.post("/review", reviewController.addReview);
 
@@ -112,6 +122,8 @@ app.post("/subscription", subscriptionController.addSubscription)
 //PATCH
 
 app.patch("/user", userController.updateUser);
+
+app.patch('/promo', promoController.updatePromo)
 
 app.patch("/review", reviewController.updateReview);
 
