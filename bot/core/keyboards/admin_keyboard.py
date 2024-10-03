@@ -11,9 +11,10 @@ main_keyboard = ReplyKeyboardMarkup(
         [
             KeyboardButton(text="Исполнители"),
             KeyboardButton(text="Заказы"),
+            KeyboardButton(text="Отзывы"),
         ],
         [
-            KeyboardButton(text="Отзывы"),
+            KeyboardButton(text="Действующие промокоды"),
             KeyboardButton(text="Добавить промокод"),
         ],
         [

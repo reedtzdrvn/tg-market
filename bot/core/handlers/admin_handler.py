@@ -27,12 +27,11 @@ from core.keyboards.admin_keyboard import (
 from core.captions.artist_request_caption import generate_artist_request_caption
 from core.captions.customer_request_caption import generate_customer_request_caption
 from core.captions.review_caption import generate_review_caption
+from core.captions.promos_caption import generate_promos_caption
 
 from core.databases.mongodb.artist.controller import ArtistController
 from core.databases.mongodb.customer.controller import CustomerController
 from core.databases.mongodb.review.controller import ReviewController
-
-import pprint
 
 from config import BACKEND_URL
 
@@ -417,7 +416,7 @@ async def finish_selection(callback_query: CallbackQuery, state: FSMContext):
     else:
         await callback_query.answer("Вы не выбрали ни одного тарифа.")
 
-@admin_router.message(F.text == "Добавить промокод")
+@admin_router.message(F.text == "Добавить промокод", AdminFilter())
 async def add_promo_start(message: Message, state: FSMContext):
     await state.set_state(PromoCodeStates.promo)
     await message.answer("Введите название промокода:")
@@ -477,7 +476,7 @@ async def choose_discount_type(message: Message, state: FSMContext):
     await state.set_state(PromoCodeStates.discount_value)
 
     if message.text == "Процент":
-        await message.answer("Введите процент скидки:")
+        await message.answer("Введите процент скидки (без знака %):")
     else:
         await message.answer("Введите фиксированную сумму скидки:")
 
@@ -519,6 +518,11 @@ async def set_discount_value(message: Message, state: FSMContext, _promos_contro
         await message.answer("Пожалуйста, введите корректное число для суммы скидки.", reply_markup=main_keyboard)
     
     await state.clear()
+
+@admin_router.message(F.text == "Действующие промокоды", AdminFilter())
+async def print_all_promos(message: Message, _promos_controller):
+    data = await _promos_controller.get_promos()
+    await message.answer(generate_promos_caption(data))
 
 @admin_router.message()
 async def unknown_command(message: Message) -> None:
