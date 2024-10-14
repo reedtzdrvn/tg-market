@@ -93,7 +93,7 @@ const Tarif = () => {
 
         const origin = window.location.origin;
         const requestId = String(Math.random().toString(36).substr(2, 6));
-        const url = "/webpayments/create";
+        const url = "https://reedtzdev.xyz";
 
         const request_method = "POST";
         const x_site_id = serviceId;
