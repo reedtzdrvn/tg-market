@@ -7,6 +7,7 @@ import attention from "../../images/attention.svg"
 import { DarkButton, LightButton2 } from "../UI/Button/button";
 import confetti from "../../images/Confetti.svg"
 import { useUser } from "../../context/userContext";
+import CryptoJS from 'crypto-js';
 
 
 const Tarif = () => {
@@ -33,14 +34,14 @@ const Tarif = () => {
 
     const usePromo = () => {
         // Сброс цены на исходную перед применением новой скидки
-        setPrice(tarif.price); 
-    
+        setPrice(tarif.price);
+
         axios.get('/promo', { params: { promo: inputPromo, tarif: tarif._id } })
             .then((res) => {
                 if (res.status === 200) {
                     setPromoData(res.data);
                     setPromo(true);
-    
+
                     // Применение скидки после сброса цены
                     if (res.data.percentPrice !== null && res.data.percentPrice !== undefined) {
                         const discountedPrice = tarif.price * (1 - res.data.percentPrice / 100);
@@ -57,45 +58,81 @@ const Tarif = () => {
                 setPromoData({});
             });
     }
-    
+
 
 
     const handleSubmit = () => {
         pay();
     };
 
-    const pay = function () {
 
-        if (price === 0) {
-            handleSuccessfulPayment();
-            return
+
+
+
+
+
+
+
+
+    const pay = async function () {
+        const serviceId = "24592";
+        const key = "04a25dadd74d683f2c82197f7b4dabbcec3c17e8ff9ad40eb8473d73ff6ddbb2835bcdb159a96ebcc5e52df854f22322933d1cdd7e16a40f25bace07937810f06d";
+        const OrderId = String(Math.floor(Math.random() * (100000 - 1000) + 1000))
+
+        const paymentData = {
+            MetaData: {
+                PaymentType: "Pay",
+            },
+            PaymentRequest: {
+                OrderId: OrderId,
+                Amount: String(price),
+                Currency: "RUB",
+                Description: `Оплата подписки "${name}"`,
+            },
+        };
+
+        const origin = window.location.origin;
+        const requestId = String(Math.random().toString(36).substr(2, 6));
+        const url = "/webpayments/create";
+
+        const request_method = "POST";
+        const x_site_id = serviceId;
+        const x_request_id = requestId;
+        const requestBody = JSON.stringify(paymentData);
+
+
+        const site_secret_key = "04a25dadd74d683f2c82197f7b4dabbcec3c17e8ff9ad40eb8473d73ff6ddbb2835bcdb159a96ebcc5e52df854f22322933d1cdd7e16a40f25bace07937810f06d";
+
+        const signature_string = `${request_method}\n${url}\n${x_site_id}\n${x_request_id}\n${requestBody}`;
+
+        const signature = CryptoJS.HmacSHA256(signature_string, site_secret_key).toString();
+
+        console.log(signature);
+        console.log(signature_string)
+
+        const widget = new window.pw.PayWidget();
+
+        let requestParams = {
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-SITE-ID": serviceId,
+                "X-REQUEST-ID": requestId,
+                "X-REQUEST-SIGNATURE": signature,
+            },
         }
 
-        if (!window.pw) {
-            console.error("PayWidget is not loaded");
-            return;
-        }
-
-        var widget = new window.pw.PayWidget();
+        console.log(requestParams)
 
         widget.pay(
             {
-                serviceId: 24592,
-                key: "5607a829f9032f9d84b6f96ac07420cbc7b93c000023650a4127878476829689",
+                serviceId,
+                key,
+                signature,
             },
+            paymentData,
             {
-                MetaData: {
-                    PaymentType: "Pay",
-                },
-                PaymentRequest: {
-                    OrderId: String(Math.floor(Math.random() * (100000 - 1000) + 1000)),
-                    Amount: String(price),
-                    Currency: "RUB",
-                    Description: `Оплата подписки "${name}"`,
-                },
-            }
-            , {
-                onSuccess: function (res) {
+                ...requestParams,
+                onSuccess: function(res) {
                     handleSuccessfulPayment();
                 },
                 onError: function (res) {
@@ -104,8 +141,11 @@ const Tarif = () => {
                 onClose: function (res) {
                     window.location.reload();
                 },
-            });
+            }
+        );
     };
+
+
 
     const handleSuccessfulPayment = () => {
         let dateExpression = new Date();
@@ -123,7 +163,7 @@ const Tarif = () => {
         const dateNow = new Date().toISOString();
         const dateExpressionISO = dateExpression.toISOString();
 
-        axios.patch('/promo', {id: promoData._id})
+        axios.patch('/promo', { id: promoData._id })
 
         axios.post('/subscription', {
             userId: user._id,
