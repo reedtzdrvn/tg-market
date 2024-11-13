@@ -5,8 +5,6 @@ import calendar from "../../images/Calendar.svg";
 import coins from "../../images/Coins.svg";
 import { DarkButton, LightButton2 } from "../UI/Button/button";
 import axios from "../../axios";
-import { useUser } from "../../context/userContext";
-import CryptoJS from 'crypto-js';
 
 const Subscription = () => {
     const { subscription } = useSubscription();

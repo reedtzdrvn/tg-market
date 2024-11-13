@@ -42,6 +42,7 @@ const AddMyRequest = () => {
     });
 
     const { cities } = useCities()
+    const [personAccept, setPersonAccept] = useState(false);
 
     useEffect(() => {
         if (user) {
@@ -138,7 +139,7 @@ const AddMyRequest = () => {
     const handleFileChange = async (e) => {
         const { name, files } = e.target;
         const file = files[0];
-        
+
         const maxSize = 5 * 1024 * 1024;
         const validFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/heic'];
 
@@ -205,8 +206,8 @@ const AddMyRequest = () => {
 
     const handleGoForm = async (e) => {
         e.preventDefault();
-        
-        if ( request.approved === false && request.isRejected === false ){
+
+        if (request.approved === false && request.isRejected === false) {
             return
         }
 
@@ -300,7 +301,7 @@ const AddMyRequest = () => {
             <div className="py-[44px] flex gap-[33px] justify-center">
                 <div className="underline font-bold text-[20px]">Моя анкета</div><Link to={"/my-requests"} className="text-[20px] opacity-60" >Мои заказы ({orders.length})</Link>
             </div>
-            <form className=" px-[16px]" onSubmit={ handleGoForm }>
+            <form className=" px-[16px]" onSubmit={handleGoForm}>
                 <div>
                     {request.isRejected && <div className="bg-custompink py-[16px] w-full mb-8 rounded-xl px-2">{request.isRejected && <div className="text-center font-bold">Анкета отклонена модератором, отредактируйте её. Подробнее прочтите в чате или напишите в поддержку</div>}</div>}
                     {!request.approved && !request.isRejected && <div className="bg-custompink py-[16px] w-full mb-8 rounded-xl px-2 ">{!request.approved && <div className="text-center font-bold">Ваша анкета на модерации. Дождитесь подтверждения, чтобы оставлять отклики.<br />
@@ -466,9 +467,14 @@ const AddMyRequest = () => {
                         {formData.videoLinks[0] !== '' && formData.videoLinks[1] !== '' && <div><input name="link_3" value={formData.videoLinks[2]} onChange={(event) => handleUpdateVideoLink(event)} type="text" placeholder="https://" className="px-[24px] py-[16px] border-black border-solid border-2 w-full" /></div>}
                     </div>
 
+                    
+                    <div className="flex gap-3">
+                        <input type="checkbox" required value={personAccept} onChange={(e) => setPersonAccept(e.target.checked)} id="accept_pers_data" /> <label htmlFor="accept_pers_data" className="text-[12px]">Я согласен(на) на обработку моих персональных данных</label>
+                    </div>
+
                     <div className={`mb-6 flex flex-col gap-4 ${disabled ? "opacity-50" : ""}`}>
                         {request.approved === true || request.isRejected === true ? <DarkButton disabled={disabled} text={"Обновить"} /> : ""}
-                        {!request.approved && <DarkButton text={"Написать в поддержку"} onClick={()=>handleContactClick("eventApp_bot")} />}
+                        {!request.approved && <DarkButton text={"Написать в поддержку"} onClick={() => handleContactClick("eventApp_bot")} />}
                     </div>
                 </div>
             </form>

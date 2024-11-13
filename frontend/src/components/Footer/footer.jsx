@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Share from "../../images/share btn.svg"
+import logo from "../../images/logo.svg";
 
 const Footer = () => {
 
@@ -10,7 +11,7 @@ const Footer = () => {
     return ( 
         <div className=" bg-black px-[52px] py-[40px] text-white">
             <div>
-                EVENTRA
+                <img src={logo} alt="logo" />
             </div>
             <div className="flex text-[12px] mt-[21px]">
                 <div className="flex flex-col gap-[23px] justify-start items-start w-1/2">

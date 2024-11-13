@@ -30,7 +30,9 @@ const AddApplication = () => {
         guestCount: '50-100',
     });
 
-    const {cities} = useCities()
+    const [personAccept, setPersonAccept] = useState(false);
+
+    const { cities } = useCities()
 
     const handleChange = (e) => {
         const { name, value, options } = e.target;
@@ -45,7 +47,7 @@ const AddApplication = () => {
     useEffect(() => {
         if (user && categories) {
             let namePerson = ''
-            if (user.firstName && user.lastName){
+            if (user.firstName && user.lastName) {
                 namePerson = user.firstName + ' ' + user.lastName
             }
             setFormData(prevData => ({
@@ -330,8 +332,11 @@ const AddApplication = () => {
                             </select>
                         </div>
                     </div>
+                    <div className="flex gap-3">
+                        <input type="checkbox" required value={personAccept} onChange={(e) => setPersonAccept(e.target.checked)} id="accept_pers_data" /> <label htmlFor="accept_pers_data" className="text-[12px]">Согласен на обработку моих персональных данных согласно Политике </label>
+                    </div>
                     <div className={`mb-6 ${disabled ? "opacity-50" : ""}`}>
-                        <DarkButton text={"Отправить"} disabled={disabled}/>
+                        <DarkButton text={"Отправить"} disabled={disabled} />
                     </div>
                 </div>
             </form>

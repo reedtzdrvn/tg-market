@@ -75,6 +75,11 @@ const Tarif = () => {
 
 
     const pay = async function () {
+        if (price === 0){
+            handleSuccessfulPayment();
+            return;
+        }
+
         const serviceId = "24592";
         const key = "04a25dadd74d683f2c82197f7b4dabbcec3c17e8ff9ad40eb8473d73ff6ddbb2835bcdb159a96ebcc5e52df854f22322933d1cdd7e16a40f25bace07937810f06d";
         const OrderId = String(Math.floor(Math.random() * (100000 - 1000) + 1000))
@@ -163,7 +168,9 @@ const Tarif = () => {
         const dateNow = new Date().toISOString();
         const dateExpressionISO = dateExpression.toISOString();
 
-        axios.patch('/promo', { id: promoData._id })
+        if (inputPromo !== '') {
+            axios.patch('/promo', { id: promoData._id })
+        }
 
         axios.post('/subscription', {
             userId: user._id,

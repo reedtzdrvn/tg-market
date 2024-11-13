@@ -6,6 +6,9 @@ import { useUser } from "../../context/userContext";
 
 const About = () => {
     const {user} = useUser()
+    const onClick = () => {
+        window.location.href = 'https://docs.google.com/document/d/11YR410x_fE9a1YNpFkf77elSpNqEq8TG/edit';
+    }
     return ( 
         <div className="min-h-screen bg-back px-[16px]">
             <div className="pt-[82px] font-bold text-[36px] text-center">
@@ -15,7 +18,7 @@ const About = () => {
                 {user?.role!=='customer' && <Link to={"/subscription"}><LightButton2 text={<div className="flex gap-[32px] items-center justify-center"><img src={coins} alt="" className="h-[29px] w-[29px]" />Подписка/Тарифы</div>} /></Link>}
                 <Link to={"/share"}><LightButton2 text={<div className="flex gap-[32px] items-center justify-center"><img src={shareabout} alt="" className="h-[29px] w-[29px]" />Рассказать другу</div>} /></Link>
                 <LightButton2 text={"Поддержка"} />
-                <LightButton2 text={"Оферта"} />
+                <LightButton2 onClick={onClick} text={"Оферта"} />
             </div>
         </div>
      );

@@ -18,10 +18,11 @@ const AddArtistRequest = () => {
     const { user } = useUser()
     const [disabled, setDisabled] = useState(false)
     const { categories } = useCategories()
-
     const { cities } = useCities()
     const [message, setMessage] = useState(null);
     const [messageOn, setMessageOn] = useState(false)
+
+    const [personAccept, setPersonAccept] = useState(false);
 
 
     const validateFullName = (fullName) => {
@@ -30,6 +31,7 @@ const AddArtistRequest = () => {
     };
 
     const handleGoForm = async (e) => {
+        if (!personAccept) return;
         e.preventDefault();
         setDisabled(true);
 
@@ -313,7 +315,7 @@ const AddArtistRequest = () => {
                             <img src={attention} alt="attention" />Первое окно – аватарка, второе – фото фона вашего профиля
                         </div>
                         <div className="flex w-full gap-[16px]">
-                            <input  required type="file" accept="image/*" name="mainPhoto" id="mainPhoto" className="hidden" onChange={(e) => handleFileChange(e)} />
+                            <input required type="file" accept="image/*" name="mainPhoto" id="mainPhoto" className="hidden" onChange={(e) => handleFileChange(e)} />
                             <label htmlFor="mainPhoto" className="border-black border-solid border-2 w-full h-[60px] flex items-center justify-center text-[40px]">
                                 {formData.mainPhotoFile ? (
                                     <img src={URL.createObjectURL(formData.mainPhotoFile)} alt="mainPhoto" className="w-full h-full object-cover" />
@@ -352,7 +354,7 @@ const AddArtistRequest = () => {
                                     '+'
                                 )}
                             </label>
-                            <input type="file" name="gallery3"  accept="image/*" id="gallery3" className="hidden" onChange={(e) => handleFileChange(e)} />
+                            <input type="file" name="gallery3" accept="image/*" id="gallery3" className="hidden" onChange={(e) => handleFileChange(e)} />
                             <label htmlFor="gallery3" className="border-black border-solid border-2 w-full h-[60px] flex items-center justify-center text-[40px]">
                                 {formData.galleryFiles[2] ? (
                                     <img src={URL.createObjectURL(formData.galleryFiles[2])} alt="gallery2" className="w-full h-full object-cover" />
@@ -376,6 +378,9 @@ const AddArtistRequest = () => {
                         <div><input name="link_1" value={formData.videoLinks[0]} onChange={(event) => handleUpdateVideoLink(event)} type="text" placeholder="https://" className="px-[24px] py-[16px] border-black border-solid border-2 w-full" /></div>
                         {formData.videoLinks[0] !== '' && <div><input name="link_2" value={formData.videoLinks[1]} onChange={(event) => handleUpdateVideoLink(event)} type="text" placeholder="https://" className="px-[24px] py-[16px] border-black border-solid border-2 w-full" /></div>}
                         {formData.videoLinks[0] !== '' && formData.videoLinks[1] !== '' && <div><input name="link_3" value={formData.videoLinks[2]} onChange={(event) => handleUpdateVideoLink(event)} type="text" placeholder="https://" className="px-[24px] py-[16px] border-black border-solid border-2 w-full" /></div>}
+                    </div>
+                    <div className="flex gap-3">
+                        <input type="checkbox" required value={personAccept} onChange={(e) => setPersonAccept(e.target.checked)} id="accept_pers_data" /> <label htmlFor="accept_pers_data" className="text-[12px]">Я согласен(на) на обработку моих персональных данных</label>
                     </div>
                     <div className={`mb-6 ${disabled ? "opacity-50" : ""}`} >
                         <DarkButton text={"Отправить"} disabled={disabled} />
