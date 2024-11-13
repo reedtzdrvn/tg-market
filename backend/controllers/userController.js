@@ -61,7 +61,6 @@ export default class userController {
       } = req.body;
       
       const user = await UserSchema.findOne({ telegramId });
-      console.log(user);
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }

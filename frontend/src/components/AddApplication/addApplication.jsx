@@ -61,8 +61,6 @@ const AddApplication = () => {
         }
     }, [user, categories]);
 
-    console.log(formData)
-
     const validateFullName = (fullName) => {
         const words = fullName.trim().split(" ");
         return words.length === 2 && words[0] && words[1];

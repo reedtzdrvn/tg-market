@@ -10,7 +10,7 @@ import { useSubscription } from '../../context/subscriptionContext';
 
 const Header = () => {
   let tg = window.Telegram.WebApp;
-  let userId = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "703999322";
+  let userId = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "";
 
   const { categories, setCategories } = useCategories();
   const { user, setUser } = useUser();
@@ -107,7 +107,7 @@ const Header = () => {
             className="text-[12px] underline w-[110px]"
           >
             {cities.map((city, index) => (
-              <option key={index} value={city}>
+              <option key={city+index} value={city}>
                 {city}
               </option>
             ))}

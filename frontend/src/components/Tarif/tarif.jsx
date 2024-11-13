@@ -112,9 +112,6 @@ const Tarif = () => {
 
         const signature = CryptoJS.HmacSHA256(signature_string, site_secret_key).toString();
 
-        console.log(signature);
-        console.log(signature_string)
-
         const widget = new window.pw.PayWidget();
 
         let requestParams = {
@@ -125,8 +122,6 @@ const Tarif = () => {
                 "X-REQUEST-SIGNATURE": signature,
             },
         }
-
-        console.log(requestParams)
 
         widget.pay(
             {
@@ -202,8 +197,6 @@ const Tarif = () => {
     if (!tarif) {
         return <Loader />
     }
-
-    console.log(promo)
 
     return (
         <div className="px-[16px] pt-[60px]">

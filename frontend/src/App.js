@@ -27,7 +27,11 @@ import Tarif from "./components/Tarif/tarif";
 
 function App() {
   const { user } = useUser();
-  console.log(user);
+  let tg = window.Telegram.WebApp;
+  let userId = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "";
+  if (userId === ""){
+    return <div>403 Forbidden</div>
+  }
   return (
     <>
       <Header />

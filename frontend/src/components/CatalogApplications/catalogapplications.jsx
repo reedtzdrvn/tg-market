@@ -57,8 +57,6 @@ const CatalogApplications = () => {
     }
   };
 
-  console.log(subscription)
-
   function handleContactClick(event, userName, customerRequestId) {
     event.stopPropagation();
 
