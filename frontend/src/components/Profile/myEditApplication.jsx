@@ -34,6 +34,7 @@ const EditMyApplication = () => {
         guestCount: '50-100',
     });
 
+    const [personAccept, setPersonAccept] = useState(false);
 
     useEffect(() => {
         if (user) {
@@ -66,7 +67,7 @@ const EditMyApplication = () => {
         if (application) {
             setFormData({
                 eventName: application.eventName || '',
-                category: application.categoryId.map((el)=>(el._id)),
+                category: application.categoryId.map((el) => (el._id)),
                 city: application.city || '',
                 feeFrom: application.fee.split(' - ')[0] || '',
                 feeTo: application.fee.split(' - ')[1] || '',
@@ -78,7 +79,7 @@ const EditMyApplication = () => {
         }
     }, [application]);
 
-    const {cities} = useCities()
+    const { cities } = useCities()
 
     const handleChange = (e) => {
         const { name, value, options } = e.target;
@@ -96,7 +97,7 @@ const EditMyApplication = () => {
 
         setDisabled(true)
         try {
-            const response = await axios.patch('/customer-request', {isReject: false, approved: false, fee: formData.feeFrom + ' - ' + formData.feeTo, eventName: formData.eventName, description: formData.eventDetails, city: formData.city, requestId: id, categoryId: formData.category, date: formData.date, time: formData.timeInterval, guestCount: formData.guestCount, approved: false });
+            const response = await axios.patch('/customer-request', { isReject: false, approved: false, fee: formData.feeFrom + ' - ' + formData.feeTo, eventName: formData.eventName, description: formData.eventDetails, city: formData.city, requestId: id, categoryId: formData.category, date: formData.date, time: formData.timeInterval, guestCount: formData.guestCount, approved: false });
             if (response.status === 200) {
                 window.location.href = "/application-done";
             }
@@ -271,6 +272,9 @@ const EditMyApplication = () => {
                                     <option value="200+">более 200</option>
                                 </select>
                             </div>
+                        </div>
+                        <div className="flex gap-3">
+                            <input type="checkbox" required value={personAccept} onChange={(e) => setPersonAccept(e.target.checked)} id="accept_pers_data" /> <label htmlFor="accept_pers_data" className="text-[12px]"><Link className='text-black underline' to="https://docs.google.com/document/d/1ZeJG7cl2raszu6VWoclo38WSxZKl_qRt/edit">Согласен</Link> на обработку моих персональных данных согласно <Link className='text-black underline' to={"https://docs.google.com/document/d/13SBC6s4-XB9GCrZEUbNjqsj-_SBw5nvE/edit"}>Политике</Link></label>
                         </div>
                         <div className={`mb-6 ${disabled ? "opacity-50" : ""}`}>
                             <DarkButton disabled={disabled} text={"Обновить"} />
