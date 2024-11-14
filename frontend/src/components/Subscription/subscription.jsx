@@ -42,7 +42,7 @@ const Subscription = () => {
 
     return (
         <div className="bg-back relative min-h-screen">
-            <div className="absolute mt-[313px] mb-[112px] z-[1]">
+            <div className="absolute mt-[313px] pb-[112px] z-[1]">
                 <img src={backgroundPayment} alt="backgroundPayment" />
             </div>
             <div className="relative z-[10] text-center px-[16px]">
@@ -52,9 +52,8 @@ const Subscription = () => {
                 <div className="mt-[32px] leading-6">
                     После активации тарифа можно оставлять неограниченное количество откликов за оплаченный период
                 </div>
-                <div className="mt-[67px] flex flex-wrap justify-center gap-[16px] mb-[98px]">
-                    {tarif.map((el) => (
-                        subscription === null && <div key={el._id} className="rounded-[15px] px-[16px] py-[32px] bg-main shadow-custom flex-grow cartTarif flex flex-col">
+                <div className="mt-[67px] flex flex-wrap justify-center gap-[16px] pb-[98px]">
+                    {tarif.map((el) => ( <div key={el._id} className="rounded-[15px] px-[16px] py-[32px] bg-main shadow-custom flex-grow cartTarif flex flex-col">
                             <div className="font-bold text-center leading-[32px] text-[24px]">
                                 {el.name}
                             </div>
